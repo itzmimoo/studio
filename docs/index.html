@@ -2,453 +2,48 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>il vero studio by SAGGIN spa</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  background: #0f0f0f;
-  color: #e8e4dc;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* TOP BAR */
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-  border-bottom: 1px solid #1e1e1e;
-  background: #0f0f0f;
-  position: relative;
-  top: 0;
-  z-index: 100;
-}
-.topbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.brand-logo {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, #c8a96e 0%, #9d7a45 100%);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-}
-.brand-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: #e8e4dc;
-  letter-spacing: -0.01em;
-}
-.brand-sub {
-  font-size: 11px;
-  color: #555;
-  letter-spacing: 0.02em;
-}
-.topbar-greeting {
-  font-size: 13px;
-  color: #555;
-}
-.topbar-greeting span {
-  color: #c8a96e;
-  font-weight: 500;
-}
-
-/* HERO */
-.hero {
-  padding: 52px 24px 36px;
-  text-align: center;
-}
-.hero-eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: #c8a96e;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-.hero-title {
-  font-size: clamp(28px, 6vw, 42px);
-  font-weight: 700;
-  color: #e8e4dc;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  margin-bottom: 12px;
-}
-.hero-sub {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.6;
-}
-
-/* GRID */
-.subjects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  padding: 0 24px 48px;
-  max-width: 900px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.subject-card {
-  display: block;
-  text-decoration: none;
-  background: #141414;
-  border: 1px solid #1e1e1e;
-  border-radius: 16px;
-  padding: 24px;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.subject-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  border-radius: 16px 16px 0 0;
-  transition: opacity 0.2s;
-}
-.subject-card.italiano::before   { background: linear-gradient(90deg, #534AB7, #7F77DD); }
-.subject-card.storia::before     { background: linear-gradient(90deg, #BA7517, #c8a96e); }
-.subject-card.inglese::before    { background: linear-gradient(90deg, #1a6b2e, #34d058); }
-.subject-card.matematica::before { background: linear-gradient(90deg, #B02020, #E24B4A); }
-.subject-card.reti::before       { background: linear-gradient(90deg, #0e7a6e, #14b8a6); }
-.subject-card.informatica::before{ background: linear-gradient(90deg, #5a3a9a, #a78bfa); }
-.subject-card.coming::before     { background: linear-gradient(90deg, #333, #555); }
-
-.subject-card:hover {
-  border-color: #2a2a2a;
-  transform: translateY(-2px);
-  background: #181818;
-}
-.subject-card.coming {
-  opacity: 0.5;
-  cursor: default;
-}
-.subject-card.coming:hover {
-  transform: none;
-  background: #141414;
-  border-color: #1e1e1e;
-}
-
-.card-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  margin-bottom: 16px;
-}
-.italiano .card-icon    { background: #1a183a; }
-.storia .card-icon      { background: #2a1a04; }
-.inglese .card-icon     { background: #0d2214; }
-.matematica .card-icon  { background: #2a0a0a; }
-.reti .card-icon        { background: #0d2220; }
-.informatica .card-icon { background: #1e1030; }
-.coming .card-icon      { background: #1a1a1a; }
-
-.card-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.italiano .card-label    { color: #7F77DD; }
-.storia .card-label      { color: #c8a96e; }
-.inglese .card-label     { color: #34d058; }
-.matematica .card-label  { color: #E24B4A; }
-.reti .card-label        { color: #14b8a6; }
-.informatica .card-label { color: #a78bfa; }
-.coming .card-label      { color: #444; }
-
-.card-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #e8e4dc;
-  margin-bottom: 8px;
-  letter-spacing: -0.01em;
-}
-.coming .card-title { color: #555; }
-
-.card-desc {
-  font-size: 13px;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 16px;
-}
-
-.card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 16px;
-}
-.tag {
-  font-size: 10px;
-  padding: 3px 9px;
-  border-radius: 20px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-.italiano .tag    { background: #1a183a; color: #9f99e0; border: 1px solid #2e2a6a; }
-.storia .tag      { background: #2a1a04; color: #d4a050; border: 1px solid #4a2e08; }
-.inglese .tag     { background: #0d2214; color: #34d058; border: 1px solid #134a26; }
-.matematica .tag  { background: #2a0a0a; color: #ff8080; border: 1px solid #5a1a1a; }
-.reti .tag        { background: #0d2220; color: #2dd4bf; border: 1px solid #134e4a; }
-.informatica .tag { background: #1e1030; color: #c4b5fd; border: 1px solid #3a2060; }
-.coming .tag      { background: #1a1a1a; color: #444;    border: 1px solid #2a2a2a; }
-
-.card-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.card-arrow-text {
-  font-size: 12px;
-  font-weight: 500;
-}
-.italiano .card-arrow-text    { color: #7F77DD; }
-.storia .card-arrow-text      { color: #c8a96e; }
-.inglese .card-arrow-text     { color: #34d058; }
-.matematica .card-arrow-text  { color: #E24B4A; }
-.reti .card-arrow-text        { color: #14b8a6; }
-.informatica .card-arrow-text { color: #a78bfa; }
-.coming .card-arrow-text      { color: #444; }
-
-.card-arrow-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  transition: transform 0.15s;
-}
-.italiano .card-arrow-icon    { background: #1a183a; color: #9f99e0; }
-.storia .card-arrow-icon      { background: #2a1a04; color: #d4a050; }
-.inglese .card-arrow-icon     { background: #0d2214; color: #34d058; }
-.matematica .card-arrow-icon  { background: #2a0a0a; color: #ff8080; }
-.reti .card-arrow-icon        { background: #0d2220; color: #2dd4bf; }
-.informatica .card-arrow-icon { background: #1e1030; color: #c4b5fd; }
-.coming .card-arrow-icon      { background: #1a1a1a; color: #444; }
-
-.subject-card:not(.coming):hover .card-arrow-icon {
-  transform: translateX(3px);
-}
-
-/* STATS BAR */
-.stats-bar {
-  display: flex;
-  gap: 24px;
-  padding: 0 24px 40px;
-  max-width: 900px;
-  margin: 0 auto;
-  width: 100%;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.stat { text-align: center; }
-.stat-value {
-  font-size: 22px;
-  font-weight: 700;
-  color: #c8a96e;
-  letter-spacing: -0.02em;
-}
-.stat-label {
-  font-size: 11px;
-  color: #555;
-  letter-spacing: 0.04em;
-  margin-top: 2px;
-}
-
-/* FOOTER */
-footer {
-  margin-top: auto;
-  border-top: 1px solid #1a1a1a;
-  padding: 20px 24px;
-  text-align: center;
-}
-.footer-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.footer-brand   { font-size: 13px; font-weight: 600; color: #c8a96e; letter-spacing: 0.02em; }
-.footer-sep     { color: #2a2a2a; font-size: 12px; }
-.footer-copy    { font-size: 12px; color: #444; }
-.footer-tagline { font-size: 11px; color: #333; margin-top: 6px; letter-spacing: 0.04em; }
-
-@media (max-width: 600px) {
-  .topbar        { padding: 14px 16px; }
-  .hero          { padding: 36px 16px 28px; }
-  .subjects-grid { padding: 0 16px 36px; grid-template-columns: 1fr; }
-  .stats-bar     { padding: 0 16px 32px; gap: 20px; }
-  footer         { padding: 16px; }
-}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3f4f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1d21" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Studio">
+<meta name="format-detection" content="telephone=no">
+<title>Studio | SAGGIN s.r.l.</title>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-<header class="topbar">
-  <div class="topbar-brand">
-    <div class="brand-logo">⌘</div>
-    <div>
-      <div class="brand-name">SAGGIN s.r.l.</div>
-      <div class="brand-sub">Dashboard</div>
-    </div>
-  </div>
-  <div class="topbar-greeting">Ciao, <span>BRO</span> </div>
-</header>
+<div class="wrap">
+  <header class="masthead">SAGGIN s.r.l.</header>
 
-<main>
-  <div class="hero">
-    <div class="hero-eyebrow">Le materie disponibili</div>
-    <div class="hero-title">Come ci salviamo il voto oggi?</div>
-    <div class="hero-sub">Scegli una materia qui sotto :) </div>
-  </div>
+  <main>
+    <h1 class="home-title">Appunti</h1>
+    <p class="home-sub">Anno scolastico 2026/27</p>
 
-  <div class="stats-bar">
-    <div class="stat">
-      <div class="stat-value">3</div>
-      <div class="stat-label">MATERIE ATTIVE</div>
-    </div>
-  </div>
-
-  <div class="subjects-grid">
-
-    <!-- 1. ITALIANO -->
-    <a class="subject-card italiano" href="italiano/">
-      <div class="card-icon">📖</div>
-      <div class="card-label">Letteratura</div>
-      <div class="card-title">Italiano</div>
-      <div class="card-desc">Attivato temporaneamente</div>
-      <div class="card-tags">
-        <span class="tag">null</span>
+    <h2 class="group-label">Attive</h2>
+    <a class="subject" href="reti/">
+      <div class="subject-main">
+        <h2>Sistemi e Reti</h2>
+        <p>Mezzi trasmissivi, architetture, OSI e TCP/IP, IP, router, DNS, DHCP, livello di trasporto, posta elettronica.</p>
       </div>
-      <div class="card-arrow">
-        <span class="card-arrow-text">Apri →</span>
-        <span class="card-arrow-icon">→</span>
-      </div>
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4l6 6-6 6"/></svg>
     </a>
 
-    <!-- 2. STORIA -->
-    <a class="subject-card storia" href="storia/">
-      <div class="card-icon">🏛️</div>
-      <div class="card-label">Storia XIX secolo</div>
-      <div class="card-title">Storia</div>
-      <div class="card-desc">Napoleone, Congresso di Vienna, Restaurazione e moti rivoluzionari 1820–1831.</div>
-      <div class="card-tags">
-        <span class="tag">Napoleone</span>
-        <span class="tag">Vienna 1815</span>
-        <span class="tag">Restaurazione</span>
-        <span class="tag">Moti 1830</span>
-      </div>
-      <div class="card-arrow">
-        <span class="card-arrow-text">Apri →</span>
-        <span class="card-arrow-icon">→</span>
-      </div>
-    </a>
+    <h2 class="group-label">Non ancora attive</h2>
+    <ul class="soon">
+      <li><span class="n">Informatica</span><span class="d">In arrivo</span></li>
+      <li><span class="n">TPSIT</span><span class="d">In arrivo</span></li>
+      <li><span class="n">Inglese</span><span class="d">In arrivo</span></li>
+      <li><span class="n">Italiano</span><span class="d">In arrivo</span></li>
+      <li><span class="n">Storia</span><span class="d">In arrivo</span></li>
+    </ul>
+  </main>
 
-    <!-- 3. INGLESE -->
-    <div class="subject-card coming">
-      <div class="card-icon">🇬🇧</div>
-      <div class="card-label">Bri'ish</div>
-      <div class="card-title">Inglese</div>
-      <div class="card-desc">Yes we can (studiare). Probabilmente.</div>
-      <div class="card-tags">
-        <span class="tag">null</span>
-      </div>
-      <div class="card-arrow">
-        <span class="card-arrow-text">Presto disponibile</span>
-        <span class="card-arrow-icon">⋯</span>
-      </div>
-    </div>
-
-    <!-- 4. MATEMATICA -->
-    <a class="subject-card matematica" href="matematica/">
-      <div class="card-icon">📈</div>
-      <div class="card-label">Analisi</div>
-      <div class="card-title">Matematica</div>
-      <div class="card-desc">Studio di funzioni passo per passo, punti di discontinuità (3 specie), grafici esponenziali e logaritmici.</div>
-      <div class="card-tags">
-        <span class="tag">Studio funzioni</span>
-        <span class="tag">Dominio & C.E.</span>
-        <span class="tag">Limiti & asintoti</span>
-        <span class="tag">Discontinuità</span>
-        <span class="tag">Exp & Log</span>
-      </div>
-      <div class="card-arrow">
-        <span class="card-arrow-text">Apri →</span>
-        <span class="card-arrow-icon">→</span>
-      </div>
-    </a>
-
-    <!-- 5. RETI -->
-    <a class="subject-card reti" href="reti/">
-      <div class="card-icon">🛜</div>
-      <div class="card-label">Reti</div>
-      <div class="card-title">Sistemi e Reti</div>
-      <div class="card-desc">la materia che alcuni non capiscono..?</div>
-      <div class="card-tags">
-        <span class="tag">Mezzi trasmissivi</span>
-        <span class="tag">Architetture di rete</span>
-        <span class="tag">Protocollo IP</span>
-        <span class="tag">Protocolli DNS/DHCP</span>
-        <span class="tag">Protocolli di trasporto</span>
-        <span class="tag">Posta elettronica</span>
-      </div>
-      <div class="card-arrow">
-        <span class="card-arrow-text">Apri →</span>
-        <span class="card-arrow-icon">→</span>
-      </div>
-    </a>
-
-    <!-- 6. INFORMATICA -->
-    <div class="subject-card coming">
-      <div class="card-icon">💻</div>
-      <div class="card-label">Java</div>
-      <div class="card-title">Informatica</div>
-      <div class="card-desc">Aspetto il prossimo anno...</div>
-      <div class="card-tags">
-        <span class="tag">null</span>
-      </div>
-      <div class="card-arrow">
-        <span class="card-arrow-text">Presto disponibile</span>
-        <span class="card-arrow-icon">⋯</span>
-      </div>
-    </div>
-
-  </div>
-</main>
-
-<footer>
-  <div class="footer-inner">
-    <span class="footer-brand">SAGGIN s.r.l.</span>
-    <span class="footer-sep">•</span>
-    <span class="footer-copy"></span>
-    <span class="footer-sep">•</span>
-    <span class="footer-copy">© 2026 - tutti i diritti riservati</span>
-  </div>
-  <div class="footer-tagline">Studio smart, non studio tanto</div>
-</footer>
+  <footer class="site-foot">
+    <span>SAGGIN s.r.l.</span>
+    <span>© 2026 Tutti i diritti riservati</span>
+  </footer>
+</div>
 
 </body>
 </html>
