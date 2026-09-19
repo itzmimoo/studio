@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3f4f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1d21" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Reti">
+<meta name="format-detection" content="telephone=no">
+<title>Sistemi e Reti | SAGGIN s.r.l.</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 4l-6 6 6 6"/></svg>Home</a>
+    <h1>Sistemi e Reti</h1>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Capitoli">
+  <div class="tabs-inner">
+    <button aria-selected="true" data-chapter="mezzi">Mezzi trasmissivi</button>
+    <button aria-selected="false" data-chapter="architetture">Architetture e protocolli</button>
+    <button aria-selected="false" data-chapter="osi">Modelli OSI e TCP/IP</button>
+    <button aria-selected="false" data-chapter="ip">IP</button>
+    <button aria-selected="false" data-chapter="router">Router</button>
+    <button aria-selected="false" data-chapter="dns">DNS</button>
+    <button aria-selected="false" data-chapter="dhcp">DHCP</button>
+    <button aria-selected="false" data-chapter="trasporto">Livello trasporto</button>
+    <button aria-selected="false" data-chapter="email">Posta elettronica</button>
+  </div>
+</nav>
+
+<main class="wrap content">
+
+<!-- ===== MEZZI TRASMISSIVI ===== -->
+<section id="mezzi" class="section visible">
+  <h2 class="chapter-title">Mezzi trasmissivi</h2>
+
+  <div class="block green">
+    <div class="btitle">Introduzione ai mezzi trasmissivi</div>
+    <p>Un <strong>mezzo trasmissivo</strong> è il supporto fisico attraverso cui viaggiano i segnali tra due o più nodi di rete. La scelta del mezzo determina la banda disponibile, la distanza massima coperta, l'attenuazione del segnale, la latenza, l'immunità ai disturbi elettromagnetici e il costo di installazione. I mezzi si dividono in <strong>guidati</strong> (il segnale è confinato in un supporto fisico: doppino, cavo coassiale, fibra ottica) e <strong>non guidati</strong> (onde radio, infrarossi, microonde).</p>
+  </div>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="mezzi-rame">Cablaggio in rame</button>
+    <button data-sub="mezzi-fibra">Fibra ottica</button>
+  </div>
+
+  <div id="mezzi-rame" class="sub-section visible">
+    <h3 class="sep">Ethernet — Cablaggio in rame</h3>
+    <div class="block blue">
+      <div class="byear">IEEE 802.3 — Standard Ethernet</div>
+      <div class="btitle">Doppino intrecciato (Twisted Pair)</div>
+      <p>È il mezzo più diffuso nelle LAN. Ogni cavo contiene coppie di conduttori in rame intrecciati tra loro per ridurre le interferenze elettromagnetiche (<strong>crosstalk</strong> e <strong>EMI</strong>). L'intreccio crea campi magnetici opposti che si cancellano reciprocamente. Esistono due varianti principali:</p>
+      <ul>
+        <li><strong>UTP (Unshielded Twisted Pair)</strong>: senza schermatura, economico, facile da installare. Usato nella maggior parte delle installazioni LAN.</li>
+        <li><strong>STP/FTP (Shielded/Foiled)</strong>: con schermatura metallica per ambienti ad alta interferenza industriale.</li>
+      </ul>
+      <p style="margin-top:8px">Le categorie definiscono la banda massima: <strong>Cat 5e</strong> → fino a 1 Gbps su 100 m; <strong>Cat 6</strong> → fino a 10 Gbps su 55 m; <strong>Cat 6A</strong> → 10 Gbps su 100 m; <strong>Cat 8</strong> → 40 Gbps su 30 m. Il connettore standard è l'<strong>RJ-45</strong>. La distanza massima per un segmento Ethernet su Cat 5e/6 è <strong>100 metri</strong> prima che l'attenuazione richieda un repeater o uno switch.</p>
+    </div>
+    <div class="block blue">
+      <div class="btitle">Ethernet — Cenni tecnici sul protocollo MAC</div>
+      <p>Ethernet opera al livello 2 (Data Link) del modello OSI. Utilizza il meccanismo <strong>CSMA/CD</strong> (Carrier Sense Multiple Access with Collision Detection) sulle reti half-duplex: prima di trasmettere, il nodo ascolta il canale (Carrier Sense); se rileva una collisione durante la trasmissione, interrompe, attende un tempo casuale (backoff esponenziale) e ritrasmette. Nelle reti <strong>full-duplex</strong> (switch moderni) il CSMA/CD non è necessario perché ogni porta ha un dominio di collisione separato.</p>
+      <p>Un <strong>frame Ethernet</strong> (IEEE 802.3) ha la struttura: <code>Preambolo (7B) | SFD (1B) | MAC dst (6B) | MAC src (6B) | Ethertype/Length (2B) | Payload (46–1500B) | FCS (4B)</code>. Il campo <strong>Ethertype</strong> identifica il protocollo di rete incapsulato (<code>0x0800</code> = IPv4, <code>0x86DD</code> = IPv6, <code>0x0806</code> = ARP). La dimensione massima del payload è <strong>1500 byte</strong> (MTU standard Ethernet).</p>
+    </div>
+  </div>
+
+  <div id="mezzi-fibra" class="sub-section">
+    <h3 class="sep">Fibra ottica — Il mezzo ad alte prestazioni</h3>
+    <div class="block green">
+      <div class="byear">Principio fisico — Riflessione totale interna</div>
+      <div class="btitle">Come funziona la fibra ottica</div>
+      <p>La fibra ottica trasmette dati sotto forma di <strong>impulsi luminosi</strong> (fotoni) attraverso un sottile filamento di vetro o silice. Il funzionamento si basa sul principio fisico della <strong>riflessione totale interna</strong>: quando un raggio di luce viaggia da un mezzo più denso (core) a uno meno denso (cladding), e l'angolo di incidenza supera il <strong>angolo critico</strong> θ<sub>c</sub>, la luce viene completamente riflessa verso l'interno e non fuoriesce.</p>
+      <p>La legge di Snell governa il fenomeno: <code>n₁ · sin(θ₁) = n₂ · sin(θ₂)</code>. Quando <code>θ₁ ≥ θ_c = arcsin(n₂/n₁)</code> si ha riflessione totale. Il <strong>core</strong> ha un indice di rifrazione n₁ leggermente superiore al <strong>cladding</strong> (n₂), tipicamente n₁ ≈ 1.48 e n₂ ≈ 1.46. Intorno al cladding è presente una <strong>jacket</strong> protettiva in polimero. La luce rimane intrappolata nel core e si propaga per rimbalzo lungo tutta la lunghezza della fibra senza dispersione laterale, con attenuazione estremamente bassa (<strong>0.2 dB/km</strong> nella finestra a 1550 nm).</p>
+    </div>
+    <div class="grid2">
+      <div class="card-small green">
+        <span class="badge">SMF — Single-Mode Fiber</span>
+        <div class="ct">Fibra monomodale</div>
+        <ul>
+          <li>Diametro del core: <strong>8–10 µm</strong></li>
+          <li>Un solo modo di propagazione della luce</li>
+          <li>Sorgente luminosa: <strong>laser</strong> (LED non sufficiente)</li>
+          <li>Lunghezze d'onda operative: 1310 nm, 1550 nm</li>
+          <li>Distanza massima: <strong>decine–centinaia di km</strong></li>
+          <li>Banda: praticamente illimitata (Tbps con WDM)</li>
+          <li>Dispersione cromatica trascurabile</li>
+          <li>Usata in backbone, WAN, reti metropolitane, intercontinentale</li>
+        </ul>
+      </div>
+      <div class="card-small blue">
+        <span class="badge">MMF — Multi-Mode Fiber</span>
+        <div class="ct">Fibra multimodale</div>
+        <ul>
+          <li>Diametro del core: <strong>50–62.5 µm</strong></li>
+          <li>Più modi di propagazione simultanei</li>
+          <li>Sorgente luminosa: <strong>LED o VCSEL</strong></li>
+          <li>Lunghezze d'onda operative: 850 nm, 1300 nm</li>
+          <li>Distanza massima: <strong>300–550 m</strong> (a 10 Gbps)</li>
+          <li>Problema: <strong>dispersione modale</strong> → i modi arrivano in tempi diversi</li>
+          <li>Profilo indice step-index o graded-index (riduce la dispersione)</li>
+          <li>Usata in LAN, data center, campus</li>
+        </ul>
+      </div>
+    </div>
+    <div class="block teal">
+      <div class="btitle">Vantaggi della fibra rispetto al rame</div>
+      <ul>
+        <li><strong>Banda</strong>: ordini di grandezza superiori al rame. Con il <strong>WDM (Wavelength Division Multiplexing)</strong> si trasmettono contemporaneamente decine/centinaia di lunghezze d'onda sullo stesso core, moltiplicando la capacità.</li>
+        <li><strong>Attenuazione bassissima</strong>: 0.2 dB/km vs ~10 dB/km del rame → distanze enormi senza amplificazione.</li>
+        <li><strong>Immunità EMI</strong>: il segnale è luminoso, non elettrico → nessun disturbo da campi elettromagnetici, nessun crosstalk.</li>
+        <li><strong>Sicurezza</strong>: non irradia segnale, difficilissimo da intercettare senza interrompere la comunicazione.</li>
+        <li><strong>Leggerezza e dimensioni</strong>: un singolo cavo può contenere centinaia di fibre.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ARCHITETTURE & PROTOCOLLI ===== -->
+<section id="architetture" class="section">
+  <h2 class="chapter-title">Architetture e protocolli</h2>
+
+  <div class="block green">
+    <div class="btitle">Cosa si intende per architettura di rete</div>
+    <p>Un'<strong>architettura di rete</strong> definisce la struttura organizzativa dei nodi di comunicazione, i ruoli che essi assumono e le modalità con cui interagiscono. Le due architetture fondamentali sono il modello <strong>client-server</strong> e il modello <strong>peer-to-peer (P2P)</strong>. In client-server un nodo (server) eroga servizi e un altro (client) li consuma, con ruoli asimmetrici e fissi; in P2P ogni nodo può assumere entrambi i ruoli indifferentemente. Parallelamente, il concetto di <strong>protocollo</strong> definisce l'insieme formale di regole sintattiche e semantiche che governano lo scambio di messaggi tra entità comunicanti.</p>
+  </div>
+
+  <h3 class="sep">Connection-oriented vs connectionless</h3>
+  <div class="grid2">
+    <div class="card-small blue">
+      <span class="badge">Connection-Oriented</span>
+      <div class="ct">Orientato alla connessione</div>
+      <p style="margin-bottom:8px">Prima di trasferire dati viene stabilita una <strong>connessione logica</strong> tra mittente e destinatario mediante una procedura di <em>handshake</em>. Questa fase negozia i parametri della sessione (numeri di sequenza, dimensione delle finestre, ecc.) e alloca le risorse necessarie. I dati vengono trasmessi lungo il canale stabilito e la connessione viene esplicitamente chiusa al termine.</p>
+      <ul>
+        <li>Garantisce ordinamento, affidabilità, controllo di flusso</li>
+        <li>Overhead maggiore per l'instaurazione e il teardown</li>
+        <li>Stato mantenuto nei nodi per tutta la durata della sessione</li>
+        <li><strong>Esempio paradigmatico</strong>: TCP (three-way handshake SYN/SYN-ACK/ACK)</li>
+        <li>Usato per trasferimento file, navigazione web, SSH, SMTP</li>
+      </ul>
+    </div>
+    <div class="card-small purple">
+      <span class="badge">Connectionless</span>
+      <div class="ct">Senza connessione</div>
+      <p style="margin-bottom:8px">Non esiste fase di instaurazione della connessione. Ogni unità dati (<strong>datagramma</strong>) è trasmessa in modo indipendente, contiene tutte le informazioni di indirizzamento necessarie e può percorrere percorsi diversi nella rete. Non c'è garanzia di consegna, di ordinamento, né di assenza di duplicati.</p>
+      <ul>
+        <li>Overhead minimo: nessuna negoziazione, nessuna teardown</li>
+        <li>Latenza bassa, adatto a traffico burst</li>
+        <li>Nessuno stato mantenuto per la sessione</li>
+        <li><strong>Esempio paradigmatico</strong>: UDP, IP, ICMP</li>
+        <li>Usato per DNS, streaming real-time, gaming, SNMP, VoIP</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sep">Stateful vs stateless</h3>
+  <div class="grid2">
+    <div class="card-small green">
+      <span class="badge">Stateful</span>
+      <div class="ct">Con mantenimento di stato</div>
+      <p style="margin-bottom:8px">Un protocollo (o servizio) è <strong>stateful</strong> quando il server mantiene informazioni sullo stato della sessione tra una richiesta e la successiva. Il server ricorda il contesto della comunicazione: dati già scambiati, autenticazione avvenuta, parametri negoziati.</p>
+      <ul>
+        <li>Il server tiene in memoria il <em>session state</em> per ogni client attivo</li>
+        <li>Consente operazioni dipendenti dal contesto precedente</li>
+        <li>Scalabilità più complessa (stato distribuito)</li>
+        <li><strong>Esempi</strong>: TCP (mantiene stato di connessione), FTP (mantiene il canale di controllo), firewall stateful (traccia connessioni aperte)</li>
+      </ul>
+    </div>
+    <div class="card-small amber">
+      <span class="badge">Stateless</span>
+      <div class="ct">Senza mantenimento di stato</div>
+      <p style="margin-bottom:8px">Un protocollo è <strong>stateless</strong> quando ogni richiesta è completamente autonoma e indipendente: il server non mantiene alcuna informazione sulle richieste precedenti dello stesso client. Ogni messaggio deve contenere tutte le informazioni necessarie all'elaborazione.</p>
+      <ul>
+        <li>Scalabilità orizzontale semplice: qualsiasi server può gestire qualsiasi richiesta</li>
+        <li>Fault tolerance maggiore: nessuno stato da ripristinare dopo un crash</li>
+        <li>Ogni richiesta è autocontenuta</li>
+        <li><strong>Esempi</strong>: HTTP/1.x (nativamente stateless; i cookie simulano lo stato), UDP, IP, DNS (ogni query è indipendente)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="highlight">La distinzione connection-oriented/connectionless opera a livello di trasporto e riguarda la gestione della sessione di comunicazione. La distinzione stateful/stateless opera a livello applicativo e riguarda il mantenimento del contesto tra richieste successive. I due assi sono ortogonali: si può avere un protocollo connection-oriented stateless (HTTP su TCP) o connectionless stateful (alcuni firewall che tracciano sessioni UDP).</div>
+</section>
+
+<!-- ===== OSI / TCP-IP ===== -->
+<section id="osi" class="section">
+  <h2 class="chapter-title">Modelli OSI e TCP/IP</h2>
+
+  <div class="block green">
+    <div class="btitle">Il modello di riferimento: perché stratificare?</div>
+    <p>La stratificazione (<strong>layering</strong>) è il principio architetturale fondamentale delle reti moderne. Decompone il problema complesso della comunicazione in strati indipendenti, ciascuno con responsabilità ben definite. Ogni strato offre servizi allo strato superiore tramite un'<strong>interfaccia</strong> e utilizza i servizi dello strato inferiore. Due entità sullo stesso strato in host diversi comunicano tramite un <strong>protocollo</strong> orizzontale. I vantaggi sono: modularità, interoperabilità, possibilità di sostituire l'implementazione di un layer senza toccare gli altri.</p>
+  </div>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="osi-osimodel">Modello OSI</button>
+    <button data-sub="osi-tcpip">Modello TCP/IP</button>
+  </div>
+
+  <div id="osi-osimodel" class="sub-section visible">
+    <h3 class="sep">Modello OSI — ISO/IEC 7498</h3>
+    <div class="card">
+      <div class="card-title">I 7 livelli del modello OSI</div>
+      <div class="block blue">
+        <div class="byear">Layer 7</div>
+        <div class="btitle">Application</div>
+        <p>Interfaccia con le applicazioni utente. Fornisce servizi di rete direttamente alle applicazioni (HTTP, FTP, SMTP, DNS, SNMP). Gestisce la semantica dei dati scambiati.</p>
+      </div>
+      <div class="block blue">
+        <div class="byear">Layer 6</div>
+        <div class="btitle">Presentation</div>
+        <p>Traduzione, codifica, compressione e cifratura dei dati. Garantisce che i dati prodotti da un'applicazione siano leggibili da un'altra (es. conversione ASCII↔EBCDIC, TLS/SSL).</p>
+      </div>
+      <div class="block blue">
+        <div class="byear">Layer 5</div>
+        <div class="btitle">Session</div>
+        <p>Gestione delle sessioni di comunicazione: instaurazione, mantenimento, sincronizzazione e terminazione. Gestisce i checkpoint per recovery dei dati (es. RPC, NetBIOS).</p>
+      </div>
+      <div class="block teal">
+        <div class="byear">Layer 4</div>
+        <div class="btitle">Transport <span class="pill imp">TCP / UDP</span></div>
+        <p>Comunicazione end-to-end tra processi. Multiplexing tramite porte. Affidabilità (TCP), controllo di flusso, controllo di congestione, o servizio best-effort (UDP). La PDU è il <strong>segmento</strong> (TCP) o <strong>datagramma</strong> (UDP).</p>
+      </div>
+      <div class="block amber">
+        <div class="byear">Layer 3</div>
+        <div class="btitle">Network <span class="pill imp">IP / Router</span></div>
+        <p>Instradamento (routing) dei pacchetti attraverso reti eterogenee. Indirizzamento logico (IPv4, IPv6). Frammentazione/reassembling. La PDU è il <strong>pacchetto</strong>. Dispositivo chiave: il <strong>router</strong>.</p>
+      </div>
+      <div class="block amber">
+        <div class="byear">Layer 2</div>
+        <div class="btitle">Data Link <span class="pill imp">MAC / Switch</span></div>
+        <p>Trasmissione affidabile su singolo link fisico. Indirizzamento fisico (MAC address 48 bit). Framing, rilevazione errori (CRC/FCS), controllo di accesso al mezzo (CSMA/CD). La PDU è il <strong>frame</strong>. Dispositivo: <strong>switch</strong>.</p>
+      </div>
+      <div class="block red" style="margin-bottom:0">
+        <div class="byear">Layer 1</div>
+        <div class="btitle">Physical</div>
+        <p>Trasmissione di bit grezzi sul mezzo fisico. Definisce tensioni, frequenze, codifiche del segnale (NRZ, Manchester), connettori, cablaggi. La PDU è il <strong>bit</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="osi-tcpip" class="sub-section">
+    <h3 class="sep">Modello TCP/IP — Stack Internet (DoD)</h3>
+    <div class="card">
+      <div class="card-title">Il modello a 4 layer del TCP/IP</div>
+      <p style="margin-bottom:12px">Il modello TCP/IP (detto anche DoD o Internet Model) è il riferimento pratico su cui è costruita Internet. Ha 4 layer che collassano i 7 livelli OSI in un'architettura più pragmatica:</p>
+      <div class="block green">
+        <div class="byear">Layer 4 — Application</div>
+        <p>Incorpora i layer OSI 5, 6, 7. I protocolli applicativi gestiscono direttamente sessione, presentazione e applicazione senza distinzione formale. Esempi: <strong>HTTP/HTTPS, DNS, DHCP, FTP, SMTP, SSH, SNMP, Telnet</strong>.</p>
+      </div>
+      <div class="block teal">
+        <div class="byear">Layer 3 — Transport</div>
+        <p>Corrisponde al layer 4 OSI. I due protocolli fondamentali sono <strong>TCP</strong> (connection-oriented, affidabile) e <strong>UDP</strong> (connectionless, best-effort). Fornisce multiplexing via numeri di porta.</p>
+      </div>
+      <div class="block amber">
+        <div class="byear">Layer 2 — Internet</div>
+        <p>Corrisponde al layer 3 OSI. Protocollo principale: <strong>IP</strong> (IPv4/IPv6). Responsabile dell'indirizzamento logico e del routing inter-rete. Protocolli ausiliari: <strong>ICMP</strong> (controllo ed errori), <strong>ARP</strong> (risoluzione IP→MAC), <strong>OSPF, BGP</strong> (routing dinamico).</p>
+      </div>
+      <div class="block red">
+        <div class="byear">Layer 1 — Network Access (Link)</div>
+        <p>Incorpora i layer OSI 1 e 2. Gestisce la trasmissione fisica e il framing sul singolo link. Dipende dalla tecnologia: Ethernet, Wi-Fi (IEEE 802.11), PPP, DSL, ecc.</p>
+      </div>
+      <div class="highlight" style="margin-bottom:0">Il modello OSI è un modello di riferimento teorico-normativo; il TCP/IP è il modello implementato realmente. OSI è utile per la didattica e per descrivere le responsabilità; TCP/IP è ciò che gira su ogni dispositivo connesso a Internet.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Incapsulamento (Encapsulation) — il processo fondamentale</div>
+      <p>Quando un'applicazione invia dati, ogni layer aggiunge la propria <strong>intestazione (header)</strong> al payload ricevuto dal layer superiore. Questo processo è detto <strong>incapsulamento</strong>. In ricezione avviene il processo inverso (<strong>decapsulamento</strong>). La PDU (Protocol Data Unit) cambia nome a ogni livello:</p>
+      <ul style="margin-top:8px">
+        <li>Livello Applicazione → <strong>Message/Data</strong></li>
+        <li>Livello Trasporto (TCP) → <strong>Segmento</strong> (aggiunge header TCP)</li>
+        <li>Livello Internet (IP) → <strong>Pacchetto/Datagramma IP</strong> (aggiunge header IP)</li>
+        <li>Livello Data Link → <strong>Frame</strong> (aggiunge header MAC + FCS)</li>
+        <li>Livello Fisico → <strong>Bit</strong></li>
+      </ul>
+      <p style="margin-top:8px">Due host sullo stesso link fisico comunicano scambiando <strong>frame</strong>; due host su reti diverse comunicano scambiando <strong>pacchetti IP</strong>, ognuno dei quali viene incapsulato in frame diversi a ogni hop intermedio.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== IP ===== -->
+<section id="ip" class="section">
+  <h2 class="chapter-title">IP</h2>
+
+  <div class="block green">
+    <div class="btitle">IP — Internet Protocol</div>
+    <p>Il protocollo IP opera al livello 3 (Network/Internet) ed è il protocollo di instradamento universale di Internet. È un protocollo <strong>connectionless</strong> e <strong>best-effort</strong>: non offre garanzie di consegna, di ordinamento, né di assenza di duplicati. Ogni pacchetto è instradato indipendentemente dagli altri. L'affidabilità è delegata ai livelli superiori (TCP). IP fornisce due servizi fondamentali: <strong>indirizzamento logico</strong> (indirizzi IP) e <strong>instradamento</strong> (routing) dei datagrammi attraverso reti eterogenee.</p>
+  </div>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="ip-ipheader">Protocollo IP</button>
+    <button data-sub="ip-ipaddr">Indirizzamento IP</button>
+  </div>
+
+  <div id="ip-ipheader" class="sub-section visible">
+    <h3 class="sep">Header IPv4 — Struttura completa (senza opzionali)</h3>
+    <div class="hdr">
+      <div class="hdr-ruler"><span>0–7</span><span>8–15</span><span>16–23</span><span>24–31</span></div>
+      <div class="hdr-rows">
+        <div class="hdr-row"><span class="hdr-off">0</span><div class="hdr-fields">
+          <div class="hdr-f green" style="--w:4;min-width:48px">Version<small>4 bit</small></div>
+          <div class="hdr-f blue" style="--w:4">IHL<small>4 bit</small></div>
+          <div class="hdr-f amber" style="--w:8">DSCP / ToS<small>8 bit</small></div>
+          <div class="hdr-f purple" style="--w:16">Total Length<small>16 bit</small></div>
+        </div></div>
+        <div class="hdr-row"><span class="hdr-off">4</span><div class="hdr-fields">
+          <div class="hdr-f red" style="--w:16">Identification<small>16 bit</small></div>
+          <div class="hdr-f cyan" style="--w:3;min-width:42px">Flags<small>3 bit</small></div>
+          <div class="hdr-f teal" style="--w:13">Fragment Offset<small>13 bit</small></div>
+        </div></div>
+        <div class="hdr-row"><span class="hdr-off">8</span><div class="hdr-fields">
+          <div class="hdr-f amber" style="--w:8">TTL<small>8 bit</small></div>
+          <div class="hdr-f blue" style="--w:8">Protocol<small>8 bit</small></div>
+          <div class="hdr-f red" style="--w:16">Header Checksum<small>16 bit</small></div>
+        </div></div>
+        <div class="hdr-row"><span class="hdr-off">12</span><div class="hdr-fields">
+          <div class="hdr-f green" style="--w:32">Source IP Address<small>32 bit</small></div>
+        </div></div>
+        <div class="hdr-row"><span class="hdr-off">16</span><div class="hdr-fields">
+          <div class="hdr-f purple" style="--w:32">Destination IP Address<small>32 bit</small></div>
+        </div></div>
+      </div>
+      <div class="hdr-note">Numeri a sinistra: offset in byte. Intestazione minima: 20 byte.</div>
+    </div>
+
+    <h3 class="sep">Descrizione dettagliata di ogni campo dell'header IPv4</h3>
+    <div class="block green">
+      <div class="byear">Version — 4 bit</div>
+      <div class="btitle">Versione del protocollo IP</div>
+      <p>Indica la versione del protocollo IP. Per IPv4 il valore è <code>0100</code> (decimale 4); per IPv6 è <code>0110</code> (decimale 6). Il router usa questo campo per determinare come interpretare il resto dell'header.</p>
+    </div>
+    <div class="block blue">
+      <div class="byear">IHL (Internet Header Length) — 4 bit</div>
+      <div class="btitle">Lunghezza dell'intestazione</div>
+      <p>Specifica la lunghezza dell'header IP in <strong>word da 32 bit</strong>. Il valore minimo è 5 (5 × 32 bit = 20 byte, header senza opzioni). Il valore massimo è 15 (15 × 32 bit = 60 byte). È necessario perché il campo Options ha lunghezza variabile. Sapere dove finisce l'header è indispensabile per trovare l'inizio del payload (segmento TCP/UDP).</p>
+    </div>
+    <div class="block amber">
+      <div class="byear">DSCP / Type of Service — 8 bit</div>
+      <div class="btitle">Differentiated Services / Qualità del servizio</div>
+      <p>Originariamente definito come <strong>ToS (Type of Service)</strong>, ridefinito come <strong>DSCP (Differentiated Services Code Point)</strong>. I 6 bit DSCP più significativi definiscono la classe di traffico per la QoS (Quality of Service): priorità del pacchetto, gestione in caso di congestione (Expedited Forwarding, Assured Forwarding). I 2 bit ECN (Explicit Congestion Notification) segnalano la congestione in rete senza dover scartare pacchetti.</p>
+    </div>
+    <div class="block purple">
+      <div class="byear">Total Length — 16 bit</div>
+      <div class="btitle">Lunghezza totale del datagramma IP</div>
+      <p>Indica la dimensione totale del datagramma IP in byte, inclusi header e payload. Valore minimo: 20 byte (solo header). Valore massimo teorico: <strong>65.535 byte</strong>. Nella pratica il limite è imposto dalla MTU del link (1500 byte per Ethernet). Quando un datagramma supera la MTU, il router effettua la <strong>frammentazione</strong>.</p>
+    </div>
+    <div class="block red">
+      <div class="byear">Identification — 16 bit</div>
+      <div class="btitle">Identificatore del datagramma (per frammentazione)</div>
+      <p>Numero identificativo assegnato dal mittente al datagramma. Tutti i frammenti prodotti dalla frammentazione di un singolo datagramma originale condividono lo <strong>stesso valore di Identification</strong>. Il destinatario usa questo campo per raggruppare i frammenti appartenenti allo stesso datagramma originale durante il reassembling.</p>
+    </div>
+    <div class="block cyan">
+      <div class="byear">Flags — 3 bit</div>
+      <div class="btitle">Controllo della frammentazione</div>
+      <ul>
+        <li><strong>Bit 0 (Reserved)</strong>: sempre 0.</li>
+        <li><strong>Bit 1 — DF (Don't Fragment)</strong>: se impostato a 1, il router <em>non deve</em> frammentare il pacchetto. Se il pacchetto supera la MTU del link successivo, viene scartato e il mittente riceve un messaggio ICMP "Fragmentation Needed". Usato dal meccanismo <strong>Path MTU Discovery</strong>.</li>
+        <li><strong>Bit 2 — MF (More Fragments)</strong>: se impostato a 1, indica che esistono altri frammenti successivi. L'ultimo frammento ha MF = 0. Il destinatario sa che il datagramma è completo quando riceve un frammento con MF = 0.</li>
+      </ul>
+    </div>
+    <div class="block teal">
+      <div class="byear">Fragment Offset — 13 bit</div>
+      <div class="btitle">Posizione del frammento nel datagramma originale</div>
+      <p>Indica la posizione dei dati del frammento rispetto all'inizio del payload del datagramma originale, espressa in <strong>unità di 8 byte</strong>. Il primo frammento ha offset = 0. Il destinatario usa Identification + Fragment Offset per riassemblare correttamente tutti i frammenti nell'ordine giusto, indipendentemente dall'ordine di arrivo.</p>
+    </div>
+    <div class="block amber">
+      <div class="byear">TTL (Time to Live) — 8 bit</div>
+      <div class="btitle">Limite di hop per prevenire loop di routing</div>
+      <p>Il TTL è decrementato di 1 da ogni router che elabora il pacchetto. Quando raggiunge 0, il router scarta il pacchetto e invia un messaggio <strong>ICMP Time Exceeded</strong> al mittente. Funzione: prevenire che pacchetti con destinazione irraggiungibile circolino indefinitamente nella rete a causa di loop di routing. Valori tipici: 64 (Linux), 128 (Windows), 255 (router Cisco). Lo strumento <strong>traceroute</strong> sfrutta il TTL inviando datagrammi con TTL incrementale per mappare il percorso.</p>
+    </div>
+    <div class="block blue">
+      <div class="byear">Protocol — 8 bit</div>
+      <div class="btitle">Protocollo del livello superiore (demultiplexing)</div>
+      <p>Identifica il protocollo di livello 4 incapsulato nel payload IP, permettendo al livello IP in ricezione di passare il datagramma al processo corretto (<strong>demultiplexing</strong>). Valori standardizzati da IANA: <code>6</code> = TCP, <code>17</code> = UDP, <code>1</code> = ICMP, <code>89</code> = OSPF, <code>41</code> = IPv6 encapsulato, <code>50</code> = ESP (IPsec).</p>
+    </div>
+    <div class="block red">
+      <div class="byear">Header Checksum — 16 bit</div>
+      <div class="btitle">Integrità dell'header IP</div>
+      <p>Checksum calcolato solo sull'header IP (non sul payload). Viene ricalcolato da ogni router perché il TTL cambia a ogni hop. Algoritmo: complemento a 1 della somma dei complementi a 1 delle word da 16 bit dell'header. Se il checksum non corrisponde, il datagramma viene scartato silenziosamente. In IPv6 questo campo è stato eliminato per efficienza (la verifica dell'integrità è delegata ai livelli superiori).</p>
+    </div>
+    <div class="block green">
+      <div class="byear">Source / Destination IP Address — 32 bit ciascuno</div>
+      <div class="btitle">Indirizzi IP sorgente e destinazione</div>
+      <p>Indirizzi IPv4 a 32 bit in notazione puntata (dotted-decimal). L'indirizzo sorgente identifica il mittente del datagramma; l'indirizzo destinazione identifica il ricevente. Sono i campi su cui si basa tutto il processo di routing. Attenzione: in presenza di NAT (Network Address Translation) l'indirizzo sorgente viene modificato dai router di bordo.</p>
+    </div>
+  </div>
+
+  <div id="ip-ipaddr" class="sub-section">
+    <h3 class="sep">Indirizzamento IP — Architettura e struttura</h3>
+    <div class="block green">
+      <div class="btitle">Perché l'indirizzamento IP?</div>
+      <p>In una rete eterogenea composta da tecnologie diverse (Ethernet, Wi-Fi, ATM, PPP...) gli indirizzi fisici (MAC) sono specifici per ogni tecnologia e non sono gerarchici: non è possibile fare routing su di essi. L'indirizzamento IP introduce un <strong>piano di indirizzamento logico, gerarchico e uniforme</strong>, indipendente dalla tecnologia del link fisico sottostante. La gerarchia (rete + host) permette ai router di aggregare le rotte e costruire tabelle di routing scalabili.</p>
+    </div>
+    <div class="block blue">
+      <div class="btitle">Struttura di un indirizzo IPv4</div>
+      <p>Un indirizzo IPv4 è composto da <strong>32 bit</strong> divisi in due parti logiche: il <strong>network prefix</strong> (identifica la rete) e il <strong>host portion</strong> (identifica l'host all'interno di quella rete). La suddivisione è determinata dalla <strong>subnet mask</strong>. In notazione CIDR si scrive <code>192.168.1.0/24</code> dove <code>/24</code> indica che i primi 24 bit sono il network prefix.</p>
+      <ul style="margin-top:8px">
+        <li><strong>Network Address</strong>: tutti i bit host a 0. Es. <code>192.168.1.0/24</code>. Identifica la rete, non è assegnabile a un host.</li>
+        <li><strong>Broadcast Address</strong>: tutti i bit host a 1. Es. <code>192.168.1.255/24</code>. Un pacchetto inviato all'indirizzo broadcast è consegnato a tutti gli host della sottorete.</li>
+        <li><strong>Indirizzi host</strong>: tutti gli indirizzi tra network e broadcast. In una /24: 256 - 2 = <strong>254 host utilizzabili</strong>.</li>
+      </ul>
+    </div>
+    <div class="block teal">
+      <div class="btitle">CIDR — Classless Inter-Domain Routing</div>
+      <p>Prima del CIDR esisteva il <strong>classful addressing</strong>: Classe A (/8), Classe B (/16), Classe C (/24). Questo schema era estremamente rigido e causava un enorme spreco di indirizzi (es. un'organizzazione con 300 host doveva ottenere una Classe B con 65.534 indirizzi). Il CIDR ha abolito le classi fisse permettendo prefix di qualsiasi lunghezza (<strong>Variable Length Subnet Masking, VLSM</strong>). Oggi si assegnano blocchi della dimensione strettamente necessaria.</p>
+      <p>La subnet mask in CIDR: <code>/24</code> = <code>255.255.255.0</code>; <code>/25</code> = <code>255.255.255.128</code>; <code>/30</code> = <code>255.255.255.252</code> (solo 2 host: usata per link punto-punto tra router).</p>
+    </div>
+    <div class="block amber">
+      <div class="btitle">Indirizzi privati e NAT</div>
+      <p>Lo spazio di indirizzamento IPv4 a 32 bit teoricamente permette circa 4,3 miliardi di indirizzi. L'esaurimento degli indirizzi pubblici ha portato a riservare blocchi di indirizzi privati (non instradabili su Internet):</p>
+      <ul>
+        <li><code>10.0.0.0/8</code> — Classe A privata (16.777.214 host)</li>
+        <li><code>172.16.0.0/12</code> — Classe B privata (1.048.574 host)</li>
+        <li><code>192.168.0.0/16</code> — Classe C privata (65.534 host)</li>
+      </ul>
+      <p style="margin-top:8px">Il meccanismo <strong>NAT (Network Address Translation)</strong> permette a host con indirizzi privati di accedere a Internet traducendo gli indirizzi privati in uno o pochi indirizzi pubblici. Il router NAT mantiene una <strong>NAT table</strong> che mappa coppie (IP privato : porta sorgente) ↔ (IP pubblico : porta NAT).</p>
+    </div>
+    <div class="grid3">
+      <div class="card-small green">
+        <span class="badge">Indirizzi speciali</span>
+        <ul>
+          <li><code>0.0.0.0/0</code> — Default route</li>
+          <li><code>127.0.0.0/8</code> — Loopback</li>
+          <li><code>169.254.0.0/16</code> — APIPA (link-local)</li>
+          <li><code>224.0.0.0/4</code> — Multicast</li>
+          <li><code>255.255.255.255</code> — Broadcast limitato</li>
+        </ul>
+      </div>
+      <div class="card-small blue">
+        <span class="badge">Calcolo rete da CIDR</span>
+        <ul>
+          <li>IP: <code>192.168.10.130/26</code></li>
+          <li>Mask: <code>255.255.255.192</code></li>
+          <li>Network: AND bit a bit IP&amp;Mask</li>
+          <li>→ <code>192.168.10.128/26</code></li>
+          <li>Broadcast: <code>192.168.10.191</code></li>
+          <li>Host range: .129 – .190 (62 host)</li>
+        </ul>
+      </div>
+      <div class="card-small amber">
+        <span class="badge">Subnetting logica</span>
+        <ul>
+          <li>Ogni bit sottratto all'host raddoppia il numero di reti</li>
+          <li>n bit host → 2<sup>n</sup> - 2 host</li>
+          <li>/30 → 4 indirizzi, 2 host</li>
+          <li>/29 → 8 indirizzi, 6 host</li>
+          <li>/28 → 16 indirizzi, 14 host</li>
+          <li>/27 → 32 indirizzi, 30 host</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ROUTER ===== -->
+<section id="router" class="section">
+  <h2 class="chapter-title">Router</h2>
+
+  <div class="block green">
+    <div class="btitle">Cos'è un Router</div>
+    <p>Un <strong>router</strong> è un dispositivo di livello 3 (Network) che interconnette reti diverse e instrada i pacchetti IP tra di esse. A differenza degli switch (che operano a L2 e instradano frame in base agli indirizzi MAC all'interno di una stessa rete), il router prende decisioni di forwarding basate sugli <strong>indirizzi IP di destinazione</strong> dei pacchetti, permettendo la comunicazione tra reti logicamente distinte. Ogni interfaccia del router appartiene a una rete IP diversa e ha un proprio indirizzo IP.</p>
+    <p>Il router svolge tre funzioni principali: <strong>Addressing</strong> (assegna e gestisce gli indirizzi IP sulle proprie interfacce), <strong>Routing</strong> (decide il percorso migliore per ogni pacchetto consultando la routing table) e <strong>Fragmentation</strong> (se un pacchetto è troppo grande per il link di uscita, lo suddivide in frammenti più piccoli compatibili con la MTU di quel link).</p>
+  </div>
+
+  <h3 class="sep">Componenti hardware interni di un router</h3>
+  <div class="grid2">
+    <div class="card-small green">
+      <span class="badge">CPU (Central Processing Unit)</span>
+      <div class="ct">Processore principale</div>
+      <p>È il "cervello" del router. Esegue il sistema operativo del router (es. Cisco IOS, JunOS) e i <strong>protocolli di routing dinamico</strong> (OSPF, BGP, RIP, EIGRP). La CPU gestisce anche la configurazione del dispositivo, le sessioni di management (SSH, SNMP), il calcolo delle tabelle di routing e la risposta ai messaggi di controllo come ICMP. Nei router moderni, la CPU non si occupa del forwarding normale dei pacchetti (che avviene in hardware dedicato) ma solo dei pacchetti speciali o delle eccezioni.</p>
+    </div>
+    <div class="card-small blue">
+      <span class="badge">RAM (Random Access Memory)</span>
+      <div class="ct">Memoria di lavoro</div>
+      <p>È la memoria volatile principale del router. Contiene tutto ciò che il router usa durante il funzionamento: la <strong>routing table</strong> (tabella delle rotte attive, detta anche RIB — Routing Information Base), la <strong>ARP table</strong> (mappatura IP↔MAC), i <strong>buffer dei pacchetti</strong> in transito (code di ingresso e uscita), la configurazione in esecuzione (running-config) e lo stato dei protocolli di routing attivi. Se il router viene spento, tutto il contenuto della RAM viene perso. Più RAM significa routing table più grande e buffer più profondi.</p>
+    </div>
+    <div class="card-small amber">
+      <span class="badge">NVRAM / Flash (Memoria non volatile)</span>
+      <div class="ct">Archiviazione persistente</div>
+      <p>Il router usa due tipi di memoria permanente. La <strong>NVRAM (Non-Volatile RAM)</strong> contiene la configurazione di avvio (startup-config): le impostazioni salvate che il router carica all'accensione. La memoria <strong>Flash</strong> (simile a una chiavetta USB interna) contiene l'immagine del sistema operativo del router (il firmware). Queste memorie non perdono i dati in assenza di alimentazione. Quando si salva la configurazione con il comando <code>write memory</code>, la running-config dalla RAM viene copiata nella NVRAM.</p>
+    </div>
+    <div class="card-small teal">
+      <span class="badge">Cache / FIB (Forwarding Information Base)</span>
+      <div class="ct">Tabella di forwarding veloce</div>
+      <p>Per evitare che la CPU debba consultare la routing table completa per ogni singolo pacchetto (operazione lenta), i router moderni mantengono una <strong>FIB (Forwarding Information Base)</strong>: una versione ottimizzata e precompilata della routing table, caricata direttamente nelle <strong>ASIC</strong> (chip hardware dedicati al forwarding). Questa cache hardware consente il <strong>forwarding a velocità di linea</strong> — cioè alla massima velocità del link — senza coinvolgere la CPU. La FIB viene aggiornata ogni volta che la routing table cambia.</p>
+    </div>
+  </div>
+
+  <h3 class="sep">Porte e matrice di commutazione</h3>
+  <div class="grid2">
+    <div class="card-small green">
+      <span class="badge">Input Ports</span>
+      <div class="ct">Porte di ingresso</div>
+      <p>Terminano il link fisico in ingresso. Eseguono le funzioni del livello fisico (ricezione segnale), del livello data-link (decapsulamento del frame) e del livello network (lookup nella FIB per determinare la porta di uscita). Le implementazioni moderne eseguono il <strong>lookup a velocità di linea</strong> per evitare colli di bottiglia.</p>
+    </div>
+    <div class="card-small blue">
+      <span class="badge">Switching Fabric</span>
+      <div class="ct">Matrice di commutazione</div>
+      <p>Il "cuore" del router: trasferisce i pacchetti dalla porta di ingresso a quella di uscita. Tre architetture principali: <strong>via memoria</strong> (tradizionale, collo di bottiglia sul bus), <strong>via bus condiviso</strong> (veloce ma un pacchetto alla volta sul bus), <strong>via rete di interconnessione</strong> (crossbar switch, parallela, alta performance; usata nei router enterprise).</p>
+    </div>
+    <div class="card-small amber">
+      <span class="badge">Output Ports</span>
+      <div class="ct">Porte di uscita</div>
+      <p>Accodano i pacchetti da trasmettere (<strong>output queue/buffer</strong>), eseguono lo <strong>scheduling</strong> (quale pacchetto trasmettere per primo in caso di congestione: FIFO, WFQ, Priority Queuing) e il framing per il layer data-link del link di uscita. Il buffer è necessario perché i pacchetti possono arrivare più velocemente di quanto possano essere trasmessi.</p>
+    </div>
+    <div class="card-small teal">
+      <span class="badge">Routing Processor</span>
+      <div class="ct">Processore di routing</div>
+      <p>Esegue i <strong>protocolli di routing</strong> (OSPF, BGP, RIP, EIGRP), mantiene e aggiorna la <strong>Routing Information Base (RIB)</strong>, e calcola la <strong>Forwarding Information Base (FIB)</strong> installata sulle porte di input per il forwarding a velocità di linea. Gestisce anche SNMP, SSH di management, e le configurazioni.</p>
+    </div>
+  </div>
+
+  <h3 class="sep">Funzioni del router: addressing, routing e fragmentation</h3>
+  <div class="block green">
+    <div class="byear">Funzione 1</div>
+    <div class="btitle">Addressing — Gestione degli indirizzi IP</div>
+    <p>Ogni interfaccia fisica del router deve avere un <strong>indirizzo IP</strong> appartenente alla rete a cui è connessa. Questo indirizzo funge da <strong>default gateway</strong> per gli host di quella rete: quando un host deve inviare un pacchetto a una rete diversa dalla propria, lo indirizza al router come primo hop. Il router gestisce anche la propria <strong>ARP table</strong>, associando gli indirizzi IP dei vicini diretti ai loro indirizzi MAC, necessari per costruire i frame di livello 2 sui singoli link.</p>
+  </div>
+  <div class="block blue">
+    <div class="byear">Funzione 2</div>
+    <div class="btitle">Routing — Instradamento diretto e indiretto</div>
+    <p><strong>Instradamento Diretto</strong>: mittente e destinatario si trovano nella stessa rete IP (stesso network prefix). Il mittente esegue un AND bit a bit tra l'IP di destinazione e la propria subnet mask: se il risultato coincide con il proprio network address, la destinazione è nella stessa rete. Il pacchetto viene consegnato direttamente tramite ARP, senza coinvolgere il router.</p>
+    <p><strong>Instradamento Indiretto</strong>: mittente e destinatario si trovano in reti IP diverse. Il mittente invia il pacchetto al <strong>default gateway</strong>. Il router riceve il pacchetto, esamina l'IP di destinazione, consulta la propria <strong>routing table / FIB</strong> e applica il principio del <strong>Longest Prefix Match (LPM)</strong>: tra tutte le voci che matchano l'IP di destinazione, viene selezionata quella con il prefix più lungo (più specifico). Ad ogni hop il router decrementa il <strong>TTL</strong> di 1, ricalcola il <strong>checksum</strong> IP e sostituisce l'indirizzo MAC di destinazione del frame con quello del prossimo hop.</p>
+    <p>Le rotte possono essere <strong>statiche</strong> (configurate manualmente, nessun overhead di protocollo, usate per reti piccole) oppure <strong>dinamiche</strong> (apprese tramite protocolli come OSPF, BGP, RIP, EIGRP — si adattano automaticamente ai guasti di rete).</p>
+  </div>
+  <div class="block amber">
+    <div class="byear">Funzione 3</div>
+    <div class="btitle">Fragmentation — Frammentazione dei pacchetti</div>
+    <p>Ogni link di rete ha una <strong>MTU (Maximum Transmission Unit)</strong>: la dimensione massima di un frame che può essere trasmesso su quel link (Ethernet standard: 1500 byte). Quando un pacchetto IP che deve attraversare un link ha una dimensione superiore alla MTU di quel link, il router esegue la <strong>frammentazione</strong>: suddivide il datagramma originale in più frammenti più piccoli, ciascuno con il proprio header IP.</p>
+    <p>Ogni frammento porta lo stesso valore di <strong>Identification</strong> del datagramma originale (così il destinatario sa che appartengono allo stesso messaggio), un <strong>Fragment Offset</strong> che indica la posizione dei suoi dati nel flusso originale, e il flag <strong>MF (More Fragments)</strong> impostato a 1 (tranne l'ultimo frammento). Il riassemblaggio avviene esclusivamente alla <strong>destinazione finale</strong>, non nei router intermedi. Se il bit <strong>DF (Don't Fragment)</strong> è impostato nell'header e il pacchetto supera la MTU, il router scarta il pacchetto e invia un messaggio ICMP al mittente.</p>
+  </div>
+</section>
+
+<!-- ===== DNS ===== -->
+<section id="dns" class="section">
+  <h2 class="chapter-title">DNS</h2>
+
+  <div class="block green">
+    <div class="btitle">DNS — Domain Name System</div>
+    <p>Il <strong>DNS</strong> è il sistema distribuito e gerarchico che risolve i <strong>nomi di dominio</strong> (es. <code>www.example.com</code>) nei corrispondenti indirizzi IP e viceversa. È un'infrastruttura critica di Internet: senza DNS ogni utente dovrebbe memorizzare gli indirizzi IP numerici. Il DNS è progettato come un database distribuito con gerarchia ad albero, non esiste un singolo server centrale. Opera prevalentemente su <strong>UDP porta 53</strong> (per query standard) e su <strong>TCP porta 53</strong> per trasferimenti di zona e query con risposta superiore a 512 byte.</p>
+  </div>
+
+  <h3 class="sep">Domain Name Space — struttura gerarchica</h3>
+  <div class="block blue">
+    <div class="btitle">Root Domain</div>
+    <p>La radice dell'albero DNS è il <strong>root domain</strong>, rappresentato da un punto finale implicito (<code>.</code>). Esistono <strong>13 indirizzi IP logici di root server</strong> (lettere da A a M: es. <code>a.root-servers.net</code>), gestiti da diverse organizzazioni mondiali (ICANN, VeriSign, ecc.), replicati tramite <strong>anycast</strong> in centinaia di nodi fisici distribuiti globalmente. Conoscono soltanto i name server autoritativi dei TLD.</p>
+  </div>
+  <div class="block blue">
+    <div class="btitle">TLD — Top Level Domain</div>
+    <p>Il primo livello sotto la radice. Si distinguono:</p>
+    <ul>
+      <li><strong>gTLD (generic)</strong>: <code>.com</code>, <code>.org</code>, <code>.net</code>, <code>.edu</code>, <code>.gov</code>, <code>.int</code>, e i nuovi gTLD (<code>.tech</code>, <code>.io</code>, <code>.ai</code>, ecc.)</li>
+      <li><strong>ccTLD (country-code)</strong>: <code>.it</code>, <code>.uk</code>, <code>.de</code>, <code>.fr</code>, <code>.us</code> — assegnati per ISO 3166.</li>
+      <li><strong>Infrastructure TLD</strong>: <code>.arpa</code> (usato per DNS inverso, reverse DNS).</li>
+    </ul>
+    <p style="margin-top:8px">I TLD server conoscono i name server autoritativi per i second-level domain registrati sotto di essi.</p>
+  </div>
+  <div class="block teal">
+    <div class="btitle">Domini, sottodomini e zone DNS</div>
+    <p>La gerarchia si estende verso il basso: il <strong>second-level domain</strong> è la parte controllata dall'organizzazione (<code>example</code> in <code>example.com</code>). I <strong>sottodomini</strong> sono ulteriori suddivisioni (<code>mail.example.com</code>, <code>api.example.com</code>). Il nome completo da sinistra alla radice è il <strong>FQDN (Fully Qualified Domain Name)</strong>.</p>
+    <p>Una <strong>zona DNS</strong> è una porzione contigua dell'albero dei nomi gestita in modo unitario da un insieme di name server. Una zona può corrispondere a un dominio o essere suddivisa in zone più piccole tramite <strong>delega</strong> (creando una zona figlia con propri name server). La zona è descritta in un file di testo strutturato: il <strong>zone file</strong>.</p>
+  </div>
+
+  <h3 class="sep">Name Server — tipologie</h3>
+  <div class="grid2">
+    <div class="card-small blue">
+      <span class="badge">Authoritative Name Server</span>
+      <p>Detiene i record DNS ufficiali per una zona. Risponde con <strong>autorità</strong> alle query su nomi di quella zona (flag AA=1 nella risposta). Ha due ruoli: <strong>Primary</strong> (legge i record dal zone file locale, unica fonte di verità) e <strong>Secondary</strong> (copia periodicamente i record dal primary via <strong>Zone Transfer</strong> — AXFR/IXFR — per ridondanza e bilanciamento).</p>
+    </div>
+    <div class="card-small teal">
+      <span class="badge">Recursive Resolver (Caching NS)</span>
+      <p>Riceve le query dei client, esegue la risoluzione ricorsiva per conto loro e memorizza le risposte nella cache. È il server DNS configurato nei client (spesso fornito dall'ISP o servizi pubblici come <code>8.8.8.8</code> Google, <code>1.1.1.1</code> Cloudflare). Non ha autorità sui dati che restituisce: è un intermediario.</p>
+    </div>
+  </div>
+
+  <h3 class="sep">Processo di risoluzione DNS</h3>
+  <div class="block green">
+    <div class="byear">Risoluzione ricorsiva (Recursive Resolution)</div>
+    <div class="btitle">Il resolver fa tutto il lavoro</div>
+    <p>Il client invia una query al proprio <strong>resolver ricorsivo</strong> (configurato nel sistema operativo). Il resolver si occupa di <strong>tutta la catena di interrogazioni</strong> e restituisce al client solo la risposta finale. Il client delega completamente la risoluzione al resolver. Questo è il comportamento standard per i client finali (browser, sistema operativo).</p>
+    <ul>
+      <li>Vantaggio: il client è semplice, non conosce l'architettura DNS.</li>
+      <li>Svantaggio: il resolver è sotto pressione — deve gestire migliaia di richieste concorrenti.</li>
+    </ul>
+  </div>
+  <div class="block amber">
+    <div class="byear">Risoluzione iterativa (Iterative Resolution)</div>
+    <div class="btitle">Il resolver fa i salti, ogni server indica il prossimo</div>
+    <p>Nella risoluzione iterativa, il resolver ricorsivo interroga i server uno per volta. Ogni server risponde con il <strong>migliore riferimento disponibile</strong> (referral) verso il server successivo, invece di risolvere completamente. Il resolver deve interrogare autonomamente ogni livello:</p>
+    <ol>
+      <li>Resolver interroga un <strong>root server</strong> → risposta: "non so, ma ecco i NS per <code>.com</code>"</li>
+      <li>Resolver interroga il <strong>TLD server per <code>.com</code></strong> → risposta: "non so, ma ecco i NS per <code>example.com</code>"</li>
+      <li>Resolver interroga l'<strong>authoritative NS per <code>example.com</code></strong> → risposta: "l'IP di <code>www.example.com</code> è 93.184.216.34"</li>
+      <li>Resolver restituisce la risposta al client e la mette in cache.</li>
+    </ol>
+    <p style="margin-top:8px">Questo è il meccanismo con cui lavorano effettivamente i resolver ricorsivi verso i server autoritativi.</p>
+  </div>
+  <div class="block teal">
+    <div class="btitle">DNS Cache e TTL</div>
+    <p>Ogni risposta DNS include un valore <strong>TTL (Time To Live)</strong> specificato dall'amministratore della zona nel record. Il resolver e i sistemi operativi <strong>memorizzano nella cache</strong> le risposte per la durata del TTL. Durante questo intervallo, le query successive per lo stesso nome vengono risolte localmente senza interrogare i server autoritativi. Benefici: riduzione drastica del traffico DNS globale e diminuzione della latenza percepita dall'utente.</p>
+  </div>
+
+  <h3 class="sep">Tipi di record DNS</h3>
+  <div class="grid2">
+    <div class="card-small green"><span class="badge">A / AAAA</span><p><strong>A</strong>: mappa un hostname a un indirizzo IPv4 (32 bit). <strong>AAAA</strong>: mappa un hostname a un indirizzo IPv6 (128 bit). Sono i record più fondamentali del DNS.</p></div>
+    <div class="card-small blue"><span class="badge">NS (Name Server)</span><p>Indica quali sono i name server autoritativi per la zona. Ogni zona deve avere almeno 2 record NS (primario + secondario) per ridondanza.</p></div>
+    <div class="card-small teal"><span class="badge">MX (Mail Exchanger)</span><p>Indica il server di posta elettronica responsabile per un dominio. Ha un campo di <strong>priorità</strong>: il server con valore più basso ha la precedenza. Consente di avere più server di posta con priorità diverse.</p></div>
+    <div class="card-small amber"><span class="badge">CNAME (Canonical Name)</span><p>Alias: mappa un nome a un altro nome (nome canonico). Es. <code>www.example.com → example.com</code>. Il resolver segue la catena fino a trovare un record A. Un CNAME non può coesistere con altri record sullo stesso nodo.</p></div>
+    <div class="card-small red"><span class="badge">PTR (Pointer)</span><p>Usato per il <strong>DNS inverso</strong> (reverse DNS): mappa un indirizzo IP a un hostname. I record PTR sono nella zona speciale <code>in-addr.arpa</code> (IPv4) o <code>ip6.arpa</code> (IPv6). Usati da sistemi anti-spam e logging.</p></div>
+    <div class="card-small gray"><span class="badge">SOA (Start of Authority)</span><p>Record obbligatorio per ogni zona. Contiene: nome del primary NS, email dell'amministratore, serial number (versione del zone file), refresh/retry/expire per i secondari, e TTL minimo.</p></div>
+    <div class="card-small purple"><span class="badge">TXT</span><p>Testo arbitrario. Usato per <strong>SPF</strong> (Sender Policy Framework), <strong>DKIM</strong>, <strong>DMARC</strong> (autenticazione email), verifica del dominio per certificati SSL, e altro.</p></div>
+    <div class="card-small cyan"><span class="badge">SRV</span><p>Specifica la posizione di servizi specifici. Formato: <code>_service._proto.name TTL class SRV priority weight port target</code>. Usato da SIP, XMPP, Microsoft AD, ecc.</p></div>
+  </div>
+
+  <h3 class="sep">Struttura del messaggio DNS e trasporto</h3>
+  <div class="block blue">
+    <div class="btitle">Formato del messaggio DNS</div>
+    <p>Query e response DNS condividono lo stesso formato di messaggio a 5 sezioni:</p>
+    <ul>
+      <li><strong>Header (12 byte fissi)</strong>: Transaction ID (16 bit, correlazione query/response), Flags (QR, Opcode, AA, TC, RD, RA, Z, RCODE), contatori delle sezioni (QDCOUNT, ANCOUNT, NSCOUNT, ARCOUNT).</li>
+      <li><strong>Question Section</strong>: QNAME (nome richiesto in formato label), QTYPE (tipo di record: A=1, NS=2, CNAME=5, MX=15, AAAA=28...), QCLASS (IN=1 per Internet).</li>
+      <li><strong>Answer Section</strong>: RR (Resource Record) che rispondono alla query.</li>
+      <li><strong>Authority Section</strong>: RR NS che indicano i name server autoritativi.</li>
+      <li><strong>Additional Section</strong>: RR ausiliari, spesso gli A record dei name server citati nella Authority Section (glue records).</li>
+    </ul>
+    <p style="margin-top:8px">Il campo <strong>TC (Truncation)</strong> nell'header è impostato a 1 se la risposta è stata troncata perché supera i 512 byte consentiti su UDP. In quel caso il client deve ripetere la query su <strong>TCP porta 53</strong>. Con <strong>EDNS0</strong> (Extension Mechanisms for DNS) è possibile negoziare payload UDP fino a 4096 byte, riducendo il ricorso a TCP.</p>
+  </div>
+</section>
+
+<!-- ===== DHCP ===== -->
+<section id="dhcp" class="section">
+  <h2 class="chapter-title">DHCP</h2>
+
+  <div class="block green">
+    <div class="btitle">DHCP — Dynamic Host Configuration Protocol</div>
+    <p>Il <strong>DHCP</strong> è un protocollo applicativo che automatizza la configurazione IP dei dispositivi su una rete. Senza DHCP, ogni host richiederebbe configurazione manuale di tutti i parametri di rete, con rischio di conflitti e errori. DHCP è un'<strong>estensione di BOOTP</strong> (Bootstrap Protocol), opera sul modello <strong>client-server</strong> e si basa su messaggi <strong>broadcast</strong>: il client, non avendo ancora un indirizzo IP, non può effettuare comunicazioni unicast verso il server.</p>
+  </div>
+  <div class="block blue">
+    <div class="btitle">Parametri forniti dal server DHCP</div>
+    <ul>
+      <li><strong>Indirizzo IP</strong> dell'host (dal pool configurato)</li>
+      <li><strong>Subnet mask</strong> della rete</li>
+      <li><strong>Default gateway</strong> (indirizzo del router di accesso)</li>
+      <li><strong>DNS server</strong> (indirizzi dei resolver DNS da usare)</li>
+      <li><strong>Lease time</strong> (durata del prestito dell'indirizzo IP)</li>
+      <li>Opzionalmente: WINS server, NTP server, domain name, proxy, ecc.</li>
+    </ul>
+  </div>
+  <div class="block amber">
+    <div class="btitle">Livello operativo e porte</div>
+    <p>DHCP opera al <strong>livello applicativo (L7)</strong> utilizzando il protocollo di trasporto <strong>UDP</strong> perché è un protocollo broadcast e non richiede la garanzia di consegna di TCP. Le porte standard sono:</p>
+    <ul>
+      <li><strong>UDP porta 67</strong>: utilizzata dal server DHCP per ricevere le richieste dai client.</li>
+      <li><strong>UDP porta 68</strong>: utilizzata dal client DHCP per ricevere le risposte dal server.</li>
+    </ul>
+    <p style="margin-top:8px">Poiché DHCP è basato su broadcast, i messaggi non attraversano i router per default. In reti con più sottoreti, si configura un <strong>DHCP Relay Agent</strong> (solitamente il router di accesso) che intercetta le richieste DHCP broadcast locali e le inoltra in unicast al server DHCP centralizzato, reinserendo nell'opzione <strong>giaddr</strong> l'indirizzo dell'interfaccia del relay.</p>
+  </div>
+
+  <h3 class="sep">Processo DORA — Le 4 fasi di configurazione</h3>
+  <div class="block green">
+    <div class="byear">Fase 1 — DISCOVER</div>
+    <div class="btitle">DHCPDISCOVER — Il client si annuncia</div>
+    <p>Il client, privo di indirizzo IP, invia un messaggio <strong>DHCPDISCOVER</strong> come <strong>broadcast</strong> a livello IP (<code>255.255.255.255</code>) e MAC (<code>FF:FF:FF:FF:FF:FF</code>), con indirizzo sorgente IP <code>0.0.0.0</code>. Il messaggio contiene il <strong>MAC address</strong> del client come identificatore e la porta sorgente UDP 68. Tutti i server DHCP sulla rete ricevono questo messaggio. L'obiettivo è scoprire quali server DHCP sono disponibili.</p>
+  </div>
+  <div class="block teal">
+    <div class="byear">Fase 2 — OFFER</div>
+    <div class="btitle">DHCPOFFER — Il server propone un indirizzo</div>
+    <p>Ogni server DHCP che riceve il DISCOVER risponde con un messaggio <strong>DHCPOFFER</strong> in <strong>broadcast</strong> (o unicast se il client lo supporta), contenente: l'<strong>indirizzo IP offerto</strong> (scelto dal pool disponibile e temporaneamente riservato), la <strong>subnet mask</strong>, il <strong>gateway predefinito</strong>, i <strong>DNS server</strong>, la <strong>durata del lease</strong> proposta, e l'<strong>indirizzo IP del server DHCP</strong> offerente (campo Server Identifier). Il campo MAC del client consente al client di riconoscere la propria offer.</p>
+  </div>
+  <div class="block amber">
+    <div class="byear">Fase 3 — REQUEST</div>
+    <div class="btitle">DHCPREQUEST — Il client sceglie un'offerta</div>
+    <p>Il client può ricevere più DHCPOFFER da più server. Seleziona la prima offerta ricevuta (tipicamente) e invia un messaggio <strong>DHCPREQUEST</strong> in <strong>broadcast</strong> (ancora, perché non ha ancora un IP confermato) che contiene il <strong>Server Identifier</strong> del server scelto. Questo messaggio ha due funzioni: conferma al server scelto che accetta la sua offerta, e informa tutti gli altri server che le loro offerte sono rifiutate (permettendo loro di liberare gli indirizzi temporaneamente riservati e riportarli nel pool). Il DHCPREQUEST viene anche usato per il rinnovo del lease.</p>
+  </div>
+  <div class="block red">
+    <div class="byear">Fase 4 — ACKNOWLEDGE</div>
+    <div class="btitle">DHCPACK — Il server conferma la configurazione</div>
+    <p>Il server selezionato invia un messaggio <strong>DHCPACK</strong> al client contenente la configurazione definitiva: indirizzo IP assegnato, subnet mask, gateway, DNS, e la <strong>durata del lease</strong>. Con la ricezione dell'ACK il client esegue un controllo ARP (<strong>Gratuitous ARP</strong>) per verificare che nessun altro host nella rete stia già usando quell'indirizzo IP (conflitto). Se nessuno risponde, il client applica la configurazione e l'interfaccia di rete diventa operativa.</p>
+  </div>
+
+  <h3 class="sep">Gestione del lease — Rinnovo e scadenza</h3>
+  <div class="card">
+    <div class="card-title">Lease time e meccanismo di rinnovo</div>
+    <div class="block teal">
+      <div class="byear">Primo tentativo — al 50% del Lease Time (T₁ = 0.5T)</div>
+      <p>Quando è trascorso il 50% del lease time, il client invia un messaggio <strong>DHCPREQUEST</strong> in <strong>unicast</strong> direttamente al server DHCP originale (di cui conosce l'IP). Se il server risponde con <strong>DHCPACK</strong>, il lease viene rinnovato (T riparte da zero).</p>
+    </div>
+    <div class="block amber">
+      <div class="byear">Secondo tentativo — finestra 50%–87.5%</div>
+      <p>Se il primo tentativo è fallito e il client si riavvia nel periodo tra il 50% e l'87.5% del lease time, all'avvio tenta nuovamente di rinnovare inviando un <strong>DHCPREQUEST unicast</strong> allo stesso server.</p>
+    </div>
+    <div class="block red">
+      <div class="byear">Terzo tentativo — all'87.5% del Lease Time (T₂ = 0.875T)</div>
+      <p>All'87.5% del lease time, il client invia un <strong>DHCPREQUEST broadcast</strong> a qualsiasi server DHCP disponibile sulla rete. Se almeno un server risponde con DHCPACK, il lease viene rinnovato.</p>
+    </div>
+    <div class="block gray" style="margin-bottom:0">
+      <div class="byear">Scadenza del lease</div>
+      <p>Allo scadere del lease time senza rinnovo riuscito, il client <strong>rilascia l'indirizzo IP</strong> (opzionalmente invia un <strong>DHCPRELEASE</strong> al server) e l'interfaccia di rete torna non configurata. Il client riavvia il processo DORA completo inviando un nuovo DHCPDISCOVER in broadcast.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LIVELLO TRASPORTO ===== -->
+<section id="trasporto" class="section">
+  <h2 class="chapter-title">Livello trasporto</h2>
+
+  <div class="block green">
+    <div class="btitle">Il livello di trasporto: comunicazione end-to-end</div>
+    <p>Il livello di trasporto si occupa della comunicazione diretta tra i processi applicativi in esecuzione sugli host di una rete. Mentre il livello IP garantisce solo il trasporto del pacchetto da un host all'altro (senza garanzie), il livello di trasporto offre servizi aggiuntivi ai processi: multiplexing tramite porte, controllo degli errori, ordinamento dei dati. I due protocolli fondamentali sono <strong>TCP</strong> (affidabile, orientato alla connessione) e <strong>UDP</strong> (veloce, senza connessione).</p>
+  </div>
+
+  <a class="link-row" href="approfondimento/">
+    <b>Approfondimenti sul trasporto</b>
+    <span>Le porte, il controllo degli errori in TCP, il three-way handshake.</span>
+  </a>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="trasporto-tcp">TCP</button>
+    <button data-sub="trasporto-udp">UDP</button>
+    <button data-sub="trasporto-sliding">Sliding window</button>
+    <button data-sub="trasporto-confronto">TCP vs UDP</button>
+  </div>
+
+  <!-- TCP -->
+  <div id="trasporto-tcp" class="sub-section visible">
+    <div class="block green">
+      <div class="btitle">TCP — Transmission Control Protocol</div>
+      <p>TCP è il protocollo di trasporto <strong>connection-oriented, full-duplex, affidabile e orientato al flusso di byte</strong>. Offre: garanzia di consegna di tutti i byte, ordinamento (i byte arrivano nell'ordine in cui sono stati inviati), controllo di flusso (non sovraccaricare il ricevitore), controllo di congestione (non sovraccaricare la rete), rilevazione e correzione degli errori. Opera tra coppie di socket (IP:porta) e mantiene stato per tutta la durata della connessione (<strong>stateful</strong>). TCP segmenta il flusso di byte in <strong>segmenti TCP</strong> che vengono incapsulati in datagrammi IP.</p>
+    </div>
+
+    <h3 class="sep">Three-way handshake — Apertura della connessione</h3>
+    <div class="block blue">
+      <div class="btitle">Instaurazione della connessione TCP</div>
+      <p>Prima di qualsiasi scambio di dati, TCP deve instaurare la connessione tramite una procedura a tre passi (<strong>3-way handshake</strong>) che sincronizza i <strong>numeri di sequenza</strong> iniziali (ISN) di entrambi i lati:</p>
+      <ul>
+        <li><strong>Step 1 — SYN</strong>: il client invia un segmento con il flag <strong>SYN=1</strong> e un numero di sequenza casuale <strong>ISN_C</strong>. Il client entra nello stato <code>SYN_SENT</code>.</li>
+        <li><strong>Step 2 — SYN-ACK</strong>: il server riceve il SYN, entra nello stato <code>SYN_RECEIVED</code>, e risponde con i flag <strong>SYN=1</strong> e <strong>ACK=1</strong>. Il campo Acknowledgment Number è <code>ISN_C + 1</code>. Il server include il proprio <strong>ISN_S</strong>.</li>
+        <li><strong>Step 3 — ACK</strong>: il client risponde con <strong>ACK=1</strong>. Il campo Acknowledgment Number è <code>ISN_S + 1</code>. La connessione è ora <code>ESTABLISHED</code> su entrambi i lati.</li>
+      </ul>
+      <p style="margin-top:8px">La randomizzazione degli ISN è fondamentale per la sicurezza: previene attacchi <strong>TCP Session Hijacking</strong> e <strong>IP Spoofing</strong>. La chiusura della connessione avviene con uno scambio <strong>FIN/ACK</strong> a 4 passi (four-way teardown), o con un <strong>RST</strong> per chiusura immediata abortiva.</p>
+    </div>
+
+    <h3 class="sep">TCP Header — Struttura completa</h3>
+    <div class="hdr">
+      <div class="hdr-ruler"><span>0–7</span><span>8–15</span><span>16–23</span><span>24–31</span></div>
+      <div class="hdr-rows">
+        <div class="hdr-row"><span class="hdr-off">0</span><div class="hdr-fields">
+          <div class="hdr-f blue" style="--w:16">Source Port<small>16 bit</small></div>
+          <div class="hdr-f purple" style="--w:16">Destination Port<small>16 bit</small></div>
+        </div></div>
+        <div class="hdr-row"><span class="hdr-off">4</span><div class="hdr-fields">
+          <div class="hdr-f green" style="--w:32">Sequence Number<small>32 bit</small></div>
+        </div></div>
+        <div class="hdr-row"><span class="hdr-off">8</span><div class="hdr-fields">
+          <div class="hdr-f amber" style="--w:32">Acknowledgment Number<small>32 bit</small></div>
+        </div></div>
+        <div class="hdr-row"><span class="hdr-off">12</span><div class="hdr-fields">
+          <div class="hdr-f red" style="--w:4">Data Offset<small>4</small></div>
+          <div class="hdr-f gray" style="--w:3;min-width:34px">Res<small>3</small></div>
+          <div class="hdr-f cyan" style="--w:9">Flags<small>NS CWR ECE URG ACK PSH RST SYN FIN</small></div>
+          <div class="hdr-f teal" style="--w:16">Window Size<small>16 bit</small></div>
+        </div></div>
+        <div class="hdr-row"><span class="hdr-off">16</span><div class="hdr-fields">
+          <div class="hdr-f red" style="--w:16">Checksum<small>16 bit</small></div>
+          <div class="hdr-f purple" style="--w:16">Urgent Pointer<small>16 bit</small></div>
+        </div></div>
+        <div class="hdr-row"><span class="hdr-off">20+</span><div class="hdr-fields">
+          <div class="hdr-f opt" style="--w:32">Options (variabile, padding a multiplo di 32 bit)</div>
+        </div></div>
+      </div>
+      <div class="hdr-note">Numeri a sinistra: offset in byte. Intestazione minima: 20 byte.</div>
+    </div>
+
+    <h3 class="sep">Descrizione dettagliata dei campi TCP</h3>
+    <div class="block blue">
+      <div class="byear">Source Port / Destination Port — 16 bit ciascuno</div>
+      <p>Identificano il processo mittente e destinatario tramite il numero di porta (0–65535). La coppia <code>(IP sorgente, porta sorgente, IP destinazione, porta destinazione)</code> forma una <strong>connessione TCP univoca (socket pair)</strong>. Le porte 0–1023 sono <em>well-known</em> (HTTP=80, HTTPS=443, SSH=22, FTP=21). Le porte 1024–49151 sono <em>registered</em>. Le porte 49152–65535 sono porte effimere assegnate dinamicamente ai client.</p>
+    </div>
+    <div class="block green">
+      <div class="byear">Sequence Number — 32 bit</div>
+      <p>Numero che identifica la posizione nel flusso di byte del <strong>primo byte di payload</strong> contenuto in questo segmento. Permette al ricevitore di riordinare i segmenti arrivati fuori sequenza e di rilevare i duplicati. Nel segmento SYN, il Sequence Number contiene l'ISN (Initial Sequence Number) scelto casualmente. Con 32 bit il numero wrappa a 0 dopo 4 GB di dati trasmessi.</p>
+    </div>
+    <div class="block amber">
+      <div class="byear">Acknowledgment Number — 32 bit</div>
+      <p>Valido solo se il flag ACK è impostato. Contiene il numero di sequenza del <strong>prossimo byte che il ricevitore si aspetta</strong> di ricevere. Implementa un ACK cumulativo: un valore ACK=N conferma la ricezione di tutti i byte fino a N-1. Questo campo è il meccanismo base della conferma di ricezione e del controllo degli errori in TCP.</p>
+    </div>
+    <div class="block red">
+      <div class="byear">Data Offset — 4 bit</div>
+      <p>Indica la lunghezza dell'header TCP in <strong>word da 32 bit</strong> (analogamente all'IHL in IP). Valore minimo: 5 (20 byte, senza opzioni). Valore massimo: 15 (60 byte). Necessario per determinare dove inizia il payload dato che il campo Options ha lunghezza variabile.</p>
+    </div>
+    <div class="block cyan">
+      <div class="byear">Flags di controllo — 9 bit (URG, ACK, PSH, RST, SYN, FIN + NS, CWR, ECE)</div>
+      <div class="btitle">I flag TCP — significato operativo</div>
+      <ul>
+        <li><strong>SYN</strong>: sincronizzazione — usato nell'apertura della connessione (handshake).</li>
+        <li><strong>ACK</strong>: acknowledgment — il campo Acknowledgment Number è valido.</li>
+        <li><strong>FIN</strong>: fine — il mittente ha terminato l'invio di dati (chiusura ordinata).</li>
+        <li><strong>RST</strong>: reset — chiusura immediata e abortiva della connessione.</li>
+        <li><strong>PSH</strong>: push — il ricevitore deve consegnare immediatamente i dati all'applicazione senza attendere il riempimento del buffer.</li>
+        <li><strong>URG</strong>: urgent — il campo Urgent Pointer è valido; i dati urgenti devono essere processati con priorità.</li>
+        <li><strong>ECE / CWR</strong>: usati con ECN (Explicit Congestion Notification) per segnalare la congestione senza perdita di pacchetti.</li>
+        <li><strong>NS</strong>: nonce sum — sperimentale, protezione contro alterazioni accidentali dei bit ECN.</li>
+      </ul>
+    </div>
+    <div class="block teal">
+      <div class="byear">Window Size — 16 bit</div>
+      <div class="btitle">Dimensione della finestra di ricezione — controllo di flusso</div>
+      <p>Indica il numero di byte che il <strong>ricevitore</strong> è in grado di accettare nel proprio buffer di ricezione. Il mittente non deve trasmettere più byte non ancora confermati di quanti indicato dalla Window Size del ricevitore. Valore massimo nominale: 65.535 byte. Con l'opzione <strong>Window Scale</strong> la finestra può essere moltiplicata per un fattore fino a 2<sup>14</sup>, raggiungendo fino a ~1 GB di finestra. Se Window Size = 0, il mittente deve fermarsi (zero-window probing).</p>
+    </div>
+    <div class="block red">
+      <div class="byear">Checksum — 16 bit</div>
+      <p>Verifica l'integrità dell'header TCP <strong>e del payload</strong> applicativo. A differenza del checksum IP (solo header), il checksum TCP copre anche i dati. Il calcolo include uno <strong>pseudo-header</strong> contenente IP sorgente, IP destinazione, protocollo (6) e lunghezza TCP. In TCP il checksum è <strong>obbligatorio</strong>.</p>
+    </div>
+    <div class="block purple">
+      <div class="byear">Urgent Pointer — 16 bit</div>
+      <p>Valido solo se il flag URG è impostato. Indica un offset positivo dal numero di sequenza corrente che punta all'ultimo byte urgente nel segmento. I dati urgenti (out-of-band) vengono consegnati all'applicazione con priorità rispetto al flusso normale. Poco usato nella pratica moderna.</p>
+    </div>
+  </div>
+
+  <!-- UDP -->
+  <div id="trasporto-udp" class="sub-section">
+    <div class="block green">
+      <div class="btitle">UDP — User Datagram Protocol</div>
+      <p>UDP è il protocollo di trasporto <strong>connectionless, senza stato (stateless), inaffidabile e best-effort</strong>. Non offre garanzie di consegna, né di ordinamento, né di rilevazione di duplicati. Non prevede handshake, controllo di flusso, né controllo di congestione. Ogni datagramma UDP è completamente indipendente dagli altri e può percorrere percorsi diversi nella rete. L'header UDP è <strong>fisso a 8 byte</strong>, contro i 20+ byte di TCP.</p>
+    </div>
+
+    <h3 class="sep">Struttura dell'header UDP</h3>
+    <div class="hdr">
+      <div class="hdr-ruler"><span>0–7</span><span>8–15</span><span>16–23</span><span>24–31</span></div>
+      <div class="hdr-rows">
+        <div class="hdr-row"><span class="hdr-off">0</span><div class="hdr-fields">
+          <div class="hdr-f purple" style="--w:16">Source Port<small>16 bit</small></div>
+          <div class="hdr-f blue" style="--w:16">Destination Port<small>16 bit</small></div>
+        </div></div>
+        <div class="hdr-row"><span class="hdr-off">4</span><div class="hdr-fields">
+          <div class="hdr-f teal" style="--w:16">Length<small>16 bit</small></div>
+          <div class="hdr-f amber" style="--w:16">Checksum<small>16 bit</small></div>
+        </div></div>
+        <div class="hdr-row"><span class="hdr-off">8+</span><div class="hdr-fields">
+          <div class="hdr-f opt" style="--w:32">Data (payload — variabile)</div>
+        </div></div>
+      </div>
+      <div class="hdr-note">Numeri a sinistra: offset in byte.</div>
+    </div>
+
+    <h3 class="sep">Descrizione dei campi dell'header UDP</h3>
+    <div class="grid2">
+      <div class="block purple">
+        <div class="byear">Source Port — 16 bit</div>
+        <p>Numero di porta del processo mittente. Consente al destinatario di inviare risposte. In alcuni protocolli (es. DNS query da client) può essere una porta effimera casuale assegnata dal SO.</p>
+      </div>
+      <div class="block blue">
+        <div class="byear">Destination Port — 16 bit</div>
+        <p>Numero di porta del processo destinatario. Porte well-known rilevanti per UDP: DNS (53), DHCP server (67), DHCP client (68), TFTP (69), SNMP (161), NTP (123), RIP (520), QUIC (443).</p>
+      </div>
+      <div class="block teal">
+        <div class="byear">Length — 16 bit</div>
+        <p>Lunghezza totale del datagramma UDP in byte, inclusi header (8 byte fissi) e payload. Valore minimo: 8 (datagramma senza payload). Dimensione massima del payload: 65.535 - 8 = 65.527 byte.</p>
+      </div>
+      <div class="block amber">
+        <div class="byear">Checksum — 16 bit</div>
+        <p>Verifica dell'integrità di header e payload. In IPv4 il checksum UDP è <strong>opzionale</strong> (un valore di 0 indica che non è stato calcolato); in IPv6 è <strong>obbligatorio</strong>. Come in TCP, il calcolo include uno pseudo-header con IP sorgente, IP destinazione, protocollo (17=UDP) e lunghezza.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">Quando si usa UDP</h3>
+    <div class="block green">
+      <div class="btitle">Casi d'uso di UDP rispetto a TCP</div>
+      <ul>
+        <li><strong>Latenza ultra-bassa</strong>: il round-trip dell'handshake TCP è inaccettabile. UDP trasmette immediatamente. Usato in: DNS, DHCP, NTP, giochi online, VoIP, videoconferenze (WebRTC).</li>
+        <li><strong>Perdita tollerabile</strong>: in streaming audio/video real-time, un pacchetto perso causa al massimo un breve glitch; la ritrasmissione arriverebbe troppo tardi per essere utile.</li>
+        <li><strong>Multicast/Broadcast</strong>: TCP è point-to-point. UDP supporta nativamente multicast e broadcast. Usato da: DHCP, RIP, mDNS, SSDP.</li>
+        <li><strong>Applicazioni con affidabilità personalizzata</strong>: QUIC (HTTP/3) usa UDP ma implementa multiplexing di stream, controllo di congestione e crittografia a livello applicativo.</li>
+        <li><strong>Transazioni semplici richiesta-risposta</strong>: DNS, SNMP, TFTP — un singolo scambio di messaggi dove l'overhead del TCP non vale la pena.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDING WINDOW -->
+  <div id="trasporto-sliding" class="sub-section">
+    <div class="card">
+      <div class="card-title">Sliding Window — Finestra scorrevole</div>
+      <div class="block blue">
+        <div class="btitle">Il problema: stop-and-wait</div>
+        <p>Senza la sliding window, TCP userebbe un approccio detto <strong>stop-and-wait</strong>: il mittente invia un segmento, poi si ferma e aspetta che il destinatario risponda con un ACK prima di poter inviare il segmento successivo. Su una connessione con latenza alta (es. un link intercontinentale con RTT di 150 ms) si potrebbero inviare solo pochi segmenti al secondo, sprecando la quasi totalità della banda disponibile.</p>
+      </div>
+      <div class="block green">
+        <div class="btitle">La soluzione: più segmenti contemporaneamente in volo</div>
+        <p>La sliding window risolve il problema permettendo al mittente di inviare <strong>più segmenti consecutivi senza aspettare l'ACK di ognuno</strong>. Questi segmenti si trovano "in volo" sulla rete contemporaneamente. La finestra definisce il numero massimo di byte che possono essere in volo in ogni momento. Finché la finestra non è piena, il mittente può continuare a inviare.</p>
+      </div>
+      <div class="block teal">
+        <div class="btitle">Come è organizzato il buffer del mittente</div>
+        <ul>
+          <li><strong>Zona 1 — Inviati e confermati</strong>: il destinatario ha già ricevuto e confermato questi dati con un ACK. Possono essere eliminati dal buffer.</li>
+          <li><strong>Zona 2 — Inviati ma non ancora confermati (in-flight)</strong>: il mittente li mantiene in memoria perché, se scade il timer di ritrasmissione, dovrà rispedirli. Occupano spazio nella finestra corrente.</li>
+          <li><strong>Zona 3 — Non inviati ma dentro la finestra (usable window)</strong>: dati pronti per essere trasmessi immediatamente, senza aspettare ulteriori ACK.</li>
+          <li><strong>Zona 4 — Oltre la finestra</strong>: dati che il mittente non può ancora inviare perché la finestra è piena o perché il ricevitore non ha ancora dichiarato di avere abbastanza spazio nel buffer.</li>
+        </ul>
+      </div>
+      <div class="block amber">
+        <div class="btitle">Due finestre che lavorano insieme: rwnd e cwnd</div>
+        <ul>
+          <li><strong>rwnd (Receive Window)</strong>: è comunicata dal <em>ricevitore</em> al mittente tramite il campo Window Size dell'header TCP. Indica quanti byte il ricevitore riesce ad accettare nel suo buffer in quel momento. Questo meccanismo si chiama <strong>controllo di flusso</strong>.</li>
+          <li><strong>cwnd (Congestion Window)</strong>: è gestita dal <em>mittente</em> in modo autonomo e stima quanti dati la <em>rete</em> riesce a gestire senza andare in congestione. Questo meccanismo si chiama <strong>controllo di congestione</strong>.</li>
+        </ul>
+        <p style="margin-top:8px">La finestra effettiva è sempre il <strong>minimo</strong> tra rwnd e cwnd.</p>
+      </div>
+      <div class="block purple">
+        <div class="btitle">Come cresce e si riduce la finestra di congestione (cwnd)</div>
+        <ul>
+          <li><strong>Slow Start</strong>: all'inizio ogni connessione TCP parte con una cwnd piccola e la aumenta in modo esponenziale ad ogni RTT finché tutto va bene.</li>
+          <li><strong>Congestion Avoidance</strong>: quando cwnd supera la soglia <strong>ssthresh</strong>, la crescita diventa lineare: la finestra cresce di un segmento per ogni RTT completo.</li>
+          <li><strong>Rilevamento della congestione</strong>: se un ACK non arriva entro il timeout, TCP riduce drasticamente cwnd e riparte con Slow Start. Con <strong>3 ACK duplicati</strong> la reazione è meno drastica: cwnd viene ridotta a metà (<strong>Fast Retransmit e Fast Recovery</strong>).</li>
+        </ul>
+      </div>
+      <div class="block gray" style="margin-bottom:0">
+        <div class="btitle">Ritrasmissione e gestione degli errori</div>
+        <p>Quando un segmento si perde, il mittente lo scopre o per scadenza del timer <strong>RTO</strong> o per ricezione di tre ACK duplicati. Il meccanismo <strong>SACK (Selective Acknowledgment)</strong> permette al ricevitore di segnalare esattamente quali blocchi di byte ha ricevuto fuori ordine: il mittente può ritrasmettere solo i segmenti effettivamente mancanti, senza rispedire tutto ciò che viene dopo il punto di perdita.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFRONTO -->
+  <div id="trasporto-confronto" class="sub-section">
+    <div class="tbl-wrap">
+      <table class="tbl cmp">
+        <thead>
+          <tr><th></th><th class="blue">TCP</th><th class="purple">UDP</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Connessione</th><td>Connection-oriented (3-way handshake)</td><td>Connectionless (nessun handshake)</td></tr>
+          <tr><th scope="row">Affidabilità</th><td>Garantita (ACK, ritrasmissione, ordinamento)</td><td>Best-effort (nessuna garanzia)</td></tr>
+          <tr><th scope="row">Controllo flusso</th><td>Sì (sliding window, rwnd)</td><td>No</td></tr>
+          <tr><th scope="row">Controllo congestione</th><td>Sì (AIMD, Slow Start, cwnd)</td><td>No (l'app deve gestirlo)</td></tr>
+          <tr><th scope="row">Overhead header</th><td>20–60 byte</td><td>8 byte (fisso)</td></tr>
+          <tr><th scope="row">Latenza</th><td>Più alta (handshake + controllo)</td><td>Minima (trasmissione immediata)</td></tr>
+          <tr><th scope="row">Multicast</th><td>Non supportato</td><td>Supportato nativamente</td></tr>
+          <tr><th scope="row">Casi d'uso</th><td>HTTP/S, SSH, FTP, SMTP, database</td><td>DNS, DHCP, streaming, VoIP, QUIC</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== POSTA ELETTRONICA ===== -->
+<section id="email" class="section">
+  <h2 class="chapter-title">Posta elettronica — Architettura e protocolli</h2>
+
+  <div class="block green">
+    <div class="btitle">Panoramica del sistema di posta elettronica</div>
+    <p>Il sistema di posta elettronica di Internet è composto da un insieme di agenti software e protocolli standardizzati che collaborano per trasportare un messaggio dal mittente al destinatario attraverso reti eterogenee. L'architettura è di tipo <strong>store-and-forward</strong>: ogni messaggio viene ricevuto, memorizzato e poi inoltrato al nodo successivo, garantendo la consegna anche in presenza di temporanee indisponibilità del destinatario. I tre protocolli fondamentali sono:</p>
+    <ul>
+      <li><strong>SMTP (Simple Mail Transfer Protocol)</strong>: protocollo di <em>trasmissione</em> — invia i messaggi dal client al server e tra server.</li>
+      <li><strong>POP3 (Post Office Protocol v3)</strong>: protocollo di <em>accesso</em> — scarica i messaggi dal server al client (modello offline).</li>
+      <li><strong>IMAP (Internet Mail Access Protocol)</strong>: protocollo di <em>accesso</em> — accede ai messaggi sul server mantenendoli centralizzati (modello online).</li>
+    </ul>
+  </div>
+
+  <h3 class="sep">Componenti architetturali del sistema email</h3>
+  <div class="grid2">
+    <div class="card-small green">
+      <span class="badge">MUA — Mail User Agent</span>
+      <div class="ct">Client di posta dell'utente</div>
+      <p>Il programma con cui l'utente compone, invia, riceve e legge le email. Esempi: <strong>Outlook, Thunderbird, Apple Mail, Gmail (WebUI)</strong>. Il MUA comunica con il proprio mail server usando SMTP per l'invio e POP3/IMAP per la ricezione. È l'interfaccia tra l'utente umano e il sistema di posta.</p>
+    </div>
+    <div class="card-small blue">
+      <span class="badge">MTA — Mail Transfer Agent</span>
+      <div class="ct">Server di trasferimento</div>
+      <p>Riceve i messaggi dal MUA (o da un altro MTA) e li instrada verso la destinazione. Usa il DNS per risolvere il record <strong>MX</strong> del dominio destinatario, trovare l'IP del server di posta destinatario e stabilire una connessione SMTP. Esempi: <strong>Postfix, Sendmail, Microsoft Exchange, Exim</strong>. Ogni hop SMTP è un MTA.</p>
+    </div>
+    <div class="card-small amber">
+      <span class="badge">MSA — Mail Submission Agent</span>
+      <div class="ct">Agente di sottomissione</div>
+      <p>Riceve il messaggio dal MUA per conto del server. Si occupa di autenticare il mittente, verificare la conformità del messaggio e aggiungere l'header <code>Received:</code> iniziale. Accetta il messaggio sulla <strong>porta 587</strong> (submission) o 465 (SMTPS).</p>
+    </div>
+    <div class="card-small teal">
+      <span class="badge">MDA — Mail Delivery Agent</span>
+      <div class="ct">Agente di consegna finale</div>
+      <p>Riceve il messaggio dall'MTA del dominio destinatario e lo consegna nella <strong>mailbox</strong> dell'utente sul server. Esempi: <strong>Procmail, Dovecot LDA, Maildrop</strong>. La mailbox può essere in formato <strong>mbox</strong> (un singolo file) o <strong>Maildir</strong> (una cartella con un file per messaggio). Il MDA non contatta altri server: è l'ultimo hop della catena SMTP.</p>
+    </div>
+  </div>
+
+  <div class="block blue">
+    <div class="btitle">Il record MX — Come il DNS instrada le email</div>
+    <p>Quando un MTA deve consegnare un messaggio a <code>utente@example.com</code>, consulta il DNS per trovare il <strong>record MX (Mail Exchanger)</strong> del dominio. Il record MX associa un dominio a uno o più mail server, ognuno con un valore di <strong>priorità</strong> numerico. Il server con il valore più basso ha la precedenza. Solo se non è raggiungibile si prova il successivo.</p>
+    <div class="trace"><pre>example.com.  IN  MX  <span class="tg">10</span>  mail1.example.com.  <span class="td">; priorità primaria</span>
+example.com.  IN  MX  <span class="ta">20</span>  mail2.example.com.  <span class="td">; backup</span>
+mail1.example.com.  IN  A  <span class="tb">93.184.216.10</span></pre></div>
+    <p>Il processo: MTA mittente → query DNS MX per <code>example.com</code> → riceve i record MX, ordina per priorità → tenta connessione SMTP sulla <strong>porta 25</strong> a <code>mail1.example.com</code>.</p>
+  </div>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="email-smtp">SMTP</button>
+    <button data-sub="email-pop3">POP3</button>
+    <button data-sub="email-imap">IMAP</button>
+    <button data-sub="email-mime">MIME</button>
+    <button data-sub="email-confronto">POP3 vs IMAP</button>
+    <button data-sub="email-sicurezza">Sicurezza e PEC</button>
+  </div>
+
+  <!-- SMTP -->
+  <div id="email-smtp" class="sub-section visible">
+    <div class="block green">
+      <div class="byear">RFC 5321 — aggiorna RFC 2821 e RFC 821</div>
+      <div class="btitle">SMTP — Simple Mail Transfer Protocol</div>
+      <p>SMTP è il protocollo standard per la <strong>trasmissione</strong> delle email. Opera al livello applicativo e usa <strong>TCP</strong> come trasporto. È un protocollo <strong>testuale, stateful e connection-oriented</strong>: la sessione mantiene uno stato e i comandi sono stringhe ASCII leggibili. SMTP è un protocollo <strong>push</strong>: il mittente stabilisce attivamente la connessione verso il server destinatario per consegnare il messaggio.</p>
+    </div>
+
+    <h3 class="sep">Porte SMTP</h3>
+    <div class="grid3">
+      <div class="card-small red">
+        <span class="badge">Porta 25 — SMTP Relay</span>
+        <div class="ct">MTA-to-MTA (server to server)</div>
+        <p>Porta storica per il trasferimento tra server MTA su Internet. I client non la usano direttamente: gli ISP la bloccano in uscita per prevenire lo spam.</p>
+      </div>
+      <div class="card-small green">
+        <span class="badge">Porta 587 — Submission</span>
+        <div class="ct">MUA-to-MSA (client to server)</div>
+        <p>Porta standard per la sottomissione dei messaggi dai client. Richiede autenticazione AUTH obbligatoria. Supporta <strong>STARTTLS</strong>. Definita in RFC 6409.</p>
+      </div>
+      <div class="card-small blue">
+        <span class="badge">Porta 465 — SMTPS</span>
+        <div class="ct">SMTP con TLS implicito</div>
+        <p>La connessione è cifrata dall'inizio senza negoziazione STARTTLS. Ancora ampiamente usata nonostante tecnicamente deprecata a favore della 587.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">Comandi SMTP</h3>
+    <div class="block blue">
+      <div class="btitle">Comandi fondamentali e descrizione</div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Comando</th><th>Descrizione</th></tr></thead>
+        <tbody>
+          <tr><td>HELO dominio</td><td>Saluto iniziale SMTP classico. Identifica il client con il proprio hostname/dominio.</td></tr>
+          <tr><td>EHLO dominio</td><td>Extended HELO (ESMTP). Il server risponde elencando le estensioni supportate: AUTH, STARTTLS, SIZE, 8BITMIME, PIPELINING ecc.</td></tr>
+          <tr><td>STARTTLS</td><td>Aggiorna la connessione da plaintext a TLS cifrata (opportunistic TLS). Dopo il successo il client riemette EHLO sul canale cifrato.</td></tr>
+          <tr><td>AUTH meccanismo</td><td>Autentica il client. Meccanismi: PLAIN, LOGIN, CRAM-MD5, SCRAM-SHA-256. Obbligatorio sulla porta 587. Usare solo su TLS.</td></tr>
+          <tr><td>MAIL FROM:&lt;addr&gt;</td><td>Dichiara l'indirizzo envelope sender. Usato per i bounce. Può differire dall'header From: visibile nel messaggio.</td></tr>
+          <tr><td>RCPT TO:&lt;addr&gt;</td><td>Dichiara un destinatario. Può essere ripetuto per più destinatari. Il server verifica se accetta email per quell'indirizzo.</td></tr>
+          <tr><td>DATA</td><td>Inizia il trasferimento del corpo del messaggio (header + body). Il messaggio termina con una riga contenente solo un punto: &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;</td></tr>
+          <tr><td>RSET</td><td>Resetta la transazione (annulla MAIL FROM e RCPT TO) senza chiudere la connessione. Utile per inviare più messaggi nella stessa sessione TCP.</td></tr>
+          <tr><td>VRFY utente</td><td>Verifica se un indirizzo è valido sul server. Spesso disabilitato per privacy (prevenire enumerazione degli utenti).</td></tr>
+          <tr><td>QUIT</td><td>Termina la sessione SMTP. Il server chiude la connessione TCP. Risponde 221.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="block teal">
+      <div class="btitle">Codici di risposta SMTP</div>
+      <p>Ogni risposta ha un codice numerico a 3 cifre: <strong>2xx</strong> Successo, <strong>3xx</strong> Azione intermedia (continua), <strong>4xx</strong> Errore temporaneo (riprova), <strong>5xx</strong> Errore permanente.</p>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Codice</th><th>Significato</th></tr></thead>
+        <tbody>
+          <tr><td class="ok">220</td><td class="plain">Service ready — banner iniziale del server</td></tr>
+          <tr><td class="ok">221</td><td class="plain">Service closing — risposta al QUIT</td></tr>
+          <tr><td class="ok">235</td><td class="plain">Authentication successful</td></tr>
+          <tr><td class="ok">250</td><td class="plain">OK — azione completata con successo (MAIL FROM, RCPT TO, fine DATA)</td></tr>
+          <tr><td class="ok">354</td><td class="plain">Start mail input — server pronto a ricevere il corpo del messaggio dopo DATA</td></tr>
+          <tr><td class="warn">421</td><td class="plain">Service not available — server in manutenzione o sovraccarico; errore temporaneo</td></tr>
+          <tr><td class="warn">450</td><td class="plain">Mailbox unavailable — temporaneamente occupata o bloccata; riprova</td></tr>
+          <tr><td class="err">500</td><td class="plain">Syntax error — comando non riconosciuto</td></tr>
+          <tr><td class="err">550</td><td class="plain">Mailbox not found / Policy rejection — destinatario inesistente o spam bloccato</td></tr>
+          <tr><td class="err">553</td><td class="plain">Mailbox name not allowed — indirizzo mittente non valido o relay negato</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <h3 class="sep">Sessione SMTP completa — Esempio annotato</h3>
+    <div class="trace">
+      <div class="trace-label">Traccia SMTP — porta 587 con STARTTLS e AUTH</div>
+<pre><span class="tb">S: 220 smtp.example.com ESMTP Postfix</span>
+<span class="tg">C: EHLO client.myisp.com</span>
+<span class="tb">S: 250-smtp.example.com Hello client.myisp.com</span>
+<span class="tb">S: 250-SIZE 52428800</span>                  <span class="td">&lt;-- max 50 MB</span>
+<span class="tb">S: 250-STARTTLS</span>
+<span class="tb">S: 250-AUTH PLAIN LOGIN</span>
+<span class="tb">S: 250 8BITMIME</span>
+<span class="tg">C: STARTTLS</span>
+<span class="tb">S: 220 2.0.0 Ready to start TLS</span>
+<span class="td">    [TLS handshake -- da qui tutto è cifrato]</span>
+<span class="tg">C: EHLO client.myisp.com</span>          <span class="td">&lt;-- riemesso su canale cifrato</span>
+<span class="tb">S: 250 AUTH PLAIN LOGIN</span>
+<span class="tg">C: AUTH LOGIN</span>
+<span class="tb">S: 334 VXNlcm5hbWU6</span>               <span class="td">&lt;-- base64("Username:")</span>
+<span class="tg">C: bWFyaW9AZXhhbXBsZS5jb20=</span>       <span class="td">&lt;-- base64(username)</span>
+<span class="tb">S: 334 UGFzc3dvcmQ6</span>               <span class="td">&lt;-- base64("Password:")</span>
+<span class="tg">C: cGFzc3dvcmQxMjM=</span>               <span class="td">&lt;-- base64(password)</span>
+<span class="tb">S: 235 2.7.0 Authentication successful</span>
+<span class="tg">C: MAIL FROM:&lt;mario@example.com&gt; SIZE=1234</span>
+<span class="tb">S: 250 2.1.0 Ok</span>
+<span class="tg">C: RCPT TO:&lt;luigi@otherdomain.com&gt;</span>
+<span class="tb">S: 250 2.1.5 Ok</span>
+<span class="tg">C: DATA</span>
+<span class="tb">S: 354 End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;</span>
+<span class="tg">C: From: mario@example.com</span>
+<span class="tg">C: To: luigi@otherdomain.com</span>
+<span class="tg">C: Subject: Test SMTP</span>
+<span class="tg">C: Date: Sun, 27 Apr 2026 10:30:00 +0200</span>
+<span class="tg">C: MIME-Version: 1.0</span>
+<span class="tg">C: Content-Type: text/plain; charset=UTF-8</span>
+<span class="tg">C:</span>
+<span class="tg">C: Corpo del messaggio.</span>
+<span class="tg">C: .</span>                              <span class="td">&lt;-- riga con solo punto: fine DATA</span>
+<span class="tb">S: 250 2.0.0 Ok: queued as 7A3F2B8C</span>
+<span class="tg">C: QUIT</span>
+<span class="tb">S: 221 2.0.0 Bye</span></pre>
+    </div>
+
+    <div class="block amber">
+      <div class="btitle">Envelope vs Message Header — distinzione fondamentale</div>
+      <p>Esistono due livelli di indirizzamento distinti e indipendenti:</p>
+      <ul>
+        <li><strong>Envelope (busta SMTP)</strong>: i comandi <code>MAIL FROM:</code> e <code>RCPT TO:</code> della sessione SMTP. Determinano il routing del messaggio e non sono visibili all'utente finale. <code>MAIL FROM</code> è l'indirizzo a cui vengono inviati i bounce.</li>
+        <li><strong>Message Header</strong>: le righe <code>From:</code>, <code>To:</code>, <code>Subject:</code>, <code>Date:</code> dentro il DATA. Sono visibili all'utente. Possono differire dall'envelope (liste di distribuzione, alias, forwarding).</li>
+      </ul>
+      <p style="margin-top:8px">Ogni MTA aggiunge un header <code>Received:</code> in cima creando una traccia del percorso hop-by-hop. L'header più recente è il primo della lista. Analizzare i <code>Received:</code> permette di ricostruire il percorso completo di un'email.</p>
+    </div>
+  </div>
+
+  <!-- POP3 -->
+  <div id="email-pop3" class="sub-section">
+    <div class="block green">
+      <div class="byear">RFC 1939 — Post Office Protocol Version 3</div>
+      <div class="btitle">POP3 — Post Office Protocol v3</div>
+      <p>POP3 è il protocollo per il <strong>recupero</strong> dei messaggi dal server. Filosofia: <strong>modello offline</strong> — i messaggi vengono scaricati sul client e, per default, eliminati dal server. L'utente legge offline. Usa <strong>TCP porta 110</strong> (plain) o <strong>TCP porta 995</strong> (POP3S con SSL/TLS). Protocollo semplice con soli tre stati e un insieme limitato di comandi.</p>
+    </div>
+
+    <h3 class="sep">I tre stati della sessione POP3</h3>
+    <div class="grid3">
+      <div class="card-small red">
+        <span class="badge">AUTHORIZATION</span>
+        <p>Stato iniziale. Il client si autentica con USER + PASS (o APOP). Il server blocca la mailbox in modo esclusivo (lock). Se l'autenticazione fallisce, la connessione viene chiusa.</p>
+      </div>
+      <div class="card-small green">
+        <span class="badge">TRANSACTION</span>
+        <p>Autenticazione riuscita. Il client può elencare, scaricare e marcare messaggi per la cancellazione. I messaggi marcati con DELE non vengono eliminati immediatamente.</p>
+      </div>
+      <div class="card-small blue">
+        <span class="badge">UPDATE</span>
+        <p>Raggiunto con QUIT. Il server elimina definitivamente i messaggi con DELE, rilascia il lock sulla mailbox e chiude la connessione TCP.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">Comandi POP3 — AUTHORIZATION</h3>
+    <div class="block blue">
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Comando</th><th>Risposta</th><th>Descrizione</th></tr></thead>
+        <tbody>
+          <tr><td>USER username</td><td class="m">+OK / -ERR</td><td>Specifica il nome utente. Il server risponde +OK anche se l'utente non esiste per non rivelare informazioni sugli account.</td></tr>
+          <tr><td>PASS password</td><td class="m">+OK / -ERR</td><td>Specifica la password. Se la coppia USER/PASS è corretta, transizione a TRANSACTION e lock esclusivo sulla mailbox.</td></tr>
+          <tr><td>APOP name digest</td><td class="m">+OK / -ERR</td><td>Autenticazione MD5 challenge-response. Il server fornisce un challenge nel banner iniziale; il client risponde con MD5(challenge+password). Evita la trasmissione della password in chiaro. Opzionale.</td></tr>
+          <tr><td>QUIT</td><td class="m">+OK</td><td>Chiude la connessione senza entrare in TRANSACTION. Nessun messaggio viene eliminato.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <h3 class="sep">Comandi POP3 — TRANSACTION</h3>
+    <div class="block teal">
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Comando</th><th>Risposta</th><th>Descrizione</th></tr></thead>
+        <tbody>
+          <tr><td>STAT</td><td class="m">+OK n m</td><td>Statistiche mailbox: n = numero messaggi, m = dimensione totale in byte (esclusi i marcati DELE).</td></tr>
+          <tr><td>LIST [n]</td><td class="m">+OK multiline</td><td>Elenca messaggi con numero sequenziale e dimensione in byte. Con argomento n restituisce solo il messaggio n-esimo. Termina con riga "."</td></tr>
+          <tr><td>RETR n</td><td class="m">+OK size</td><td>Scarica il messaggio n completo (header + body). Termina con "." su riga singola. Non elimina il messaggio dal server.</td></tr>
+          <tr><td>DELE n</td><td class="m">+OK</td><td>Marca il messaggio n per la cancellazione. Effettiva solo al QUIT (stato UPDATE). Il messaggio marcato non compare in STAT/LIST.</td></tr>
+          <tr><td>NOOP</td><td class="m">+OK</td><td>Nessuna operazione. Keep-alive per evitare timeout della connessione.</td></tr>
+          <tr><td>RSET</td><td class="m">+OK</td><td>Annulla tutte le marcature DELE della sessione corrente. I messaggi tornano visibili. Utile se si cambia idea sulla cancellazione.</td></tr>
+          <tr><td>TOP n k</td><td class="m">+OK multiline</td><td>Scarica header del messaggio n più le prime k righe del body. Preview rapida senza scaricare l'intero messaggio. Comando opzionale ma universalmente implementato.</td></tr>
+          <tr><td>UIDL [n]</td><td class="m">+OK multiline</td><td>Unique IDentifier Listing: ID univoco e persistente per ogni messaggio. Il client lo usa per ricordare quali messaggi ha già scaricato tra sessioni diverse senza duplicati. Opzionale ma essenziale nella pratica.</td></tr>
+          <tr><td>QUIT</td><td class="m">+OK</td><td>Transizione UPDATE: elimina i messaggi DELE, rilascia il lock e chiude la connessione TCP.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <h3 class="sep">Sessione POP3 — Esempio annotato</h3>
+    <div class="trace">
+      <div class="trace-label">Traccia POP3 — porta 110</div>
+<pre><span class="tb">S: +OK POP3 server ready &lt;challenge@mail.example.com&gt;</span>
+<span class="tg">C: USER mario</span>
+<span class="tb">S: +OK password required</span>
+<span class="tg">C: PASS segreto123</span>
+<span class="tb">S: +OK mario's maildrop has 3 messages (8640 octets)</span>  <span class="td">&lt;-- TRANSACTION</span>
+<span class="tg">C: STAT</span>
+<span class="tb">S: +OK 3 8640</span>
+<span class="tg">C: LIST</span>
+<span class="tb">S: +OK 3 messages:</span>
+<span class="tb">S: 1 2000</span>
+<span class="tb">S: 2 3540</span>
+<span class="tb">S: 3 3100</span>
+<span class="tb">S: .</span>
+<span class="tg">C: UIDL</span>
+<span class="tb">S: +OK</span>
+<span class="tb">S: 1 whqtswO00WBw418f9t5JxYwZ</span>
+<span class="tb">S: 2 QhdPYR:00WBw1Ph7x7</span>
+<span class="tb">S: 3 oaB3mEHzWC8lNqMbYRDa</span>
+<span class="tb">S: .</span>
+<span class="tg">C: RETR 1</span>
+<span class="tb">S: +OK 2000 octets</span>
+<span class="tb">S: From: luigi@example.it ...</span>
+<span class="tb">S: [corpo del messaggio]</span>
+<span class="tb">S: .</span>
+<span class="tg">C: DELE 1</span>  <span class="td">&lt;-- marca per cancellazione</span>
+<span class="tb">S: +OK message 1 deleted</span>
+<span class="tg">C: QUIT</span>   <span class="td">&lt;-- UPDATE: elimina msg 1, chiude connessione</span>
+<span class="tb">S: +OK POP3 server signing off (1 message deleted)</span></pre>
+    </div>
+  </div>
+
+  <!-- IMAP -->
+  <div id="email-imap" class="sub-section">
+    <div class="block green">
+      <div class="byear">RFC 9051 (IMAP4rev2) — aggiorna RFC 3501 (IMAP4rev1)</div>
+      <div class="btitle">IMAP — Internet Message Access Protocol</div>
+      <p>IMAP è progettato per il <strong>modello online e multi-dispositivo</strong>. I messaggi restano <strong>sul server</strong>; il client vi accede e li manipola direttamente. Lo stato (letto, risposto, contrassegnato), le cartelle e le ricerche sono tutte operazioni server-side, sincronizzate tra tutti i dispositivi. Usa <strong>TCP porta 143</strong> (STARTTLS) o <strong>TCP porta 993</strong> (IMAPS).</p>
+      <p>IMAP è <strong>stateful e a tag</strong>: ogni comando è preceduto da un <strong>tag univoco</strong> (es. <code>A001</code>) che permette di correlare le risposte. Il server può inviare risposte non sollecitate (unilaterali) per aggiornare il client su nuovi messaggi arrivati durante la sessione attiva.</p>
+    </div>
+
+    <h3 class="sep">Stati della sessione IMAP</h3>
+    <div class="grid2">
+      <div class="card-small gray">
+        <span class="badge">Not Authenticated</span>
+        <p>Stato iniziale. Solo CAPABILITY, NOOP, LOGOUT, AUTHENTICATE e LOGIN disponibili. Il server invia greeting <code>* OK</code> o <code>* PREAUTH</code>.</p>
+      </div>
+      <div class="card-small green">
+        <span class="badge">Authenticated</span>
+        <p>Autenticazione riuscita. Accesso all'elenco cartelle (LIST, LSUB), creazione/rinomina/cancellazione cartelle. Non ancora accesso ai messaggi senza selezionare una cartella.</p>
+      </div>
+      <div class="card-small blue">
+        <span class="badge">Selected</span>
+        <p>Una cartella è selezionata con SELECT o EXAMINE. Accesso completo ai messaggi: fetch, store flag, search, copy, move, expunge. Con EXAMINE la cartella è in sola lettura.</p>
+      </div>
+      <div class="card-small red">
+        <span class="badge">Logout</span>
+        <p>Sessione in chiusura dopo LOGOUT. Il server invia <code>* BYE</code> e chiude la connessione TCP. I messaggi con flag \Deleted vengono eliminati se è stato eseguito CLOSE/EXPUNGE prima del logout.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">Comandi IMAP — tutti gli stati</h3>
+    <div class="block blue">
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Comando</th><th>Stato</th><th>Descrizione</th></tr></thead>
+        <tbody>
+          <tr><td>CAPABILITY</td><td class="m">Qualsiasi</td><td>Elenca le estensioni supportate: IMAP4rev2, STARTTLS, AUTH=PLAIN, IDLE, UIDPLUS, MOVE, NAMESPACE ecc.</td></tr>
+          <tr><td>NOOP</td><td class="m">Qualsiasi</td><td>Nessuna operazione. Il server può inviare aggiornamenti spontanei (nuovi messaggi, flag cambiati). Usato per polling passivo.</td></tr>
+          <tr><td>LOGIN u p</td><td class="m">Not Auth</td><td>Autenticazione plaintext. Solo su TLS. Transizione ad Authenticated.</td></tr>
+          <tr><td>AUTHENTICATE</td><td class="m">Not Auth</td><td>Autenticazione SASL (PLAIN, CRAM-MD5, SCRAM-SHA-1). Preferibile a LOGIN per sicurezza.</td></tr>
+          <tr><td>SELECT mailbox</td><td class="m">Auth</td><td>Seleziona cartella in lettura/scrittura. Il server risponde con: EXISTS (n messaggi), RECENT, UNSEEN, UIDVALIDITY, UIDNEXT. Transizione a Selected.</td></tr>
+          <tr><td>EXAMINE mailbox</td><td class="m">Auth</td><td>Come SELECT ma sola lettura. Nessuna modifica ai flag o cancellazioni permessa.</td></tr>
+          <tr><td>LIST ref pattern</td><td class="m">Auth</td><td>Elenca cartelle che corrispondono al pattern (wildcard * e %). Es: <code>LIST "" "*"</code> elenca tutte le cartelle.</td></tr>
+          <tr><td>CREATE / DELETE / RENAME</td><td class="m">Auth</td><td>Crea, elimina, rinomina cartelle. Il separatore gerarchico permette sottocartelle: <code>CREATE Lavoro/Clienti</code>.</td></tr>
+          <tr><td>STATUS mailbox</td><td class="m">Auth</td><td>Statistiche su una cartella senza selezionarla: messaggi totali, UNSEEN, RECENT, UIDNEXT, dimensione.</td></tr>
+          <tr><td>FETCH seq parts</td><td class="m">Selected</td><td>Recupera parti di messaggi: ENVELOPE, BODY[HEADER], BODY[TEXT], BODY[] (tutto), FLAGS, UID, RFC822.SIZE. Es: <code>FETCH 1:3 (FLAGS BODY[HEADER])</code></td></tr>
+          <tr><td>STORE seq flags</td><td class="m">Selected</td><td>Modifica flag: \Seen (letto), \Answered, \Flagged, \Deleted, \Draft. Operazioni: FLAGS (imposta), +FLAGS (aggiunge), -FLAGS (rimuove).</td></tr>
+          <tr><td>SEARCH criteria</td><td class="m">Selected</td><td>Cerca messaggi per criteri: FROM, TO, SUBJECT, BODY, BEFORE/SINCE date, UNSEEN, FLAGGED, LARGER/SMALLER n. Operatori: NOT, OR.</td></tr>
+          <tr><td>COPY / MOVE</td><td class="m">Selected</td><td>Copia o sposta messaggi in un'altra cartella sul server, senza trasferire dati al client. MOVE è atomico (RFC 6851).</td></tr>
+          <tr><td>EXPUNGE</td><td class="m">Selected</td><td>Elimina definitivamente i messaggi con flag \Deleted. Il server risponde <code>* N EXPUNGE</code> per ogni messaggio rimosso. I numeri di sequenza vengono rinumerati.</td></tr>
+          <tr><td>IDLE</td><td class="m">Selected/Auth</td><td>Estensione RFC 2177. Push server: invia notifiche al client senza polling (nuovi messaggi, flag cambiati). Il client esce con DONE.</td></tr>
+          <tr><td>APPEND mailbox</td><td class="m">Auth</td><td>Aggiunge un messaggio direttamente a una cartella sul server (es. salva la posta inviata nella cartella Sent).</td></tr>
+          <tr><td>LOGOUT</td><td class="m">Qualsiasi</td><td>Il server invia <code>* BYE</code> e chiude la connessione TCP.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <h3 class="sep">Sessione IMAP — Esempio annotato</h3>
+    <div class="trace">
+      <div class="trace-label">Traccia IMAP — login, lista cartelle, search, fetch, modifica flag, IDLE</div>
+<pre><span class="tb">S: * OK [CAPABILITY IMAP4rev2 STARTTLS AUTH=PLAIN IDLE] Dovecot ready</span>
+<span class="tg">C: A001 STARTTLS</span>
+<span class="tb">S: A001 OK Begin TLS</span>
+<span class="td">    [TLS handshake]</span>
+<span class="tg">C: A002 LOGIN mario password123</span>
+<span class="tb">S: A002 OK Logged in</span>
+<span class="tg">C: A003 LIST "" "*"</span>
+<span class="tb">S: * LIST (\HasNoChildren) "/" INBOX</span>
+<span class="tb">S: * LIST (\HasNoChildren) "/" Sent</span>
+<span class="tb">S: * LIST (\HasNoChildren) "/" Trash</span>
+<span class="tb">S: A003 OK List completed</span>
+<span class="tg">C: A004 SELECT INBOX</span>
+<span class="tb">S: * 47 EXISTS</span>  <span class="td">&lt;-- 47 messaggi</span>
+<span class="tb">S: * 3 RECENT</span>
+<span class="tb">S: * OK [UNSEEN 12] First unseen</span>
+<span class="tb">S: * OK [UIDVALIDITY 1714210800]</span>
+<span class="tb">S: A004 OK [READ-WRITE] Select completed</span>
+<span class="tg">C: A005 SEARCH UNSEEN FROM "luigi@example.it"</span>
+<span class="tb">S: * SEARCH 12 15 23</span>
+<span class="tb">S: A005 OK Search completed</span>
+<span class="tg">C: A006 FETCH 12 (FLAGS BODY[HEADER.FIELDS (FROM TO SUBJECT DATE)])</span>
+<span class="tb">S: * 12 FETCH (FLAGS (\Recent) BODY[HEADER.FIELDS ...] {128}</span>
+<span class="tb">S: A006 OK Fetch completed</span>
+<span class="tg">C: A007 FETCH 12 BODY[TEXT]</span>
+<span class="tb">S: * 12 FETCH (BODY[TEXT] {854} ...corpo...)</span>
+<span class="tb">S: A007 OK Fetch completed</span>
+<span class="tg">C: A008 STORE 12 +FLAGS (\Seen)</span>  <span class="td">&lt;-- segna come letto</span>
+<span class="tb">S: * 12 FETCH (FLAGS (\Seen \Recent))</span>
+<span class="tb">S: A008 OK Store completed</span>
+<span class="tg">C: A009 MOVE 12 Archivio/2026</span>
+<span class="tb">S: A009 OK Move completed</span>
+<span class="tg">C: A010 IDLE</span>  <span class="td">&lt;-- attendi notifiche push</span>
+<span class="tb">S: + idling</span>
+<span class="tb">S: * 48 EXISTS</span>  <span class="td">&lt;-- arriva nuovo messaggio!</span>
+<span class="tg">C: DONE</span>
+<span class="tb">S: A010 OK Idle terminated</span>
+<span class="tg">C: A011 LOGOUT</span>
+<span class="tb">S: * BYE Logging out</span>
+<span class="tb">S: A011 OK Logout completed</span></pre>
+    </div>
+  </div>
+
+  <!-- MIME -->
+  <div id="email-mime" class="sub-section">
+    <div class="block green">
+      <div class="byear">RFC 2045–2049 — Multipurpose Internet Mail Extensions</div>
+      <div class="btitle">MIME — Estensioni per la posta multimediale</div>
+      <p>SMTP originariamente supportava solo testo ASCII a 7 bit: impossibile trasmettere allegati, caratteri accentati, HTML o dati binari. MIME estende il formato dei messaggi senza modificare SMTP, aggiungendo nuovi <strong>header</strong> e meccanismi di codifica. Quasi tutte le email moderne usano MIME.</p>
+    </div>
+    <div class="block blue">
+      <div class="btitle">Header MIME fondamentali</div>
+      <ul>
+        <li><strong>MIME-Version: 1.0</strong> — obbligatorio, segnala che il messaggio usa MIME.</li>
+        <li><strong>Content-Type: tipo/sottotipo; parametri</strong> — tipo di contenuto. Il parametro <code>boundary</code> per messaggi multipart delimita le parti. Il parametro <code>charset</code> per testo specifica la codifica.</li>
+        <li><strong>Content-Transfer-Encoding</strong> — come sono codificati i dati per il trasporto ASCII.</li>
+        <li><strong>Content-Disposition</strong> — come il client presenta la parte: <code>inline</code> o <code>attachment; filename="doc.pdf"</code>.</li>
+        <li><strong>Content-ID</strong> — ID per parti referenziate da altri contenuti (immagini inline nell'HTML).</li>
+      </ul>
+    </div>
+    <div class="block teal">
+      <div class="btitle">Tipi Content-Type fondamentali</div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Tipo/sottotipo</th><th>Utilizzo</th></tr></thead>
+        <tbody>
+          <tr><td>text/plain</td><td>Testo semplice. Parametro charset specifica la codifica (es. charset=UTF-8).</td></tr>
+          <tr><td>text/html</td><td>Corpo HTML con formattazione, colori, link, immagini incorporate.</td></tr>
+          <tr><td>multipart/mixed</td><td>Messaggi con allegati: una parte per il corpo, una per ogni file allegato. Il parametro boundary delimita le parti.</td></tr>
+          <tr><td>multipart/alternative</td><td>Versioni alternative dello stesso contenuto (text/plain + text/html). Il client mostra la versione più ricca che sa gestire.</td></tr>
+          <tr><td>multipart/related</td><td>HTML con risorse incorporate (immagini inline referenziate con Content-ID cid:...).</td></tr>
+          <tr><td>application/octet-stream</td><td>Dati binari generici. Allegati di tipo sconosciuto o eseguibili.</td></tr>
+          <tr><td>message/rfc822</td><td>Messaggio email incluso come allegato (forwarding di un'email).</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="block amber">
+      <div class="btitle">Content-Transfer-Encoding — le codifiche</div>
+      <ul>
+        <li><strong>7bit</strong>: testo ASCII puro. Nessuna codifica aggiuntiva. Solo caratteri ASCII 0–127.</li>
+        <li><strong>8bit</strong>: permette byte con bit alto (caratteri accentati). Richiede estensione SMTP 8BITMIME.</li>
+        <li><strong>quoted-printable</strong>: per testo con pochi caratteri non-ASCII. I caratteri speciali codificati come =XX (valore esadecimale). Il testo resta leggibile senza decodifica. Overhead basso per testo europeo.</li>
+        <li><strong>base64</strong>: converte dati binari in testo ASCII usando 64 caratteri stampabili. Ogni 3 byte diventano 4 caratteri ASCII. Overhead del 33%. Usato per allegati binari (immagini, PDF, ZIP). Il destinatario deve decodificare il base64.</li>
+        <li><strong>binary</strong>: nessuna codifica. Richiede estensione SMTP BINARYMIME. Non universalmente supportato.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CONFRONTO POP3 vs IMAP -->
+  <div id="email-confronto" class="sub-section">
+    <div class="tbl-wrap">
+      <table class="tbl cmp">
+        <thead>
+          <tr><th></th><th class="red">POP3</th><th class="blue">IMAP</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Filosofia</th><td>Scarica e rimuovi — modello offline</td><td>Accesso centralizzato — modello online</td></tr>
+          <tr><th scope="row">Porta</th><td>110 (plain) / 995 (SSL)</td><td>143 (STARTTLS) / 993 (SSL)</td></tr>
+          <tr><th scope="row">RFC</th><td>RFC 1939</td><td>RFC 3501 / RFC 9051</td></tr>
+          <tr><th scope="row">Messaggi sul server</th><td>Cancellati dopo il download (default)</td><td>Rimangono fino all'EXPUNGE esplicito</td></tr>
+          <tr><th scope="row">Cartelle multiple</th><td>No — solo INBOX</td><td>Sì — gerarchia completa di cartelle</td></tr>
+          <tr><th scope="row">Multi-device sync</th><td>No — ogni device scarica copia diversa</td><td>Sì — stato identico su tutti i device</td></tr>
+          <tr><th scope="row">Flag (letto, risposto)</th><td>No — nessun flag lato server</td><td>Sì — flag persistenti lato server</td></tr>
+          <tr><th scope="row">Ricerca lato server</th><td>No — il client cerca in locale</td><td>Sì — comando SEARCH sul server</td></tr>
+          <tr><th scope="row">Complessità</th><td>Semplice — pochi comandi</td><td>Complesso — stateful, tag, molti comandi</td></tr>
+          <tr><th scope="row">Caso d'uso ideale</th><td>Un solo device, accesso offline, connessione lenta</td><td>Multi-device, posta aziendale, web mail</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight blue" style="margin-top:14px">SMTP, POP3 e IMAP svolgono funzioni complementari: SMTP gestisce l'<em>invio</em> (push), POP3/IMAP la <em>ricezione</em> (pull). Un client email usa sempre tutti e tre: SMTP per inviare, POP3 o IMAP per leggere.</div>
+  </div>
+
+  <!-- SICUREZZA & PEC -->
+  <div id="email-sicurezza" class="sub-section">
+    <div class="block red">
+      <div class="btitle">Problemi di sicurezza della posta elettronica</div>
+      <p>Il sistema email è stato progettato senza autenticazione del mittente: chiunque può dichiarare qualsiasi indirizzo nel campo <code>From:</code> e nel comando <code>MAIL FROM:</code>. Questo espone a spoofing, spam, phishing e intercettazione. Le tecnologie moderne di autenticazione cercano di mitigare questi rischi.</p>
+    </div>
+    <div class="grid2">
+      <div class="card-small green">
+        <span class="badge">SPF — Sender Policy Framework (RFC 7208)</span>
+        <p>Il proprietario del dominio pubblica nel DNS un record <strong>TXT</strong> con gli IP autorizzati a inviare email per quel dominio. Il server ricevente verifica se l'IP del server mittente è nell'elenco SPF. Protegge l'<strong>envelope sender</strong> (MAIL FROM), non il From: degli header visibili all'utente.</p>
+      </div>
+      <div class="card-small blue">
+        <span class="badge">DKIM — DomainKeys Identified Mail (RFC 6376)</span>
+        <p>Il server mittente firma crittograficamente parti del messaggio con una <strong>chiave privata</strong>, aggiungendo l'header <code>DKIM-Signature</code>. La <strong>chiave pubblica</strong> è nel DNS del dominio. Il server destinatario verifica la firma: garantisce integrità del messaggio e autenticità del dominio mittente.</p>
+      </div>
+      <div class="card-small amber">
+        <span class="badge">DMARC (RFC 7489)</span>
+        <p>Estende SPF e DKIM con una <strong>policy DNS</strong>: cosa fare con i messaggi che falliscono la verifica. Valori: <code>none</code> (solo monitoraggio), <code>quarantine</code> (metti in spam), <code>reject</code> (blocca). Prevede anche report aggregati sulle email inviate a nome del dominio.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">S/MIME e PGP</span>
+        <p>Cifratura e firma digitale <strong>end-to-end</strong> del contenuto. Anche se il server è compromesso, il corpo resta cifrato. S/MIME usa PKI con certificati X.509; PGP usa web of trust. Richiedono gestione delle chiavi da parte degli utenti.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">PEC — Posta Elettronica Certificata</h3>
+    <div class="block blue">
+      <div class="btitle">Cos'è la PEC e il suo valore legale</div>
+      <p>La <strong>PEC</strong> (DPR 68/2005, Codice dell'Amministrazione Digitale) è un sistema italiano che fornisce a un messaggio email lo stesso <strong>valore legale di una raccomandata con ricevuta di ritorno</strong>. La PEC non cifra il contenuto ma garantisce con certezza e certificazione digitale: identità del mittente, consegna al destinatario, integrità del messaggio, data/ora di invio e ricezione.</p>
+    </div>
+    <div class="block teal">
+      <div class="btitle">Flusso di consegna PEC — step by step</div>
+      <ol>
+        <li>Il mittente invia al proprio <strong>Gestore PEC mittente</strong> (provider accreditato AGID).</li>
+        <li>Il Gestore verifica l'autenticità del mittente, avvolge il messaggio in una <strong>busta di trasporto</strong> firmata digitalmente. Invia al mittente la <strong>ricevuta di accettazione</strong> (prova dell'invio con timestamp).</li>
+        <li>La busta di trasporto viene trasmessa al <strong>Gestore PEC destinatario</strong> via SMTP cifrato.</li>
+        <li>Il Gestore destinatario verifica la firma, consegna nella mailbox del destinatario e invia una <strong>ricevuta di presa in carico</strong>.</li>
+        <li>Il Gestore mittente invia al mittente la <strong>ricevuta di consegna</strong>: certifica data/ora di consegna nella mailbox del destinatario.</li>
+      </ol>
+      <p style="margin-top:8px">La firma digitale del gestore su ogni ricevuta (certificati X.509 da CA accreditate) garantisce non repudiabilità. Nota: la comunicazione PEC verso indirizzi non-PEC perde il valore legale della ricevuta di consegna.</p>
+    </div>
+    <div class="block amber">
+      <div class="btitle">PEC vs S/MIME — differenza fondamentale</div>
+      <ul>
+        <li>S/MIME garantisce integrità e identità del firmatario ma <strong>non la consegna</strong>.</li>
+        <li>PEC garantisce l'intero ciclo: invio + trasporto + consegna, con valore legale riconosciuto.</li>
+        <li>La PEC <strong>non cifra il contenuto</strong>: per confidenzialità occorre combinare PEC con S/MIME o PGP.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
