@@ -31,6 +31,9 @@
     <button aria-selected="false" data-chapter="dhcp">DHCP</button>
     <button aria-selected="false" data-chapter="trasporto">Livello trasporto</button>
     <button aria-selected="false" data-chapter="email">Posta elettronica</button>
+    <button aria-selected="false" data-chapter="sicurezza">Sicurezza informatica</button>
+    <button aria-selected="false" data-chapter="crittografia">Crittografia</button>
+    <button aria-selected="false" data-chapter="vlan">VLAN</button>
   </div>
 </nav>
 
@@ -1426,6 +1429,441 @@ mail1.example.com.  IN  A  <span class="tb">93.184.216.10</span></pre></div>
     </div>
   </div>
 </section>
+
+<!-- ===== SICUREZZA INFORMATICA ===== -->
+<section id="sicurezza" class="section">
+  <h2 class="chapter-title">Introduzione alla sicurezza informatica</h2>
+  <p class="chapter-lead">Cosa si intende per "sistema informatico", quali proprietà vogliamo proteggere e quali sono le minacce più comuni a cui è esposto chi usa la rete ogni giorno.</p>
+
+  <div class="block green">
+    <div class="btitle">Sistema informativo vs sistema informatico</div>
+    <p>Un <strong>sistema informativo</strong> è l'insieme di persone, procedure e mezzi tecnici con cui un'organizzazione raccoglie, elabora e scambia informazioni con l'ambiente esterno e interno: comprende tanto le procedure cartacee quanto quelle digitali. Il <strong>sistema informatico</strong> è la parte del sistema informativo che viene gestita con strumenti elettronici (computer, rete, software): è quindi un sottoinsieme, propriamente annidato, del sistema informativo.</p>
+    <p>La giurisprudenza italiana (Cassazione, sent. 3067/1999) definisce il sistema informatico come <em>"un complesso di apparecchiature destinate a compiere una qualsiasi funzione utile all'uomo, attraverso l'utilizzazione (anche parziale) di tecnologie informatiche, che sono caratterizzate — per mezzo di un'attività di codificazione e decodificazione — dalla registrazione o memorizzazione, per mezzo di impulsi elettronici, su supporti adeguati, di dati [...] e dalla elaborazione automatica di tali dati, in modo da generare informazioni"</em>. È una definizione pensata per il diritto penale: serve a stabilire quando un reato (es. accesso abusivo, art. 615-ter c.p.) riguarda effettivamente un sistema informatico.</p>
+  </div>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="sic-cia">Riservatezza, integrità, disponibilità</button>
+    <button data-sub="sic-minacce">Minacce e attacchi</button>
+    <button data-sub="sic-rischi">I rischi del web</button>
+    <button data-sub="sic-auth">Autenticazione e password</button>
+  </div>
+
+  <div id="sic-cia" class="sub-section visible">
+    <h3 class="sep">I pilastri della sicurezza delle informazioni</h3>
+    <div class="block blue">
+      <div class="btitle">Le sei proprietà da garantire</div>
+      <p>Quando si parla di "sicurezza informatica" ci si riferisce in realtà alla protezione di sei proprietà distinte dell'informazione. Le prime tre (<strong>CIA</strong> — Confidentiality, Integrity, Availability) sono lo zoccolo duro di qualunque policy di sicurezza; le altre tre riguardano più da vicino l'identità e la responsabilità di chi usa il sistema.</p>
+    </div>
+    <div class="grid3">
+      <div class="card-small green">
+        <span class="badge">Confidenzialità</span>
+        <div class="ct">Riservatezza</div>
+        <p>L'accesso alle informazioni è consentito solo agli utenti autorizzati. Si ottiene con cifratura, controllo degli accessi e permessi. È la proprietà violata da un'<strong>interception</strong>: un attaccante legge dati che non dovrebbe vedere.</p>
+      </div>
+      <div class="card-small red">
+        <span class="badge">Integrità</span>
+        <div class="ct">Integrity</div>
+        <p>Impedire modifiche o manomissioni non autorizzate dei dati, che ne farebbero perdere la validità. Si verifica con checksum, hash e firme digitali. Violata da una <strong>modification</strong>: i dati vengono alterati in transito o a riposo.</p>
+      </div>
+      <div class="card-small blue">
+        <span class="badge">Disponibilità</span>
+        <div class="ct">Availability</div>
+        <p>Garantire che le informazioni e i servizi siano costantemente accessibili a chi ne ha diritto, nei tempi previsti. Minacciata da attacchi di tipo <strong>interruption</strong> (es. Denial of Service) o da guasti hardware/software.</p>
+      </div>
+      <div class="card-small amber">
+        <span class="badge">Paternità</span>
+        <div class="ct">Autenticità della fonte</div>
+        <p>L'identità della fonte delle informazioni deve essere certa: chi dice di aver inviato un messaggio o prodotto un documento deve essere davvero chi dice di essere.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">Autenticazione</span>
+        <div class="ct">Authentication</div>
+        <p>L'accesso alle informazioni avviene tramite l'uso di credenziali verificabili (password, token, biometria), che legano una sessione a un'identità specifica prima di concedere l'accesso.</p>
+      </div>
+      <div class="card-small teal">
+        <span class="badge">Non ripudio</span>
+        <div class="ct">Non-repudiation</div>
+        <p>Impossibilità per chi ha compiuto un'operazione (inviato un messaggio, firmato un documento) di negarne successivamente l'esecuzione. Si realizza tipicamente con firme digitali e marche temporali.</p>
+      </div>
+    </div>
+    <div class="highlight">Le ultime tre proprietà non sono un "extra" accademico: sono il motivo per cui esistono la firma digitale e la PEC (vedi il capitolo sulla <a href="#email">posta elettronica</a>), che garantiscono paternità, autenticazione e non ripudio su un documento informatico con lo stesso valore di una firma autografa o di una raccomandata.</div>
+  </div>
+
+  <div id="sic-minacce" class="sub-section">
+    <h3 class="sep">Hacker e cracker — una distinzione da non confondere</h3>
+    <div class="grid2">
+      <div class="card-small blue">
+        <span class="badge">Hacker</span>
+        <p>Chi sfrutta le proprie conoscenze e competenze per studiare in maniera approfondita le caratteristiche tecniche di sistemi informatici, allo scopo di individuarne limiti, difetti e vulnerabilità. L'obiettivo è la conoscenza, spesso messa a disposizione per migliorare la sicurezza (<em>ethical hacking</em>, bug bounty, red team aziendali).</p>
+      </div>
+      <div class="card-small red">
+        <span class="badge">Cracker</span>
+        <p>Chi, con lo stesso tipo di competenze tecniche, ha come obiettivo un crimine informatico: sottrarre o distruggere dati, violare sistemi, sottrarre identità. La definizione è quella data dalla RFC 1392 (Internet Users' Glossary). La differenza non è tecnica ma di <strong>intento</strong>.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">Classificazione delle minacce — il modello Interruption / Interception / Modification / Fabrication</h3>
+    <div class="block amber">
+      <div class="btitle">Quattro modi di compromettere una comunicazione</div>
+      <p>Dato un flusso normale di informazione da una sorgente a una destinazione, un attacco alla sicurezza può essere classificato in base a <em>cosa</em> viene compromesso rispetto al flusso originale:</p>
+    </div>
+    <div class="grid2">
+      <div class="card-small red">
+        <span class="badge">Interruption</span>
+        <div class="ct">Compromette la disponibilità</div>
+        <p>Il flusso di dati viene interrotto o distrutto prima di raggiungere la destinazione: taglio di un cavo, jamming di un segnale radio, un attacco DoS che rende un servizio irraggiungibile.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">Interception</span>
+        <div class="ct">Compromette la riservatezza</div>
+        <p>Una parte non autorizzata accede al flusso di dati senza alterarlo: sniffing del traffico su una rete condivisa, intercettazione di un segnale non cifrato. La vittima spesso non si accorge di nulla.</p>
+      </div>
+      <div class="card-small amber">
+        <span class="badge">Modification</span>
+        <div class="ct">Compromette l'integrità</div>
+        <p>L'attaccante intercetta il flusso <em>e</em> lo altera prima di inoltrarlo alla destinazione: modifica dell'importo in un bonifico intercettato, alterazione di un file in transito.</p>
+      </div>
+      <div class="card-small teal">
+        <span class="badge">Fabrication</span>
+        <div class="ct">Compromette l'autenticità</div>
+        <p>L'attaccante inserisce nel sistema oggetti contraffatti spacciandoli per legittimi: un messaggio fasullo "da" un mittente fidato, record falsificati inseriti in un database.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">Man in the Middle (MITM)</h3>
+    <div class="block red">
+      <div class="btitle">L'attaccante si inserisce nel mezzo della comunicazione</div>
+      <p>Nell'attacco <strong>Man in the Middle</strong> l'aggressore si posiziona logicamente tra due parti che credono di comunicare direttamente, intercettando e potenzialmente alterando ogni messaggio scambiato. Ciascuna delle due vittime "pensa" di parlare con l'altra, mentre in realtà sta parlando con l'attaccante, che inoltra (ed eventualmente modifica) il traffico in entrambe le direzioni.</p>
+      <ul>
+        <li><strong>Intercettazione dei dati</strong>: lettura passiva di credenziali, cookie di sessione, contenuti riservati.</li>
+        <li><strong>Modifica delle informazioni</strong>: alterazione di dati in transito senza che le vittime se ne accorgano.</li>
+        <li><strong>Creazione di informazioni false</strong>: inserimento di contenuti che nessuna delle due parti ha mai inviato.</li>
+        <li><strong>Interruzione del servizio</strong>: l'attaccante può semplicemente bloccare la comunicazione, negando la disponibilità.</li>
+      </ul>
+      <p style="margin-top:8px">Scenari tipici: una rete Wi-Fi pubblica non cifrata, un DNS spoofing che reindirizza il traffico verso un server malevolo, un ARP spoofing sulla LAN locale. La difesa principale è l'uso di protocolli cifrati e autenticati end-to-end (HTTPS/TLS con verifica del certificato), che impediscono all'attaccante di leggere o alterare il traffico anche se riesce a intercettarlo.</p>
+    </div>
+  </div>
+
+  <div id="sic-rischi" class="sub-section">
+    <h3 class="sep">I rischi specifici del web e dei social</h3>
+    <div class="grid3">
+      <div class="card-small red"><span class="badge">Cyberbullismo</span><p>Atti di prevaricazione o aggressione ripetuti nel tempo, veicolati attraverso mezzi digitali (chat, social, messaggistica).</p></div>
+      <div class="card-small amber"><span class="badge">False identità</span><p>Profili creati con dati non veritieri per ingannare altri utenti o nascondere la propria vera identità.</p></div>
+      <div class="card-small purple"><span class="badge">Informazioni fuorvianti</span><p>Contenuti costruiti per indurre in errore chi li legge, dalla disinformazione generica alle fake news mirate.</p></div>
+      <div class="card-small blue"><span class="badge">Messaggi fraudolenti</span><p>Comunicazioni (email, SMS) che imitano mittenti legittimi per indurre la vittima a compiere un'azione dannosa (es. phishing).</p></div>
+      <div class="card-small teal"><span class="badge">Adescamento</span><p>Costruzione di un rapporto di fiducia online con l'obiettivo di sfruttare la vittima, particolarmente pericoloso verso i minori.</p></div>
+      <div class="card-small green"><span class="badge">Furto d'identità</span><p>Appropriazione indebita dei dati personali di un'altra persona per impersonarla, ottenere credito o compiere reati a suo nome.</p></div>
+    </div>
+    <div class="block blue">
+      <div class="btitle">Perché la rete amplifica questi rischi</div>
+      <ul>
+        <li>La rete garantisce un elevato livello di <strong>anonimato</strong>, che abbassa la percezione delle conseguenze per chi compie atti scorretti.</li>
+        <li>È facile fornire identità diverse da quella reale: la verifica dell'identità online è debole per molti servizi.</li>
+        <li>Le comunità virtuali possono dare una falsa sensazione di essere "circuiti protetti", abbassando la guardia degli utenti.</li>
+        <li>Le informazioni inserite diventano spesso di <strong>pubblico dominio</strong>, anche quando l'utente non ne è pienamente consapevole.</li>
+        <li>Scarsa attenzione alle clausole di <strong>privacy e copyright</strong> al momento dell'iscrizione a un servizio.</li>
+      </ul>
+    </div>
+    <div class="highlight">Qualsiasi cosa scritta o pubblicata in rete non potrà mai essere cancellata definitivamente e con assoluta certezza. L'effetto "virale" di alcuni servizi internet tende a propagare rapidamente copie della stessa informazione, spesso su piattaforme molto difficili da controllare o raggiungere con un'adeguata normativa a tutela dei propri diritti: è il motivo per cui, prima di pubblicare qualcosa, conviene sempre chiedersi se saremmo a nostro agio nel vederlo diffuso ovunque, per sempre.</div>
+  </div>
+
+  <div id="sic-auth" class="sub-section">
+    <h3 class="sep">Autenticazione: a più fattori è meglio</h3>
+    <div class="block green">
+      <div class="btitle">I tre fattori di autenticazione</div>
+      <p>Un sistema di autenticazione può basarsi su tre categorie indipendenti di "prova": una cosa che <strong>sai</strong> (password, PIN), una cosa che <strong>hai</strong> (token, smartphone, smart card) e una cosa che <strong>sei</strong> (impronta digitale, iride, altri dati biometrici). Più fattori diversi vengono combinati, più è difficile per un attaccante impersonare l'utente legittimo, perché deve compromettere contemporaneamente canali di natura diversa.</p>
+    </div>
+    <div class="grid2">
+      <div class="card-small blue">
+        <span class="badge">2FA — Two-Factor Authentication</span>
+        <p>Combina due fattori di categoria diversa: tipicamente qualcosa che sai (password) e qualcosa che hai (codice via app authenticator, SMS, chiave di sicurezza). È lo standard minimo consigliato per qualsiasi account importante oggi.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">3FA — Three-Factor Authentication</span>
+        <p>Aggiunge anche un fattore biometrico (impronta, riconoscimento facciale/iride) ai due precedenti. Usato in contesti ad alta sicurezza: accesso fisico a data center, sistemi bancari critici, dispositivi governativi.</p>
+      </div>
+    </div>
+    <h3 class="sep">Requisiti minimi per una password sicura</h3>
+    <div class="block amber">
+      <ul>
+        <li>Lunga <strong>almeno 8 caratteri</strong> (oggi si consigliano 12+ per resistere ad attacchi di forza bruta più veloci).</li>
+        <li>Formata da lettere maiuscole e minuscole, numeri e simboli.</li>
+        <li>Non ha alcun senso compiuto: evitare parole di senso compiuto, facilmente attaccabili con un <em>dictionary attack</em>.</li>
+        <li>Non contiene alcun riferimento al nome utente (account).</li>
+        <li>Non contiene riferimenti a dati personali dell'utente (data di nascita, nome di famigliari, squadra del cuore...).</li>
+        <li>Va cambiata periodicamente, soprattutto dopo un sospetto di compromissione.</li>
+        <li>Non va mai riportata su supporti cartacei facilmente accessibili (il classico post-it sul monitor).</li>
+      </ul>
+      <p style="margin-top:8px">Nella pratica moderna, la raccomandazione più efficace resta: usare un <strong>password manager</strong> per generare e memorizzare password lunghe, casuali e diverse per ogni servizio, abilitando sempre la 2FA dove disponibile. In questo modo il "non ha senso compiuto" e la rotazione periodica sono gestiti automaticamente, senza che l'utente debba ricordare decine di password.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== CRITTOGRAFIA ===== -->
+<section id="crittografia" class="section">
+  <h2 class="chapter-title">Crittografia</h2>
+  <p class="chapter-lead">Dalla scitala spartana agli algoritmi che cifrano ogni connessione HTTPS: come si trasforma un messaggio leggibile in uno che solo il destinatario può capire, e perché la sicurezza di un cifrario deve stare nella chiave e non nel segreto dell'algoritmo.</p>
+
+  <div class="block green">
+    <div class="btitle">Cifratura e decifratura — lo schema di base</div>
+    <p>La <strong>crittografia</strong> è la disciplina che studia le tecniche per rendere un messaggio incomprensibile a chiunque non sia autorizzato a leggerlo. Il messaggio originale, leggibile, si chiama <strong>messaggio in chiaro</strong> (plaintext); il risultato della trasformazione si chiama <strong>messaggio cifrato</strong> (ciphertext). La trasformazione è governata da due algoritmi — di <strong>cifratura</strong> e di <strong>decifratura</strong> — e da una o più <strong>chiavi</strong>, parametri segreti che determinano il risultato specifico della trasformazione a parità di algoritmo.</p>
+    <p>Il processo inverso di "rompere" un cifrario senza conoscere la chiave si chiama <strong>crittanalisi</strong>. Crittografia e crittanalisi insieme formano la <strong>crittologia</strong>.</p>
+  </div>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="cripto-storia">Cenni storici</button>
+    <button data-sub="cripto-simmetrica">Crittografia simmetrica</button>
+    <button data-sub="cripto-asimmetrica">Crittografia asimmetrica</button>
+    <button data-sub="cripto-integrita">Hash, firma digitale e smart card</button>
+  </div>
+
+  <div id="cripto-storia" class="sub-section visible">
+    <h3 class="sep">Dalla crittografia classica al principio di Kerckhoffs</h3>
+    <div class="grid2">
+      <div class="card-small amber">
+        <span class="badge">Scitala spartana</span>
+        <p>Uno dei più antichi strumenti crittografici noti (Sparta, V secolo a.C.): un nastro di cuoio veniva avvolto a spirale attorno a un bastone di diametro prefissato e vi si scriveva il messaggio lungo l'asse. Srotolato, il nastro mostrava solo lettere apparentemente casuali: per leggerlo serviva un bastone dello stesso diametro. La "chiave" era il diametro del bastone.</p>
+      </div>
+      <div class="card-small blue">
+        <span class="badge">Cifrario di Cesare</span>
+        <p>Cifrario a sostituzione monoalfabetica: ogni lettera del messaggio viene sostituita con quella che si trova <em>n</em> posizioni più avanti nell'alfabeto (Giulio Cesare usava n = 3). È un caso particolare di cifrario a scorrimento, facilmente rappresentabile con due dischi concentrici — i <strong>dischi cifranti</strong> — che ruotando l'uno rispetto all'altro realizzano lo scorrimento.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">Cifrario di Vigenère (1586)</span>
+        <p>Pubblicato nel <em>Traicté des Chiffres</em> di Blaise de Vigenère, è un cifrario <strong>polialfabetico</strong>: usa una parola chiave per scegliere, lettera per lettera, uno scorrimento diverso. Per oltre due secoli fu considerato "indecifrabile" (le <em>chiffre indéchiffrable</em>), finché Babbage e Kasiski nell'Ottocento non svilupparono tecniche di crittanalisi basate sulla ricerca di ripetizioni nel testo cifrato per risalire alla lunghezza della chiave.</p>
+      </div>
+      <div class="card-small teal">
+        <span class="badge">Enigma</span>
+        <p>Macchina elettromeccanica a rotori usata dalla Germania nella Seconda guerra mondiale. Ogni rotore realizza una sostituzione, ma i rotori avanzano a ogni pressione di tasto: il cifrario cambia continuamente, rendendo enorme lo spazio delle chiavi possibili (posizione e cablaggio dei rotori, impostazioni del pannello a spine). Fu violata dai crittoanalisti polacchi e poi dal team di Bletchley Park guidato da Alan Turing, un evento che ha significativamente accorciato la guerra in Europa.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">Crittanalisi per frequenza — lo scarabeo d'oro</h3>
+    <div class="block amber">
+      <div class="btitle">Perché un cifrario a sostituzione semplice è debole</div>
+      <p>In un cifrario monoalfabetico ogni lettera del messaggio in chiaro corrisponde sempre allo stesso simbolo cifrato. Questo significa che le proprietà statistiche della lingua sopravvivono alla cifratura: nell'italiano la lettera <strong>e</strong> compare circa l'11,8% delle volte, la <strong>a</strong> l'11,7%, mentre lettere come <strong>q</strong> e <strong>z</strong> sono rarissime (sotto l'1%). Contando le frequenze dei simboli nel testo cifrato e confrontandole con le frequenze note della lingua, un crittoanalista può risalire alla sostituzione usata, anche senza conoscere la chiave.</p>
+      <p>È esattamente la tecnica di <strong>crittanalisi per frequenza</strong> che il protagonista del racconto <em>Lo scarabeo d'oro</em> di Edgar Allan Poe (1843) usa per decifrare una mappa del tesoro scritta con un cifrario a sostituzione: il simbolo più frequente nel crittogramma viene assunto come la lettera più frequente della lingua, e da lì si procede per tentativi incrociati con le parole che via via si riescono a intuire.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Lettera</th><th>%</th><th>Lettera</th><th>%</th><th>Lettera</th><th>%</th></tr></thead>
+        <tbody>
+          <tr><td>e</td><td>11,79</td><td>r</td><td>6,38</td><td>d</td><td>3,73</td></tr>
+          <tr><td>a</td><td>11,74</td><td>n</td><td>6,88</td><td>p</td><td>3,05</td></tr>
+          <tr><td>i</td><td>11,28</td><td>t</td><td>5,63</td><td>u</td><td>3,02</td></tr>
+          <tr><td>o</td><td>9,83</td><td>s</td><td>4,98</td><td>g</td><td>1,65</td></tr>
+          <tr><td>l</td><td>6,51</td><td>c</td><td>4,50</td><td>h</td><td>1,54</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight">La lezione che se ne ricava è generale e tuttora valida: <strong>un cifrario non è sicuro solo perché il suo funzionamento è segreto</strong>. È il principio enunciato dal crittografo olandese <strong>Auguste Kerckhoffs</strong> nel 1883 (<em>La cryptographie militaire</em>): la sicurezza di un sistema crittografico deve dipendere esclusivamente dalla segretezza della <strong>chiave</strong>, mai dalla segretezza dell'algoritmo. Un algoritmo pubblico, studiato e attaccato da migliaia di ricercatori senza che nessuno riesca a romperlo (come AES oggi), è molto più affidabile di un algoritmo "segreto" mai messo alla prova.</div>
+  </div>
+
+  <div id="cripto-simmetrica" class="sub-section">
+    <h3 class="sep">Crittografia a chiave simmetrica</h3>
+    <div class="block blue">
+      <div class="btitle">Una sola chiave, condivisa, per cifrare e decifrare</div>
+      <p>Nella <strong>crittografia simmetrica</strong> la stessa chiave segreta viene usata sia per cifrare sia per decifrare il messaggio: mittente e destinatario devono essersi accordati in anticipo su una chiave condivisa, che deve restare segreta a chiunque altro. Il messaggio in chiaro passa attraverso l'algoritmo di cifratura insieme alla chiave e produce il messaggio cifrato; il destinatario applica l'algoritmo di decifratura con la <em>stessa</em> chiave e ottiene di nuovo il messaggio in chiaro.</p>
+      <p>Vantaggio principale: è <strong>computazionalmente molto veloce</strong>, adatta a cifrare grandi quantità di dati. Svantaggio: il problema dello <strong>scambio della chiave</strong>. Se Alice e Bob non si sono mai incontrati di persona, come si accordano su una chiave segreta senza che un attaccante in ascolto sul canale la intercetti? È il problema che la crittografia asimmetrica risolve elegantemente.</p>
+    </div>
+
+    <h3 class="sep">Dentro un cifrario a blocchi: la rete di Feistel</h3>
+    <div class="block purple">
+      <div class="btitle">Come DES e molti altri cifrari simmetrici sono costruiti</div>
+      <p>Molti cifrari simmetrici storici (DES su tutti) e alcuni moderni sono costruiti come <strong>reti di Feistel</strong>: il blocco di testo in chiaro viene diviso in due metà, <strong>L</strong> (left) e <strong>R</strong> (right). A ogni "giro" (round), la metà destra passa attraverso una funzione <strong>F</strong> parametrizzata dalla sottochiave del round, il risultato viene combinato in XOR con la metà sinistra, e le due metà si scambiano di posto per il round successivo. DES applica questo schema per <strong>16 round</strong> su blocchi di <strong>64 bit</strong>, con una chiave effettiva di 56 bit — oggi considerata troppo corta e sostituita da <strong>AES</strong> (chiavi a 128/192/256 bit, struttura diversa da Feistel ma stesso principio di confusione e diffusione ripetute su più round).</p>
+      <p>Il punto cruciale, dal punto di vista della sicurezza teorica, è quello formalizzato da <strong>Claude Shannon</strong> nel 1948-49: la quantità di incertezza (entropia) di una sorgente di informazione si misura con <code>H = −Σ p(x)·log p(x)</code>, e un cifrario robusto deve avvicinare il testo cifrato al rumore puro, cioè massimizzare l'entropia apparente del messaggio per chi non conosce la chiave, attraverso i principi di <strong>confusione</strong> (nascondere la relazione fra chiave e cifrato) e <strong>diffusione</strong> (far dipendere ogni bit del cifrato da molti bit del testo in chiaro).</p>
+    </div>
+  </div>
+
+  <div id="cripto-asimmetrica" class="sub-section">
+    <h3 class="sep">Crittografia a chiave pubblica (asimmetrica)</h3>
+    <div class="block green">
+      <div class="btitle">Due chiavi diverse, matematicamente legate</div>
+      <p>Nella <strong>crittografia asimmetrica</strong> ogni utente possiede una <strong>coppia di chiavi</strong> matematicamente correlate: una <strong>chiave pubblica</strong>, che può essere distribuita liberamente a chiunque, e una <strong>chiave privata</strong>, che deve restare segreta e non lasciare mai il dispositivo del proprietario. Ciò che viene cifrato con una delle due chiavi può essere decifrato solo con l'altra della stessa coppia. Questo risolve il problema dello scambio della chiave: non serve nessun segreto condiviso in anticipo.</p>
+    </div>
+    <div class="grid2">
+      <div class="card-small green">
+        <span class="badge">Riservatezza — cifro con la chiave pubblica del destinatario</span>
+        <p>Se Marco vuole inviare un documento riservato a Roberto, lo cifra con la <strong>chiave pubblica di Roberto</strong>. Solo Roberto, che possiede la corrispondente <strong>chiave privata</strong>, può decifrarlo. Chiunque altro intercetti il messaggio cifrato — pur conoscendo la chiave pubblica di Roberto, che è pubblica per definizione — non può invertire la trasformazione senza la chiave privata.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">Autenticità — cifro con la mia chiave privata</span>
+        <p>Se invece Marco cifra un documento con la <strong>propria chiave privata</strong>, chiunque possieda la sua chiave pubblica può decifrarlo: questo non garantisce la riservatezza (la chiave pubblica di Marco è nota a tutti), ma garantisce che <em>solo Marco</em> può aver prodotto quel testo cifrato, perché solo lui conosce la chiave privata corrispondente. È il principio alla base della firma digitale.</p>
+      </div>
+    </div>
+    <div class="block amber">
+      <div class="btitle">Il costo da pagare: la velocità</div>
+      <p>Gli algoritmi asimmetrici (il più noto è <strong>RSA</strong>, basato sulla difficoltà computazionale di fattorizzare il prodotto di due grandi numeri primi) sono molto più lenti di quelli simmetrici a parità di sicurezza, perché si basano su operazioni aritmetiche su numeri molto grandi (centinaia o migliaia di bit) invece che su semplici permutazioni e XOR di bit. Per questo nella pratica si usa quasi sempre uno schema <strong>ibrido</strong>: la crittografia asimmetrica serve solo a scambiarsi in modo sicuro una chiave simmetrica temporanea (<em>chiave di sessione</em>), dopodiché tutto il traffico viene cifrato con quella chiave simmetrica, molto più veloce. È esattamente quello che fa TLS/HTTPS a ogni connessione sicura verso un sito web.</p>
+    </div>
+  </div>
+
+  <div id="cripto-integrita" class="sub-section">
+    <h3 class="sep">Hash, firma digitale e documenti elettronici</h3>
+    <div class="block blue">
+      <div class="btitle">La funzione di hash — un'impronta digitale dei dati</div>
+      <p>Una <strong>funzione di hash crittografica</strong> trasforma un messaggio di lunghezza qualsiasi in una stringa di lunghezza fissa, detta <strong>digest</strong> o impronta (es. SHA-256 produce sempre 256 bit, indipendentemente dalla dimensione dell'input). Proprietà richieste: deve essere <em>deterministica</em> (stesso input → stesso digest), praticamente <em>irreversibile</em> (dal digest non si può risalire al messaggio originale) e <em>resistente alle collisioni</em> (è computazionalmente impraticabile trovare due messaggi diversi con lo stesso digest). Anche una modifica minima del messaggio produce un digest completamente diverso: per questo l'hash è lo strumento base per verificare l'<strong>integrità</strong> di un file o di un messaggio.</p>
+    </div>
+    <h3 class="sep">Firma digitale — integrare hash e crittografia asimmetrica</h3>
+    <div class="grid2">
+      <div class="card-small purple">
+        <span class="badge">1 · Creazione della firma</span>
+        <ol>
+          <li>Il mittente calcola l'hash (digest) del documento.</li>
+          <li>Cifra il digest con la propria <strong>chiave privata</strong>: questo è il valore della firma digitale, allegato al documento.</li>
+          <li>Invia documento + firma al destinatario.</li>
+        </ol>
+      </div>
+      <div class="card-small teal">
+        <span class="badge">2 · Verifica della firma</span>
+        <ol>
+          <li>Il destinatario ricalcola l'hash del documento ricevuto.</li>
+          <li>Decifra la firma allegata con la <strong>chiave pubblica</strong> del mittente, ottenendo il digest originale.</li>
+          <li>Confronta i due digest: se coincidono, il documento è autentico e integro (non è stato alterato) e proviene certamente dal possessore di quella chiave privata.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="highlight">La firma digitale realizza contemporaneamente tre delle proprietà viste a inizio capitolo: <strong>integrità</strong> (qualunque modifica al documento cambia l'hash e la verifica fallisce), <strong>paternità/autenticazione</strong> (solo chi possiede la chiave privata può aver prodotto quella firma) e <strong>non ripudio</strong> (il firmatario non può negare di aver firmato, perché la sua chiave privata è — o dovrebbe essere — sotto il suo esclusivo controllo).</div>
+
+    <h3 class="sep">Smart card e dispositivi di firma</h3>
+    <div class="block green">
+      <div class="btitle">Dove vive la chiave privata</div>
+      <p>Perché la firma digitale abbia valore legale, la chiave privata non deve mai poter essere estratta o copiata: viene quindi generata e conservata dentro un dispositivo hardware dedicato — una <strong>smart card</strong> o una chiavetta USB con <strong>microprocessore sicuro</strong> — che espone un <em>contact plate</em> collegato a CPU, co-processore crittografico e memoria (ROM/EPROM) interni alla carta. Le operazioni di cifratura con la chiave privata avvengono <em>dentro</em> il chip: il dato da firmare entra, il dato firmato esce, ma la chiave privata non lascia mai fisicamente il dispositivo. È lo stesso principio alla base della <strong>Carta Nazionale dei Servizi</strong> e della <strong>Tessera Sanitaria</strong> italiane, che includono un chip crittografico utilizzabile per l'autenticazione forte ai servizi della pubblica amministrazione.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== VLAN ===== -->
+<section id="vlan" class="section">
+  <h2 class="chapter-title">VLAN — Virtual LAN</h2>
+  <p class="chapter-lead">Come dividere logicamente uno switch fisico in più reti separate, senza bisogno di hardware aggiuntivo, e come far condividere quella divisione a più switch collegati fra loro.</p>
+
+  <div class="block green">
+    <div class="btitle">Cos'è una VLAN</div>
+    <p>Una <strong>VLAN (Virtual Local Area Network)</strong> permette di suddividere uno o più switch fisici in più switch "virtuali" separati: le porte di uno stesso switch possono appartenere a VLAN diverse, e solo i dispositivi che appartengono alla <em>stessa</em> VLAN possono vedersi a livello di collegamento (Data Link) e scambiarsi traffico di broadcast. Il traffico tra VLAN diverse (<strong>inter-VLAN</strong>) deve obbligatoriamente passare attraverso un <strong>router</strong> (o uno switch di livello 3), esattamente come se le VLAN fossero reti fisicamente separate.</p>
+    <ul>
+      <li>Le VLAN forniscono <strong>segmentazione basata sui domini di broadcast</strong>: ogni VLAN è un dominio di broadcast a sé stante.</li>
+      <li>La segmentazione è <strong>logica</strong>, basata su funzioni, team di progetto o reparti aziendali, indipendentemente dalla posizione fisica dei dispositivi o da come sono cablati.</li>
+      <li>Tutte le postazioni e i server usati da uno stesso gruppo di lavoro condividono la stessa VLAN, a prescindere dal collegamento fisico o dalla posizione.</li>
+    </ul>
+  </div>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="vlan-concetti">Perché le VLAN</button>
+    <button data-sub="vlan-tagging">Tagging 802.1Q</button>
+    <button data-sub="vlan-lab">Configurazione pratica</button>
+  </div>
+
+  <div id="vlan-concetti" class="sub-section visible">
+    <h3 class="sep">LAN tradizionale vs segmentazione con VLAN</h3>
+    <div class="grid2">
+      <div class="card-small red">
+        <span class="badge">Senza VLAN</span>
+        <p>Ogni gruppo di lavoro (es. reparto Ingegneria, Marketing, Vendite) deve stare su una <strong>rete IP diversa e su uno switch fisicamente dedicato</strong> per essere isolato dagli altri. Serve un link (e spesso uno switch) per ogni gruppo: poco flessibile e costoso da scalare, perché aggiungere o spostare un reparto significa ricablare fisicamente la rete.</p>
+      </div>
+      <div class="card-small green">
+        <span class="badge">Con VLAN</span>
+        <p>Lo switch viene configurato assegnando ciascuna porta alla VLAN appropriata: i gruppi restano su reti IP diverse, ma possono condividere <strong>lo stesso switch fisico</strong>. Spostare un host da un gruppo all'altro diventa una semplice riconfigurazione software della porta, senza toccare il cablaggio.</p>
+      </div>
+    </div>
+    <div class="block blue">
+      <div class="btitle">Port-based VLAN — l'assegnazione più semplice</div>
+      <p>Nella forma più semplice, ogni <strong>porta fisica</strong> dello switch viene assegnata staticamente a un numero identificativo di VLAN, il <strong>VID (VLAN ID)</strong>. Ad esempio le porte 1, 2 e 3 possono appartenere al VID 10, mentre le porte 5, 6 e 7 al VID 20: i dispositivi collegati alle porte del VID 10 si vedono fra loro come se fossero su uno switch indipendente, e lo stesso vale per il VID 20. Lo switch impedisce che il traffico broadcast o unicast di una VLAN raggiunga le porte di un'altra VLAN, anche se sono fisicamente sulla stessa scheda.</p>
+    </div>
+  </div>
+
+  <div id="vlan-tagging" class="sub-section">
+    <h3 class="sep">Collegare più switch: la necessità del tagging</h3>
+    <div class="block amber">
+      <div class="btitle">Il problema: una VLAN che attraversa più switch</div>
+      <p>Finché una VLAN vive su un solo switch, basta assegnare le porte giuste. Ma se gli host di una stessa VLAN sono collegati a <strong>switch diversi</strong>, serve un modo per far sapere allo switch ricevente a quale VLAN appartiene ciascun frame che arriva dal collegamento fra switch. La soluzione standard è lo <strong>IEEE 802.1Q</strong>, che introduce il concetto di <strong>tagged VLAN</strong> (o VLAN trunking): il formato del frame Ethernet viene modificato aggiungendo <strong>4 byte</strong> — il <strong>TAG</strong> — che trasportano l'identificativo della VLAN di appartenenza e altre informazioni accessorie.</p>
+    </div>
+
+    <h3 class="sep">Il tag 802.1Q — struttura del campo aggiunto al frame</h3>
+    <div class="hdr">
+      <div class="hdr-ruler"><span>0–15</span><span>16–18</span><span>19</span><span>20–31</span></div>
+      <div class="hdr-rows">
+        <div class="hdr-row"><span class="hdr-off">0</span><div class="hdr-fields">
+          <div class="hdr-f green" style="--w:16">TPID — Tag Protocol Identifier<small>16 bit, sempre 0x8100</small></div>
+          <div class="hdr-f amber" style="--w:3;min-width:46px">Priority<small>3 bit</small></div>
+          <div class="hdr-f cyan" style="--w:1;min-width:34px">CFI<small>1 bit</small></div>
+          <div class="hdr-f purple" style="--w:12">VLAN ID<small>12 bit</small></div>
+        </div></div>
+      </div>
+      <div class="hdr-note">I 4 byte del tag 802.1Q vengono inseriti nel frame Ethernet subito dopo l'indirizzo MAC sorgente, prima del campo Length/Ethertype originale.</div>
+    </div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="card-small green">
+        <span class="badge">TPID — Tag Protocol Identifier</span>
+        <p>2 byte fissi al valore <code>0x8100</code>, che segnalano a switch e NIC che questo è un frame taggato 802.1Q e non un frame Ethernet "classico". È il campo che permette la retrocompatibilità: un dispositivo che non capisce il tagging riconosce comunque che il frame ha un formato diverso dal solito.</p>
+      </div>
+      <div class="card-small amber">
+        <span class="badge">Priority (PCP) — 3 bit</span>
+        <p>Codifica la priorità del frame ai fini del <strong>Quality of Service</strong> (802.1p), permettendo a switch e router di dare precedenza a traffico sensibile alla latenza (es. voce) rispetto a traffico "best effort".</p>
+      </div>
+      <div class="card-small cyan">
+        <span class="badge">CFI — Canonical Format Indicator</span>
+        <p>1 bit storicamente usato per segnalare la compatibilità con reti Token Ring; nelle reti Ethernet moderne è sempre a 0.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">VLAN ID — 12 bit</span>
+        <p>Identifica la VLAN di appartenenza del frame. Con 12 bit sono disponibili fino a <strong>4094 VLAN utilizzabili</strong> (0 e 4095 sono riservati), un limite più che sufficiente per la maggior parte delle reti aziendali e scolastiche.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">Access port vs trunk port</h3>
+    <div class="grid2">
+      <div class="card-small blue">
+        <span class="badge">Access port</span>
+        <p>Porta assegnata a <strong>una sola VLAN</strong>, usata per collegare un host finale (PC, stampante, server). I frame in uscita verso l'host sono privi di tag (il PC collegato non ha bisogno di sapere nulla sul tagging 802.1Q): lo switch aggiunge e rimuove il tag internamente, in modo trasparente.</p>
+      </div>
+      <div class="card-small teal">
+        <span class="badge">Trunk port</span>
+        <p>Porta usata per collegare <strong>due switch fra loro</strong> (o uno switch a un router): trasporta il traffico di <em>più VLAN contemporaneamente</em> sullo stesso cavo fisico, mantenendo il tag 802.1Q su ogni frame così il dispositivo ricevente sa a quale VLAN appartiene ciascuno. È la tecnologia che rende possibile, ad esempio, avere la VLAN 10 "didattica" e la VLAN 30 "segreteria" distribuite su più switch collegati in cascata con un solo link fisico tra loro, invece di un cavo dedicato per ogni VLAN.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="vlan-lab" class="sub-section">
+    <h3 class="sep">Un caso pratico — due VLAN, due switch, un router</h3>
+    <div class="block green">
+      <div class="btitle">Lo scenario: scuola con rete didattica e segreteria separate</div>
+      <p>Un caso tipico, replicabile in Cisco Packet Tracer: una rete con due VLAN — <strong>VLAN 10 "DIDATTICA"</strong> e <strong>VLAN 20 "SEGRETERIA"</strong> — distribuite su due switch collegati tra loro con una porta in modalità trunk, e un router che fa da gateway per entrambe le sottoreti tramite un unico collegamento fisico (<strong>router-on-a-stick</strong>).</p>
+    </div>
+    <div class="grid2">
+      <div class="card-small amber">
+        <span class="badge">1 · Creazione delle VLAN sullo switch</span>
+        <p>Nel database VLAN dello switch si definiscono i nuovi VID con un nome descrittivo: <code>VLAN 10 → DIDATTICA</code>, <code>VLAN 20 → SEGRETERIA</code>, oltre alla VLAN 1 di default già presente su ogni switch gestito.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">2 · Assegnazione delle porte in modalità access</span>
+        <p>Ogni porta collegata a un PC viene impostata come <strong>Access</strong> e associata al VID corretto: le porte verso i PC della didattica vanno in VLAN 10, quelle verso i PC della segreteria in VLAN 20. Da questo momento i due gruppi non si vedono più a livello 2, pur restando sullo stesso switch fisico.</p>
+      </div>
+      <div class="card-small teal">
+        <span class="badge">3 · Trunk fra i due switch</span>
+        <p>La porta che collega Switch1 e Switch2 viene impostata in modalità <strong>Trunk</strong> (tipicamente con VLAN permesse <code>2–1005</code>, cioè tutte tranne la default): da questo momento entrambe le VLAN possono estendersi sul secondo switch usando un solo cavo fisico fra i due apparati, grazie al tagging 802.1Q.</p>
+      </div>
+      <div class="card-small blue">
+        <span class="badge">4 · Router-on-a-stick: subinterfacce sul router</span>
+        <p>Il router ha un solo collegamento fisico verso lo switch (<code>FastEthernet0/0</code>), ma deve fare da gateway per entrambe le sottoreti IP. La soluzione è creare due <strong>subinterfacce logiche</strong> sulla stessa interfaccia fisica, una per VLAN, ciascuna con il proprio indirizzo IP e la propria associazione 802.1Q.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">Configurazione delle subinterfacce sul router</h3>
+    <div class="trace"><pre><span class="tg">interface</span> FastEthernet0/0.10
+  <span class="tb">encapsulation dot1Q 10</span>
+  ip address 192.168.1.1 255.255.255.0
+
+<span class="tg">interface</span> FastEthernet0/0.20
+  <span class="tb">encapsulation dot1Q 20</span>
+  ip address 192.168.2.1 255.255.255.0</pre></div>
+    <p style="margin-top:10px">Il comando <code>encapsulation dot1Q 10</code> dice alla subinterfaccia <code>Fa0/0.10</code> di occuparsi solo dei frame taggati con VLAN ID 10, assegnandole l'indirizzo <code>192.168.1.1/24</code> come gateway per quella rete; analogamente <code>Fa0/0.20</code> gestisce il traffico VLAN 20 con gateway <code>192.168.2.1/24</code>. Risultato: i PC della VLAN 10 ottengono come default gateway <code>192.168.1.1</code>, quelli della VLAN 20 <code>192.168.2.1</code>, e il router instrada il traffico tra le due sottoreti applicando — se configurate — anche eventuali ACL per limitare cosa può attraversare i reparti.</p>
+
+    <div class="highlight">Da notare: sulla porta del router verso lo switch serve <strong>una sola interfaccia fisica</strong>, non una per VLAN. È esattamente il vantaggio del router-on-a-stick rispetto a un collegamento con un cavo fisico dedicato per ogni VLAN: il tagging 802.1Q multiplexa il traffico di tutte le VLAN sullo stesso link, e le subinterfacce lo demultiplexano lato router in base al VLAN ID presente nel tag.</div>
+  </div>
+</section>
+
 
 </main>
 
