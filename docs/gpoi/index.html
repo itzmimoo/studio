@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3f4f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1d21" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GPOI">
+<meta name="format-detection" content="telephone=no">
+<title>GPOI | SAGGIN s.r.l.</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 4l-6 6 6 6"/></svg>Home</a>
+    <h1>GPOI</h1>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Capitoli">
+  <div class="tabs-inner">
+    <button aria-selected="true" data-chapter="org">Organizzazione aziendale</button>
+    <button aria-selected="false" data-chapter="imprese">Classificazione imprese</button>
+    <button aria-selected="false" data-chapter="coordinamento">Coordinamento</button>
+  </div>
+</nav>
+
+<main class="wrap content">
+
+<!-- ===== ORGANIZZAZIONE AZIENDALE ===== -->
+<section id="org" class="section visible">
+  <h2 class="chapter-title">Elementi di organizzazione aziendale</h2>
+
+  <div class="block green">
+    <div class="btitle">Cos'è l'organizzazione</div>
+    <p>L'<strong>organizzazione</strong> è il complesso delle modalità con cui si effettua la <strong>divisione del lavoro</strong> in compiti distinti e si realizza il <strong>coordinamento</strong> tra tali compiti. Disegna il modello strutturale dell'impresa: centri decisionali, di controllo ed esecutivi; autorità e responsabilità di ciascuno; procedure di decisione, informazione ed esecuzione; politica delle ricompense.</p>
+    <p>Non esiste un unico modo di organizzare: la struttura va <strong>adeguata di continuo</strong> ai cambiamenti interni ed esterni, altrimenti diventa obsoleta. Tra strategia e struttura c'è una relazione <strong>circolare</strong>, non lineare.</p>
+  </div>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="org-finalita">Finalità</button>
+    <button data-sub="org-teorie">Teorie</button>
+    <button data-sub="org-fp">Funzioni vs processi</button>
+    <button data-sub="org-strutture">Strutture</button>
+    <button data-sub="org-aree">Aree funzionali</button>
+  </div>
+
+  <!-- FINALITA -->
+  <div id="org-finalita" class="sub-section visible">
+    <h3 class="sep">Le finalità dell'azienda</h3>
+    <div class="block blue">
+      <div class="btitle">Massimizzazione del profitto: vale solo in casi limitati</div>
+      <p>Funziona nella <strong>concorrenza perfetta</strong>: prodotto omogeneo, perfetta informazione, nessuna barriera all'entrata/uscita, molti venditori e compratori (tutti <em>price takers</em>). È tipica delle micro/piccole imprese monoprodotto e monoimpianto. Nelle imprese grandi (più prodotti e impianti, <strong>separazione tra proprietà e management</strong>, rapporti con molti soggetti) non basta: il profitto è difficile da quantificare e dipende da scelte manageriali.</p>
+    </div>
+    <div class="grid3">
+      <div class="card-small blue">
+        <span class="badge">Altre funzioni obiettivo</span>
+        <p><strong>Marris</strong>: massimizzare il tasso di crescita (crescita + sicurezza dei manager). <strong>Williamson</strong>: funzione di utilità del manager (status, spese di staff, fondi discrezionali).</p>
+      </div>
+      <div class="card-small amber">
+        <span class="badge">Più obiettivi, soddisfazione</span>
+        <p><strong>Cyert e March</strong> (razionalità limitata di Simon): l'impresa è un insieme di gruppi con obiettivi diversi; si cerca una decisione <em>soddisfacente</em>, non ottima. Teorie dell'omeostasi: ritorno all'equilibrio.</p>
+      </div>
+      <div class="card-small green">
+        <span class="badge">Profitto ricontestualizzato</span>
+        <p>Anche crescita e sicurezza portano a scelte simili alla massimizzazione del profitto di <strong>lungo periodo</strong>. Oggi: creazione di valore per l'azionista (Guatri).</p>
+      </div>
+    </div>
+    <div class="block teal">
+      <div class="btitle">Sopravvivenza e finalità intermedie</div>
+      <p>La finalità generale è la <strong>sopravvivenza</strong>: risposta (reattiva e proattiva) alle sollecitazioni dell'ambiente. Da essa derivano tre finalità intermedie:</p>
+      <ul>
+        <li><strong>Convenienza</strong>: criterio di scelta tra impieghi alternativi di risorse scarse.</li>
+        <li><strong>Economicità</strong>: impiegare risorse scarse in modo appropriato, con un'idea imprenditoriale valida e rispettando la convenienza.</li>
+        <li><strong>Creazione di valore</strong>: produrre beni/servizi utili, cioè l'utilità che il mercato riconosce (prezzo × quantità vendute).</li>
+      </ul>
+      <p style="margin-top:8px">Fattori comuni alle teorie: motivazioni, obiettivi, durabilità, profitto come risorsa per la crescita, conoscenza/apprendimento, sopravvivenza.</p>
+    </div>
+  </div>
+
+  <!-- TEORIE -->
+  <div id="org-teorie" class="sub-section">
+    <h3 class="sep">Le scuole di teoria delle organizzazioni</h3>
+    <div class="block red">
+      <div class="byear">Fine '800 – primo '900</div>
+      <div class="btitle">Scuola Classica — Taylor, Fayol, Weber</div>
+      <p>Modello ispirato a esercito, stato, ordini religiosi (autorità, gerarchia, controllo) + economia politica (specializzazione, standardizzazione). Principi: <strong>parcellizzazione e standardizzazione</strong> dei compiti, gerarchia e controllo, distinzione <strong>line/staff</strong>. Cerca la <em>one best way</em>. Esempi pratici: catena di montaggio, fordismo.</p>
+      <ul>
+        <li><strong>Taylor</strong>: organizzazione scientifica del lavoro.</li>
+        <li><strong>Fayol</strong>: teoria della direzione amministrativa; le 5 funzioni del direttore: <em>prevedere, organizzare, comandare, coordinare, controllare</em>.</li>
+        <li><strong>Weber</strong>: burocrazia (divisione del lavoro, gerarchia degli uffici, regole generali, impersonalità); distingue <strong>potere</strong> da <strong>autorità</strong> (carismatica, tradizionale, legale).</li>
+      </ul>
+    </div>
+    <div class="grid2">
+      <div class="card-small amber">
+        <span class="badge">Relazioni umane (anni '30–'60)</span>
+        <p>Reazione al taylorismo. L'uomo ha anche bisogni di ordine superiore. <strong>Mayo</strong>: la produttività cresce coinvolgendo gli operai. Meglio incentivi e gruppi informali (oggi "circoli di qualità") che controllo burocratico.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">Scuola delle decisioni</span>
+        <p>Barnard, Newell. L'azienda è un insieme di gruppi in coalizione temporanea; i conflitti sono orizzontali; i contrasti si risolvono con <strong>negoziazione</strong> continua degli obiettivi.</p>
+      </div>
+    </div>
+    <div class="block green">
+      <div class="byear">Anni '60–'70</div>
+      <div class="btitle">Scuola Contingente — dalla "one best way" alla "one best fit"</div>
+      <p>Non esiste un modello universale: la struttura (variabile dipendente) dipende dalla <strong>situazione</strong> (variabile indipendente). Approccio sistemico e metafora biologica. Quattro variabili:</p>
+      <ul>
+        <li><strong>Ambiente</strong> (Burns e Stalker): ambiente stabile → struttura <em>meccanica</em>; ambiente instabile → struttura <em>organica</em>.</li>
+        <li><strong>Tecnologia</strong> (Woodward: lotti, grande serie, processo; Perrow: eccezioni e analizzabilità).</li>
+        <li><strong>Strategia</strong> (Chandler: <em>la struttura segue la strategia</em>): monoprodotto → poco formalizzata; integrata verticalmente → per funzioni; diversificata → per divisioni.</li>
+        <li><strong>Dimensione</strong>: più grande = più specializzazione, programmazione e decentramento.</li>
+      </ul>
+      <p style="margin-top:8px">La sintesi è di <strong>Mintzberg</strong> (vedi capitolo Coordinamento): coerenza tra ambiente e struttura e tra gli elementi interni.</p>
+    </div>
+    <div class="grid2">
+      <div class="card-small blue">
+        <span class="badge">Cognitivista e fenomenologica</span>
+        <p><strong>March e Simon</strong>: razionalità limitata; la struttura serve a coordinare e controllare razionalità diverse. La fenomenologica guarda all'attore individuale e alla costruzione sociale della realtà.</p>
+      </div>
+      <div class="card-small teal">
+        <span class="badge">Costi di transazione (Williamson)</span>
+        <p>Governare le transazioni, tra imprese o tra uffici, ha sempre un costo oltre a quello di produzione. Le forme organizzative nascono per ridurlo. Internamente: il <strong>gruppo dei pari</strong> con rete di comunicazione totale.</p>
+      </div>
+      <div class="card-small amber">
+        <span class="badge">Motivazioni (Maslow)</span>
+        <p>Piramide dei bisogni: sopravvivenza, sicurezza, socialità, stima, autorealizzazione. L'organizzazione deve adattarsi all'individuo, non il contrario. Anche Herzberg e Vroom.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">Agenzia</span>
+        <p>Rapporto <strong>principale → agente</strong> (azionisti/manager, capo/collaboratore). Problemi: asimmetria informativa, conflitto di interessi, opportunismo. Genera <strong>costi di agenzia</strong>; risposta: retribuzione variabile, stock option.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUNZIONI VS PROCESSI -->
+  <div id="org-fp" class="sub-section">
+    <h3 class="sep">Gestione per funzioni e per processi</h3>
+    <div class="grid2">
+      <div class="card-small blue">
+        <span class="badge">Per funzioni — verticale</span>
+        <p>Le <strong>funzioni</strong> raggruppano attività della stessa natura (stesse competenze, risorse, tecnologie) sotto un'unica responsabilità (es. amministrazione → contabilità, clienti, fornitori; produzione → assemblaggio, controllo qualità). Successo nel boom del dopoguerra.</p>
+        <ul>
+          <li>Adatta al <strong>lungo periodo</strong> e alla crescita stabile</li>
+          <li>Consolida le competenze</li>
+          <li><strong>Limite</strong>: coordinamento debole tra funzioni, nessun responsabile dell'intero processo</li>
+        </ul>
+      </div>
+      <div class="card-small green">
+        <span class="badge">Per processi — orizzontale</span>
+        <p>Un <strong>processo</strong> è un insieme di attività coordinate che usano input per produrre un output di valore richiesto da un <strong>cliente</strong>, interno o esterno.</p>
+        <ul>
+          <li>Catena di <strong>fornitori-clienti</strong> interni ed esterni</li>
+          <li>Un responsabile per processo (<strong>process owner</strong>), lavoro in team</li>
+          <li>Strutture piatte, decentramento, mansioni più ampie</li>
+          <li>Adatta al <strong>breve periodo</strong> e ad ambienti turbolenti</li>
+          <li><strong>Difficoltà</strong>: resistenza del management e delle vecchie funzioni</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">I due approcci sono <strong>complementari</strong>: le funzioni consolidano le competenze nel tempo, i processi rispondono rapidamente ai cambiamenti. Storicamente i processi sono precedenti alle funzioni.</div>
+  </div>
+
+  <!-- STRUTTURE -->
+  <div id="org-strutture" class="sub-section">
+    <h3 class="sep">Le strutture organizzative</h3>
+    <p style="margin-bottom:14px">La struttura dipende dalle scelte strategiche, dalla combinazione produttiva e dall'ambiente. Imprese monoprodotto/artigianali: struttura elementare; integrate verticalmente: per funzioni; diversificate: divisionale, per prodotto, per progetti, a matrice.</p>
+    <div class="block blue">
+      <div class="btitle">Struttura divisionale</div>
+      <p>Divisioni per <strong>prodotto</strong> (se la diversificazione produttiva è forte) o per <strong>area geografica</strong> (prodotti simili, mercati vasti e differenziati). Ogni divisione ha parte delle funzioni (vendite, progettazione, marketing, produzione); le funzioni di supporto comuni restano collegate alla direzione.</p>
+      <ul>
+        <li><strong>Decentrata/pura</strong>: divisioni molto autonome, rischio di ridursi a imprese indipendenti.</li>
+        <li><strong>Accentrata</strong>: la direzione centrale decide sulle strategie e accentra funzioni (marketing, finanza) per sfruttare sinergie.</li>
+        <li>Adottata da quasi tutte le grandi imprese e multinazionali: flessibilità di fronte ai cambiamenti.</li>
+      </ul>
+    </div>
+    <div class="block teal">
+      <div class="btitle">Struttura per prodotto (product manager)</div>
+      <p>Struttura funzionale + <strong>product manager</strong>, figura permanente responsabile di tutti gli aspetti di un prodotto. <strong>Non ha autorità gerarchica</strong>: coordina i capi funzione. Dipende dalla direzione se la diversificazione è ampia, altrimenti dal marketing.</p>
+    </div>
+    <div class="block amber">
+      <div class="btitle">Struttura per progetti</div>
+      <p>Unità <strong>temporanee</strong> con autorità gerarchica per attività rilevanti (commessa particolare, nuovo prodotto, nuova tecnologia). Progetto complesso: il personale dipende dal <strong>project manager</strong>; progetto semplice: dai capi funzione. Pro: sofisticazione tecnica ed economie di scala nelle funzioni. Contro: più costi e complessità, lavoro discontinuo, spostamenti di personale mal accetti.</p>
+    </div>
+    <div class="block purple">
+      <div class="btitle">Struttura a matrice</div>
+      <p>Mantiene i reparti funzionali e definisce al loro interno gruppi con incarichi specifici. Ogni sottogruppo appartiene <strong>in modo continuativo</strong> a un reparto e, di volta in volta, a un obiettivo (progetto, prodotto, cliente). Le linee di autorità sono <strong>due</strong>: i capi dei sottogruppi (<em>two-boss manager</em>) dipendono sia dal responsabile di obiettivo sia dal dirigente di funzione.</p>
+      <ul>
+        <li><strong>Pro</strong>: adattamento più rapido alle innovazioni su entrambe le dimensioni.</li>
+        <li><strong>Contro</strong>: serve che tutta l'organizzazione assimili il concetto di matrice; si viola l'<strong>unità di comando</strong>.</li>
+        <li>Per Mintzberg è la configurazione adatta a innovazioni non marginali in ambienti turbolenti: l'<strong>adhocrazia</strong>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- AREE FUNZIONALI -->
+  <div id="org-aree" class="sub-section">
+    <h3 class="sep">Le aree funzionali dell'azienda</h3>
+    <div class="grid2">
+      <div class="card-small green"><span class="badge">Produzione</span><p>Acquisire, aggregare e impiegare risorse scarse per ottenere altre risorse richieste dal mercato. Obiettivo: <strong>efficienza</strong>, cioè minimizzare i costi unitari usando bene lavoro e capitale.</p></div>
+      <div class="card-small blue"><span class="badge">Acquisti</span><p>Garantire in modo economico e nei tempi la disponibilità dei beni per la produzione, con continuità e standard di qualità. Oggetto: beni strumentali, materie prime, componenti, lavorazioni su commessa, servizi, materiali d'uso.</p></div>
+      <div class="card-small teal"><span class="badge">Logistica</span><p>Pianificazione, organizzazione e controllo dei flussi di materiali (movimentazione, stoccaggio) e di informazioni, dai fornitori alla consegna al cliente e al post-vendita. Due flussi: <strong>beni fisici</strong> e <strong>informazioni</strong>.</p></div>
+      <div class="card-small purple"><span class="badge">Ricerca e Sviluppo</span><p>Nuove conoscenze e <strong>innovazioni di prodotto</strong> o di <strong>processo</strong>. Non è necessaria una funzione R&amp;S dedicata: l'innovazione nasce anche da vendite e produzione.</p></div>
+      <div class="card-small amber"><span class="badge">Marketing</span><p>Attività finalizzate allo scambio di beni e servizi (Kotler): processo sociale con cui si ottiene ciò che si desidera creando e scambiando prodotti e valori.</p></div>
+      <div class="card-small red"><span class="badge">Vendite</span><p>Collegamento operativo tra domanda e offerta: vendita, servizio al cliente, amministrazione, pianificazione e controllo dello scambio, gestione della rete di vendita. La consegna fisica è della <strong>logistica in uscita</strong>.</p></div>
+      <div class="card-small cyan"><span class="badge">Personale</span><p>Da compiti amministrativi (paghe, contributi) e disciplinari, a selezione, formazione, valutazione; poi relazioni industriali (anni '70); oggi sviluppo delle risorse umane e competitività.</p></div>
+      <div class="card-small blue"><span class="badge">Finanza</span><p>Reperire e impiegare i fondi: pianificazione finanziaria, analisi degli investimenti e della finanza straordinaria, reperimento delle risorse.</p></div>
+      <div class="card-small gray"><span class="badge">Amministrazione</span><p>Obblighi civilistico-fiscali, obbligazioni verso fornitori e banche, gestione dei crediti. Produce <strong>informazioni economico-finanziarie</strong> per aree interne e stakeholder esterni. Si occupa di contabilità.</p></div>
+      <div class="card-small green"><span class="badge">Organizzazione</span><p>Funzione <strong>trasversale</strong>: disegna il modello strutturale (centri decisionali, autorità, responsabilità, procedure, ricompense).</p></div>
+    </div>
+    <div class="block teal">
+      <div class="btitle">Sistema informativo e sicurezza</div>
+      <p>Sistema informativo = dati + tecniche/strumenti + persone. La parte informatica si articola in <strong>EDP</strong> (elaborazione dati), <strong>MIS</strong> (reporting direzionale) e <strong>DSS</strong> (supporto a decisioni non di routine). Gli <strong>ERP</strong> integrano tutte le aree. Requisiti di sicurezza: riservatezza, integrità, disponibilità, autenticazione, disconoscimento (non ripudio), difesa dalla pirateria informatica.</p>
+    </div>
+    <div class="block amber">
+      <div class="btitle">Pianificazione, programmazione e controllo di gestione</div>
+      <ul>
+        <li><strong>Pianificazione</strong>: obiettivi e percorsi di sviluppo. Documento di sintesi: <strong>business plan</strong> (3-5 anni, rivisto ogni anno: <em>piano scorrevole</em>).</li>
+        <li><strong>Programmazione</strong>: traduce gli obiettivi in breve periodo (1 anno) con il <strong>budget</strong>.</li>
+        <li><strong>Controllo di gestione</strong>: analizza gli scostamenti tra risultati e budget.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CLASSIFICAZIONE IMPRESE ===== -->
+<section id="imprese" class="section">
+  <h2 class="chapter-title">Classificazione delle imprese</h2>
+  <p class="chapter-lead">Criteri: scopo, soggetto giuridico, forma giuridica, dimensione, mercati, autonomia, luogo in cui operano.</p>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="imp-att">Attività e dimensione</button>
+    <button data-sub="imp-prop">Proprietà e forma giuridica</button>
+    <button data-sub="imp-sett">Settori e ATECO</button>
+  </div>
+
+  <div id="imp-att" class="sub-section visible">
+    <h3 class="sep">Per settore di attività</h3>
+    <div class="grid2">
+      <div class="card-small green">
+        <span class="badge">Produzione</span>
+        <p>Producono beni e servizi.</p>
+        <ul>
+          <li><strong>Produzione diretta</strong>: trasformano materie prime in prodotti finiti da vendere.</li>
+          <li><strong>Produzione indiretta</strong>: trasferimento nel tempo o nello spazio senza trasformazione (commercio all'ingrosso e al dettaglio, trasporti, banche).</li>
+        </ul>
+      </div>
+      <div class="card-small blue">
+        <span class="badge">Erogazione</span>
+        <p>Dette anche "di consumo": dedite solo al consumo di beni e servizi.</p>
+      </div>
+    </div>
+    <h3 class="sep">Per dimensione</h3>
+    <div class="tbl-wrap">
+      <table class="tbl cmp">
+        <thead><tr><th></th><th>Addetti</th><th>Fatturato</th><th>Attivo patrimoniale</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Micro</th><td>fino a 10</td><td>≤ 2 milioni €</td><td>≤ 2 milioni €</td></tr>
+          <tr><th scope="row">Piccola</th><td>11–50</td><td>≤ 10 milioni €</td><td>—</td></tr>
+          <tr><th scope="row">Media</th><td>51–250</td><td>&lt; 50 milioni €</td><td>&lt; 43 milioni €</td></tr>
+          <tr><th scope="row">Grande</th><td>oltre 250</td><td>oltre soglie</td><td>spesso operano su scala internazionale</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight">Per essere <strong>PMI</strong> l'UE richiede anche il <strong>principio di indipendenza</strong>: l'impresa non deve essere controllata da altre imprese che non siano a loro volta PMI.</div>
+  </div>
+
+  <div id="imp-prop" class="sub-section">
+    <h3 class="sep">Per proprietà</h3>
+    <p style="margin-bottom:12px">Il <strong>soggetto economico</strong> è la persona (o l'insieme di persone) che detiene il potere formale.</p>
+    <div class="grid2">
+      <div class="card-small blue"><span class="badge">Private</span><p>Di singoli individui o gruppi ristretti (famiglie, investitori privati).</p></div>
+      <div class="card-small green"><span class="badge">Pubbliche</span><p>Capitale di investitori pubblici (Stato, ministeri, enti territoriali).</p></div>
+      <div class="card-small amber"><span class="badge">Miste</span><p>Proprietà divisa tra soggetti pubblici e privati (ENEL, ENI).</p></div>
+      <div class="card-small purple"><span class="badge">Quotate in borsa</span><p>Immettono parte del capitale sul mercato borsistico.</p></div>
+    </div>
+    <h3 class="sep">Per forma giuridica</h3>
+    <div class="grid2">
+      <div class="card-small red">
+        <span class="badge">Società di persone</span>
+        <p><strong>S.s.</strong> (semplice), <strong>S.n.c.</strong> (nome collettivo), <strong>S.a.s.</strong> (accomandita semplice).</p>
+        <ul>
+          <li>Responsabilità <strong>illimitata</strong> dei soci: rispondono con il patrimonio sociale <em>e</em> con quello personale.</li>
+          <li>Ogni socio ha la qualità di amministratore.</li>
+        </ul>
+      </div>
+      <div class="card-small green">
+        <span class="badge">Società di capitali</span>
+        <p><strong>S.r.l.</strong>, <strong>S.p.A.</strong>, <strong>S.a.p.A.</strong> (accomandita per azioni).</p>
+        <ul>
+          <li>Personalità giuridica e <strong>autonomia patrimoniale perfetta</strong>: prevale il capitale sulla persona.</li>
+          <li>Responsabilità <strong>limitata</strong> al capitale conferito (salvo casi di legge).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="block teal">
+      <div class="btitle">Società cooperative</div>
+      <p>Società a <strong>capitale variabile</strong> con <strong>scopo mutualistico</strong>: forniscono beni, servizi o lavoro direttamente ai soci a condizioni vantaggiose, senza lucro speculativo.</p>
+    </div>
+  </div>
+
+  <div id="imp-sett" class="sub-section">
+    <h3 class="sep">Settori economici</h3>
+    <div class="grid3">
+      <div class="card-small green"><span class="badge">Primario</span><p>Contatto diretto con la natura per ricavare materie prime. Agricoltura, allevamento, pesca, silvicoltura, miniere.</p></div>
+      <div class="card-small amber"><span class="badge">Secondario</span><p>Trasformazione di materie prime in prodotti finiti/semilavorati. Artigianato, industria manifatturiera, edilizia, energia.</p></div>
+      <div class="card-small blue"><span class="badge">Terziario</span><p>Distribuzione di beni e servizi a persone e imprese. Commercio, trasporti, turismo, banche, PA, libere professioni.</p></div>
+    </div>
+    <div class="block purple">
+      <div class="btitle">Terziario avanzato (quaternario)</div>
+      <p>Servizi ad alto valore aggiunto basati su tecnologia, innovazione, conoscenza e informazioni. Aree: <strong>ICT e informatica</strong> (software, hardware, sicurezza, IA, cloud), <strong>telecomunicazioni</strong>, <strong>consulenza specialistica</strong>, <strong>ricerca e sviluppo</strong>, <strong>new media e marketing</strong>.</p>
+    </div>
+    <div class="block gray">
+      <div class="btitle">Codice ATECO</div>
+      <p>Classificazione delle attività economiche adottata dall'<strong>Istat</strong> per scopi statistici; usata anche per finalità amministrative e fiscali.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COORDINAMENTO ===== -->
+<section id="coordinamento" class="section">
+  <h2 class="chapter-title">Meccanismi di coordinamento — Mintzberg</h2>
+
+  <div class="block green">
+    <div class="btitle">L'idea di fondo</div>
+    <p>Un'organizzazione è il modo in cui si <strong>divide il lavoro</strong> in compiti e si <strong>coordinano</strong> i compiti. Una <strong>configurazione</strong> è un insieme coerente di variabili organizzative e fattori contingenti. Efficacia ed efficienza dipendono dalla <strong>coerenza interna</strong> (tra variabili organizzative) ed <strong>esterna</strong> (con i fattori contingenti). Poche configurazioni fondamentali spiegano la maggior parte delle strutture efficaci.</p>
+  </div>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="co-mecc">5 meccanismi</button>
+    <button data-sub="co-parti">5 parti</button>
+    <button data-sub="co-conf">5 configurazioni</button>
+  </div>
+
+  <div id="co-mecc" class="sub-section visible">
+    <h3 class="sep">I cinque meccanismi di coordinamento</h3>
+    <div class="block green">
+      <div class="byear">1 · Informale</div>
+      <div class="btitle">Adattamento reciproco</div>
+      <p>Coordinamento con la <strong>comunicazione informale</strong>; il controllo resta agli stessi esecutori. Funziona in team di specialisti. Tipico degli estremi: organizzazioni molto semplici o molto complesse.</p>
+    </div>
+    <div class="block blue">
+      <div class="byear">2 · Gerarchico</div>
+      <div class="btitle">Supervisione diretta</div>
+      <p>Una persona si assume la responsabilità del lavoro di altri, <strong>dando ordini e controllando</strong>. Serve quando l'organizzazione cresce: pianificare, allocare risorse, addestrare, controllare. Tipica delle aziende di media dimensione, modello militare.</p>
+    </div>
+    <div class="block amber">
+      <div class="byear">3 · Standardizzazione</div>
+      <div class="btitle">Dei processi di lavoro</div>
+      <p>Le <strong>modalità di esecuzione</strong> sono programmate: processi routinari. Esempi: check-list pre-decollo, bollino blu, procedure ISO 9000, istruzioni di montaggio Ikea. Consente automazione e poca supervisione.</p>
+    </div>
+    <div class="block teal">
+      <div class="byear">4 · Standardizzazione</div>
+      <div class="btitle">Dei risultati (output)</div>
+      <p>Gli <strong>output sono predefiniti</strong> (parametri dimensionali, rapporti di conversione, profittabilità, indicatori di costo/tempo); il coordinamento è stabilito in anticipo e monitorabile.</p>
+    </div>
+    <div class="block purple">
+      <div class="byear">5 · Standardizzazione</div>
+      <div class="btitle">Delle professionalità (capacità)</div>
+      <p>Per attività non standardizzabili né nei processi né nei risultati. Il coordinamento passa dalla <strong>formazione</strong> richiesta e dalla condivisione di valori e standard etici (medici, docenti).</p>
+    </div>
+    <div class="highlight">Trucco per ricordare: cosa si standardizza? <strong>Come</strong> si lavora (processi), <strong>cosa</strong> si ottiene (risultati), <strong>chi</strong> lavora (professionalità).</div>
+  </div>
+
+  <div id="co-parti" class="sub-section">
+    <h3 class="sep">Le cinque parti dell'organizzazione</h3>
+    <div class="block red">
+      <div class="btitle">Nucleo operativo</div>
+      <p>Svolge l'<strong>attività fondamentale</strong>: reperimento input, trasformazione in output, distribuzione, supporto diretto. Coordinamento: adattamento reciproco nelle organizzazioni semplici, standardizzazione al crescere della dimensione.</p>
+    </div>
+    <div class="block blue">
+      <div class="btitle">Vertice strategico</div>
+      <p>Responsabilità globale. Tre funzioni: <strong>supervisione diretta</strong>, gestione delle <strong>condizioni di confine</strong> (rapporti con l'ambiente), sviluppo delle <strong>strategie</strong>. Tra i manager del vertice prevale l'adattamento reciproco.</p>
+    </div>
+    <div class="block green">
+      <div class="btitle">Linea intermedia</div>
+      <p>Il <em>middle management</em>: gerarchia di autorità tra vertice e nucleo operativo. Raccoglie e trasmette <strong>feedback</strong>, mantiene contatti con manager, analisti e staff, contribuisce alla strategia.</p>
+    </div>
+    <div class="block amber">
+      <div class="btitle">Tecnostruttura</div>
+      <p>Analisti, spesso di staff, <strong>esterni alla linea di autorità</strong>, che progettano e standardizzano il lavoro:</p>
+      <ul>
+        <li><strong>Analisti del lavoro</strong> → standardizzano i <em>processi</em></li>
+        <li><strong>Analisti di pianificazione e controllo</strong> → standardizzano gli <em>output</em></li>
+        <li><strong>Analisti del personale</strong> → standardizzano le <em>capacità</em></li>
+      </ul>
+    </div>
+    <div class="block teal">
+      <div class="btitle">Staff di supporto</div>
+      <p>Servizi indiretti, <strong>estranei all'attività fondamentale</strong> (mensa, spedizioni, ufficio legale). Potrebbero essere acquistati all'esterno, ma si internalizzano per avere più controllo.</p>
+    </div>
+  </div>
+
+  <div id="co-conf" class="sub-section">
+    <h3 class="sep">Le cinque configurazioni (modelli puri)</h3>
+    <div class="tbl-wrap">
+      <table class="tbl cmp">
+        <thead><tr><th></th><th>Coordinamento</th><th>Parte chiave</th><th>Ambiente</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Struttura semplice</th><td>Supervisione diretta</td><td>Vertice strategico</td><td>Semplice e dinamico</td></tr>
+          <tr><th scope="row">Burocrazia meccanica</th><td>Standardizzazione dei processi</td><td>Tecnostruttura</td><td>Semplice e stabile</td></tr>
+          <tr><th scope="row">Burocrazia professionale</th><td>Standardizzazione delle capacità</td><td>Nucleo operativo</td><td>Complesso e stabile</td></tr>
+          <tr><th scope="row">Struttura divisionale</th><td>Standardizzazione dei risultati</td><td>Linea intermedia</td><td>Non troppo complesso né troppo instabile</td></tr>
+          <tr><th scope="row">Adhocrazia</th><td>Adattamento reciproco</td><td>Nucleo operativo (fuso con la tecnostruttura)</td><td>Complesso e dinamico</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block blue" style="margin-top:14px">
+      <div class="btitle">1 · Struttura semplice</div>
+      <p>Solo vertice strategico + nucleo operativo. Accentramento, supervisione diretta, quasi assenti tecnostruttura, linea intermedia e staff, poca formalizzazione. Es.: piccola impresa imprenditoriale.</p>
+    </div>
+    <div class="block amber">
+      <div class="btitle">2 · Burocrazia meccanica</div>
+      <p>Grandi volumi, produzione di massa, coordinamento con gerarchia e standardizzazione; <strong>tecnostruttura e linea intermedia molto sviluppate</strong>. Fabbrica tayloristica. Sempre meno frequente. Es.: produzione di autoveicoli, assicurazioni, servizi telefonici.</p>
+    </div>
+    <div class="block green">
+      <div class="btitle">3 · Burocrazia professionale</div>
+      <p>Elevata formalizzazione ma <strong>basso accentramento</strong> e nessuna supervisione diretta. <strong>Nucleo operativo di professionisti</strong> e staff di supporto molto sviluppati, tecnostruttura poco rilevante. Es.: ospedali, università, revisione contabile.</p>
+    </div>
+    <div class="block teal">
+      <div class="btitle">4 · Struttura divisionale</div>
+      <p>Deriva da una burocrazia meccanica che <strong>diversifica</strong> prodotti/servizi. Divisioni per prodotto/mercato, linea intermedia (responsabili di divisione) molto sviluppata, controllo tramite programmazione e controllo. Ogni divisione è a sua volta una burocrazia meccanica.</p>
+    </div>
+    <div class="block purple">
+      <div class="btitle">5 · Adhocrazia</div>
+      <p>Gestisce l'<strong>innovazione</strong>. Formalizzazione molto limitata, poche regole, grande valore alla competenza e alla formazione professionale. Es.: società di consulenza, aerospaziale, computer.</p>
+    </div>
+    <div class="highlight">Sono <strong>modelli puri</strong>: nella realtà esistono configurazioni <strong>ibride</strong> (es. orchestra sinfonica). Evoluzione con la crescita: adattamento reciproco → supervisione diretta → standardizzazione.</div>
+  </div>
+</section>
+
+</main>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
