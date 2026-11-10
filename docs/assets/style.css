@@ -181,6 +181,74 @@ code {
   border-bottom-color: var(--accent);
 }
 
+/* ---------- dropdown capitolo "1" (gruppo) ---------- */
+.tab-dropdown {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+.tab-dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.tab-dropdown-toggle[aria-expanded="true"],
+.tab-dropdown:has(.tab-dropdown-menu [aria-selected="true"]) > .tab-dropdown-toggle {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+.tab-dropdown-arrow {
+  font-size: .7em;
+  line-height: 1;
+  display: inline-block;
+  transition: transform .15s ease;
+}
+.tab-dropdown.open .tab-dropdown-arrow { transform: rotate(180deg); }
+
+/* Menu: position fixed → niente clipping da .tabs-inner (overflow-x: auto).
+   La posizione (top/left) viene impostata via JS all'apertura. */
+.tab-dropdown-menu {
+  display: none;
+  position: fixed;
+  min-width: 220px;
+  max-width: calc(100vw - 16px);
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .15);
+  z-index: 100;
+}
+.tab-dropdown.open .tab-dropdown-menu { display: block; }
+
+.tab-dropdown-menu button {
+  display: block;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: 0;
+  text-align: left;
+  padding: 9px 12px;
+  border-radius: 2px;
+  font: 500 14px var(--font);
+  color: var(--body);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tab-dropdown-menu button:hover { background: var(--surface-2); }
+.tab-dropdown-menu button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.tab-dropdown-menu button[aria-selected="true"] {
+  color: var(--text);
+  background: var(--surface-2);
+  font-weight: 600;
+}
+
 /* ---------- contenuto ---------- */
 .content { padding-top: 22px; padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
 .section, .sub-section { display: none; }
@@ -345,7 +413,6 @@ code {
 .tbl td.err { color: var(--red); }
 .tbl td.plain { font-family: var(--font); font-size: 13.5px; color: var(--body); }
 
-/* confronto a tre colonne */
 .cmp th[scope="row"] {
   width: 27%;
   font-weight: 600;
@@ -532,7 +599,6 @@ pre.mono {
 .csum .bits.ck { color: var(--amber); }
 .csum hr { border: 0; border-top: 1px solid var(--line); margin: 10px 0; }
 
-/* diagrammi a sequenza (mittente a sinistra, ricevitore a destra) */
 .seq {
   background: var(--code);
   border: 1px solid var(--line);
@@ -591,4 +657,4 @@ pre.mono {
 }
 .states { display: flex; justify-content: space-between; gap: 8px; margin: 6px 0; }
 
-.chapter-lead { color: var(--muted); font-size: 14.5px; margin: -6px 0 18px; }
+.chapter-lead { color: var(--muted); font-size: 14.5px; margin: -6px 18px 18px; }
