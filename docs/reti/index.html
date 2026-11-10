@@ -2426,6 +2426,140 @@ mail1.example.com.  IN  A  <span class="tb">93.184.216.10</span></pre></div>
   </div>
 </section>
 
+  <!-- ===== DATA CENTER ===== -->
+<section id="data-center" class="section">
+  <h2 class="chapter-title">Data Center</h2>
+  <p class="chapter-lead">Dove vivono fisicamente i server che erogano i servizi cloud: classificazione, componenti, efficienza energetica e tendenze evolutive.</p>
+
+  <div class="block green">
+    <div class="btitle">Che cos'è un data center</div>
+    <p>Un <strong>data center</strong> (o <strong>CED — Centro Elaborazione Dati</strong>) è la sala macchine che ospita server, storage, apparati di rete, gruppi di continuità (UPS) e tutti i sistemi necessari a garantire il funzionamento <strong>24/7</strong> dei servizi IT di un'organizzazione. Oggi il data center non è più solo un luogo fisico: è sempre più spesso un ambiente <strong>ibrido</strong>, composto da infrastrutture in-house, cloud privati e cloud pubblici.</p>
+  </div>
+
+  <div class="sub-nav">
+    <button class="on" data-sub="dc-tier">Tier e componenti</button>
+    <button data-sub="dc-efficienza">Efficienza e cloud</button>
+  </div>
+
+  <div id="dc-tier" class="sub-section visible">
+    <h3 class="sep">Classificazione TIER (Uptime Institute)</h3>
+    <div class="block amber">
+      <div class="btitle">Quattro livelli di affidabilità</div>
+      <p>La classificazione <strong>TIER</strong> definisce il livello di ridondanza, affidabilità e uptime di un data center. Esistono quattro livelli:</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead>
+          <tr><th>Tier</th><th>Denominazione</th><th>Uptime</th><th>Ridondanza</th><th>Caratteristiche</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Tier I</strong></td>
+            <td>Basic</td>
+            <td>99.671%<br><small>~28,8 h/anno di downtime</small></td>
+            <td>Nessuna</td>
+            <td>Singolo path di alimentazione e raffreddamento; nessun componente ridondante</td>
+          </tr>
+          <tr>
+            <td><strong>Tier II</strong></td>
+            <td>Redundant Capacity Components</td>
+            <td>99.741%</td>
+            <td>Componenti ridondanti (N+1)</td>
+            <td>Path di distribuzione singolo, ma componenti ridondanti</td>
+          </tr>
+          <tr>
+            <td><strong>Tier III</strong></td>
+            <td>Concurrently Maintainable</td>
+            <td>99.982%</td>
+            <td>Path multipli attivi (N+1)</td>
+            <td>Permette manutenzione programmata senza interruzione del servizio</td>
+          </tr>
+          <tr>
+            <td><strong>Tier IV</strong></td>
+            <td>Fault Tolerant</td>
+            <td>99.995%</td>
+            <td>Completamente ridondante (2N/2N+1)</td>
+            <td>Tolleranza ai guasti; nessuna interruzione anche in caso di guasto</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight">Il Tier IV è l'unico che garantisce la <strong>fault tolerance</strong> completa. La maggior parte dei data center aziendali si colloca tra Tier II e Tier III.</div>
+
+    <h3 class="sep">Tipologie di data center</h3>
+    <div class="grid2">
+      <div class="card-small blue">
+        <span class="badge">Server / Computer Room</span>
+        <p>Piccola sala macchine dedicata, spesso all'interno dell'azienda stessa. Destinata a ospitare l'infrastruttura IT locale.</p>
+      </div>
+      <div class="card-small green">
+        <span class="badge">Private Data Center</span>
+        <p>Infrastruttura di proprietà di una singola organizzazione, gestita internamente o da terzi.</p>
+      </div>
+      <div class="card-small amber">
+        <span class="badge">Managed Services / Vendor Owned</span>
+        <p>Data center gestito da un fornitore di servizi che eroga l'infrastruttura ai clienti.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">Vendor / Carrier Neutral Colocation</span>
+        <p>Data center in cui più aziende affittano spazio e connettività da provider diversi. Il cliente può scegliere tra più carrier per la connettività.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">Componenti infrastrutturali</h3>
+    <div class="block teal">
+      <div class="btitle">Cosa c'è dentro un data center</div>
+      <ul>
+        <li><strong>Server</strong>: fisici e virtualizzati.</li>
+        <li><strong>Storage</strong>: SAN (Storage Area Network), NAS, storage object-based.</li>
+        <li><strong>Networking</strong>: switch, router, firewall, load balancer, connessioni ridondanti.</li>
+        <li><strong>Alimentazione</strong>: UPS (gruppi di continuità), generatori diesel, PDU (Power Distribution Unit), path di alimentazione ridondanti.</li>
+        <li><strong>Raffreddamento</strong>: CRAC/CRAH, free cooling, contenimento corsie (hot/cold aisle).</li>
+        <li><strong>Sicurezza fisica</strong>: controllo accessi, videosorveglianza, rilevamento incendi, soppressione incendi.</li>
+        <li><strong>Monitoraggio e gestione</strong>: DCIM (Data Center Infrastructure Management), sensori ambientali.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="dc-efficienza" class="sub-section">
+    <h3 class="sep">Efficienza energetica — PUE</h3>
+    <div class="block amber">
+      <div class="btitle">Power Usage Effectiveness</div>
+      <p>Il <strong>PUE</strong> è il rapporto tra l'energia totale consumata dal data center e quella effettivamente usata dall'IT:</p>
+      <p style="margin-top:8px;font-family:monospace"><strong>PUE = Energia totale del data center / Energia consumata dall'IT</strong></p>
+      <ul style="margin-top:8px">
+        <li><strong>PUE ideale = 1.0</strong> (tutta l'energia va all'IT).</li>
+        <li>Valori tipici: 1.2–1.5 per data center moderni ed efficienti; &gt;2.0 per strutture obsolete.</li>
+        <li>Il PUE misura l'efficienza dell'infrastruttura di supporto (raffreddamento, alimentazione), non quella dei server.</li>
+      </ul>
+    </div>
+
+    <h3 class="sep">Evoluzione — SDDC e IT-as-a-Service</h3>
+    <div class="grid2">
+      <div class="card-small blue">
+        <span class="badge">SDDC — Software-Defined Data Center</span>
+        <p>L'intera infrastruttura (calcolo, storage, rete, sicurezza) è virtualizzata e gestita tramite software. Consente automazione, orchestrazione e policy dinamiche. È l'evoluzione verso un data center completamente programmabile.</p>
+      </div>
+      <div class="card-small green">
+        <span class="badge">IT-as-a-Service (ITaaS)</span>
+        <p>Il data center eroga risorse IT come servizi self-service, con modelli di costo a consumo (pay-per-use). L'utente richiede risorse tramite un catalogo e le ottiene in modo automatico, come in un cloud provider.</p>
+      </div>
+    </div>
+
+    <h3 class="sep">Data Center e Cloud</h3>
+    <div class="block purple">
+      <div class="btitle">Il substrato fisico del cloud</div>
+      <p>Il data center è il <strong>substrato fisico</strong> del cloud computing. I provider cloud possiedono e gestiscono data center su larga scala (regioni, availability zone) per offrire servizi IaaS, PaaS e SaaS con elevati livelli di affidabilità e tolleranza ai guasti.</p>
+      <p style="margin-top:8px">La tendenza moderna è verso <strong>architetture ibride</strong>, in cui carichi di lavoro critici restano on-premise (o in private cloud) e altri vengono spostati su cloud pubblico, con orchestrazione unificata.</p>
+      <ul>
+        <li><strong>Regioni</strong>: aree geografiche diverse (es. Europa, USA, Asia).</li>
+        <li><strong>Availability Zone</strong>: data center fisicamente separati all'interno di una regione, con alimentazione e rete indipendenti.</li>
+        <li><strong>Edge Computing</strong>: elaborazione vicino all'utente finale, per ridurre latenza e traffico verso il cloud centrale.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 
 </main>
 
