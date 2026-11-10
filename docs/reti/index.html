@@ -22,15 +22,26 @@
 
 <nav class="tabs" aria-label="Capitoli">
   <div class="tabs-inner">
-    <button aria-selected="true" data-chapter="mezzi">Mezzi trasmissivi</button>
-    <button aria-selected="false" data-chapter="architetture">Architetture e protocolli</button>
-    <button aria-selected="false" data-chapter="osi">Modelli OSI e TCP/IP</button>
-    <button aria-selected="false" data-chapter="ip">IP</button>
-    <button aria-selected="false" data-chapter="router">Router</button>
-    <button aria-selected="false" data-chapter="dns">DNS</button>
-    <button aria-selected="false" data-chapter="dhcp">DHCP</button>
-    <button aria-selected="false" data-chapter="trasporto">Livello trasporto</button>
-    <button aria-selected="false" data-chapter="email">Posta elettronica</button>
+
+    <!-- ===== CATEGORIA 1 — dropdown ===== -->
+    <div class="tab-dropdown" id="chapter-dropdown-1">
+      <button class="tab-dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+        1 <span class="tab-dropdown-arrow">▾</span>
+      </button>
+      <div class="tab-dropdown-menu" role="menu">
+        <button role="menuitem" aria-selected="true"  data-chapter="mezzi">Mezzi trasmissivi</button>
+        <button role="menuitem" aria-selected="false" data-chapter="architetture">Architetture e protocolli</button>
+        <button role="menuitem" aria-selected="false" data-chapter="osi">Modelli OSI e TCP/IP</button>
+        <button role="menuitem" aria-selected="false" data-chapter="ip">IP</button>
+        <button role="menuitem" aria-selected="false" data-chapter="router">Router</button>
+        <button role="menuitem" aria-selected="false" data-chapter="dns">DNS</button>
+        <button role="menuitem" aria-selected="false" data-chapter="dhcp">DHCP</button>
+        <button role="menuitem" aria-selected="false" data-chapter="trasporto">Livello trasporto</button>
+        <button role="menuitem" aria-selected="false" data-chapter="email">Posta elettronica</button>
+      </div>
+    </div>
+
+    <!-- ===== Capitoli fuori categoria ===== -->
     <button aria-selected="false" data-chapter="sicurezza">Sicurezza informatica</button>
     <button aria-selected="false" data-chapter="crittografia">Crittografia</button>
     <button aria-selected="false" data-chapter="vlan">VLAN</button>
@@ -38,6 +49,7 @@
     <button aria-selected="false" data-chapter="cloud">Cloud Computing</button>
     <button aria-selected="false" data-chapter="virtualizzazione">Virtualizzazione</button>
     <button aria-selected="false" data-chapter="data-center">Data Center</button>
+
   </div>
 </nav>
 
