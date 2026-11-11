@@ -41,6 +41,9 @@
   /* ---------- dropdown "1" ---------- */
   var dropdowns = Array.prototype.slice.call(document.querySelectorAll('.tab-dropdown'));
 
+  var openScrollY = 0;
+  var lastWidth = window.innerWidth;
+
   function closeDropdowns() {
     dropdowns.forEach(function (dd) {
       dd.classList.remove('open');
@@ -56,6 +59,7 @@
     closeDropdowns();
     dd.classList.add('open');
     toggle.setAttribute('aria-expanded', 'true');
+    openScrollY = window.scrollY;
 
     /* il menu è position: fixed → va posizionato via JS.
        .tabs-inner ha overflow-x: auto, quindi il menu verrebbe
@@ -95,8 +99,14 @@
     if (!e.target.closest('.tab-dropdown')) closeDropdowns();
   });
 
-  window.addEventListener('scroll', closeDropdowns, { passive: true });
-  window.addEventListener('resize', closeDropdowns);
+  /* su mobile il browser genera scroll/resize "spuri" (barra indirizzi,
+     tap sulla barra sticky): chiudo solo se la pagina si è mossa davvero */
+  window.addEventListener('scroll', function () {
+    if (Math.abs(window.scrollY - openScrollY) > 12) closeDropdowns();
+  }, { passive: true });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth !== lastWidth) { lastWidth = window.innerWidth; closeDropdowns(); }
+  });
 
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeDropdowns();
