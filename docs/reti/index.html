@@ -45,10 +45,19 @@
     <button aria-selected="false" data-chapter="sicurezza">Sicurezza informatica</button>
     <button aria-selected="false" data-chapter="crittografia">Crittografia</button>
     <button aria-selected="false" data-chapter="vlan">VLAN</button>
-    <button aria-selected="false" data-chapter="packet-filtering">Packet Filtering e ACL Cisco</button>
-    <button aria-selected="false" data-chapter="cloud">Cloud Computing</button>
-    <button aria-selected="false" data-chapter="virtualizzazione">Virtualizzazione</button>
-    <button aria-selected="false" data-chapter="data-center">Data Center</button>
+
+    <!-- ===== CATEGORIA 2 — dropdown ===== -->
+    <div class="tab-dropdown" id="chapter-dropdown-2">
+      <button class="tab-dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+        2 <span class="tab-dropdown-arrow">▾</span>
+      </button>
+      <div class="tab-dropdown-menu" role="menu">
+        <button role="menuitem" aria-selected="false" data-chapter="cloud">Cloud computing</button>
+        <button role="menuitem" aria-selected="false" data-chapter="virt">Virtualizzazione e data center</button>
+        <button role="menuitem" aria-selected="false" data-chapter="acl">Packet filtering e ACL</button>
+      </div>
+    </div>
+
 
   </div>
 </nav>
@@ -1880,698 +1889,443 @@ mail1.example.com.  IN  A  <span class="tb">93.184.216.10</span></pre></div>
   </div>
 </section>
 
-  <!-- ===== PACKET FILTERING E ACL CISCO ===== -->
-<section id="packet-filtering" class="section">
-  <h2 class="chapter-title">Packet Filtering e ACL Cisco</h2>
-  <p class="chapter-lead">Come un firewall e un router filtrante decidono quali pacchetti far passare e quali scartare, e come si configurano le Access Control List su un dispositivo Cisco.</p>
+  
 
-  <div class="block green">
-    <div class="btitle">Il firewall — schema concettuale</div>
-    <p>Un <strong>firewall</strong> è un dispositivo (hardware, software o ibrido) posto tra due reti con livelli di fiducia differenti — tipicamente una <strong>Local Network</strong> (rete interna fidata) e <strong>Internet</strong> (rete esterna non fidata). Il suo scopo è implementare la politica di sicurezza dell'organizzazione, controllando tutto il traffico che attraversa il punto di confine tra le due reti.</p>
-  </div>
-
-  <div class="sub-nav">
-    <button class="on" data-sub="pf-firewall">Firewall e packet filter</button>
-    <button data-sub="pf-acl-cisco">ACL Cisco</button>
-  </div>
-
-  <div id="pf-firewall" class="sub-section visible">
-    <h3 class="sep">Packet filter router — screening router</h3>
-    <div class="block blue">
-      <div class="btitle">Che cos'è un packet filter router</div>
-      <p>Il <strong>packet filter router</strong> (o <em>screening router</em>) è un router che applica regole di filtro ai pacchetti in transito, decidendo per ciascuno se <strong>instradarlo</strong>, <strong>bloccarlo</strong> o <strong>scartarlo</strong>. Opera tipicamente tra una <strong>Trusted Network</strong> e una <strong>Untrusted Network</strong>: il router filtra il traffico in base a una politica di sicurezza definita dall'amministratore.</p>
-      <p>Il meccanismo si basa sulle <strong>ACL (Access Control List)</strong>: liste di condizioni applicate al traffico entrante o uscente da un'interfaccia. Senza ACL configurate, un router inoltra <em>tutti</em> i pacchetti verso la destinazione richiesta (comportamento di default).</p>
-    </div>
-
-    <h3 class="sep">Come funziona il filtraggio</h3>
-    <div class="block amber">
-      <div class="btitle">Cosa esamina il router per ogni pacchetto</div>
-      <p>Il router analizza il <strong>frame header</strong>, l'<strong>IP header</strong> e l'<strong>header TCP/UDP</strong> per estrarre i campi su cui basare la decisione:</p>
-      <ul>
-        <li><strong>Indirizzo IP sorgente e destinazione</strong></li>
-        <li><strong>Indirizzo MAC sorgente e destinazione</strong> (livello 2)</li>
-        <li><strong>Numero di porta</strong> (TCP/UDP)</li>
-        <li><strong>Protocollo utilizzato</strong> (TCP, UDP, ICMP, ecc.)</li>
-      </ul>
-      <p style="margin-top:8px">Il risultato dell'elaborazione è una decisione binaria: <strong>Permit</strong> (inoltra) o <strong>Deny</strong> (scarta).</p>
-    </div>
-
-    <h3 class="sep">Direzione del traffico — Inbound e Outbound</h3>
-    <div class="block teal">
-      <div class="btitle">Ogni interfaccia del router ha due direzioni</div>
-      <p>Su un router, ogni interfaccia ha due direzioni logiche:</p>
-      <ul>
-        <li><strong>Inbound</strong>: il pacchetto <em>entra</em> nell'interfaccia (arriva dall'esterno verso il router).</li>
-        <li><strong>Outbound</strong>: il pacchetto <em>esce</em> dall'interfaccia (dal router verso l'esterno).</li>
-      </ul>
-      <p style="margin-top:8px">Prendiamo un router con due interfacce: <code>F0/0</code> verso Internet (10.0.0.0/8) e <code>F0/1</code> verso la LAN (192.168.0.0/24). Il traffico che va da Internet alla LAN è <strong>inbound su F0/0</strong> e <strong>outbound su F0/1</strong>. Il traffico che va dalla LAN a Internet è <strong>inbound su F0/1</strong> e <strong>outbound su F0/0</strong>. Ogni interfaccia può avere ACL diverse per ciascuna direzione.</p>
-    </div>
-
-    <h3 class="sep">Logica di elaborazione delle ACL</h3>
-    <div class="block green">
-      <div class="btitle">Una ACL è una lista di regole di accettazione o rifiuto</div>
-      <p>Una ACL è una lista ordinata di regole. Il pacchetto viene confrontato con le regole <strong>dall'alto verso il basso</strong>. La <strong>prima corrispondenza vince</strong>: non appena una regola corrisponde, l'azione (Permit o Deny) viene applicata e l'elaborazione termina. Se nessuna regola corrisponde, il pacchetto viene scartato dalla regola implicita di default (<strong>implicit deny</strong>).</p>
-      <ul>
-        <li>Pacchetto → test prima regola → se match, applica azione</li>
-        <li>Se non match → test regola successiva → se match, applica azione</li>
-        <li>Se non match con nessuna regola → <strong>Implicit Deny</strong>: pacchetto scartato</li>
-      </ul>
-    </div>
-
-    <h3 class="sep">Ragioni per creare le ACL</h3>
-    <div class="block blue">
-      <ul>
-        <li><strong>Limitare il traffico</strong> in rete.</li>
-        <li>Fornire <strong>controllo del flusso</strong> di traffico.</li>
-        <li>Offrire un <strong>livello base di sicurezza</strong> per l'accesso alla rete.</li>
-        <li><strong>Permettere o negare</strong> l'accesso a parte della rete sulla base del tipo di traffico.</li>
-      </ul>
-      <p style="margin-top:8px">Se su un router non sono configurate ACL, <strong>tutti i pacchetti saranno instradati</strong> verso la destinazione richiesta: il router non applica alcun filtro.</p>
-    </div>
-
-    <h3 class="sep">Strutture tipiche di una ACL</h3>
-    <div class="tbl-wrap">
-      <table class="tbl">
-        <thead>
-          <tr><th>N° Regola</th><th>Azione</th><th>Sorgente</th><th>Porta Sorg.</th><th>Destinazione</th><th>Porta Dest.</th><th>Protocollo</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>1</td><td>Accept</td><td>Host interno</td><td>1024</td><td>Rete esterna</td><td>80</td><td>TCP</td></tr>
-          <tr><td>2</td><td>Accept</td><td>Host interno</td><td>2234</td><td>Host esterno</td><td>110</td><td>UDP</td></tr>
-          <tr><td>3</td><td>Deny</td><td>Host esterno</td><td>90</td><td>Rete interna</td><td>8080</td><td>TCP</td></tr>
-          <tr><td>4</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3 class="sep">Esempio — servizio SMTP</h3>
-    <div class="block amber">
-      <div class="btitle">Gestione del traffico SMTP in ingresso e in uscita</div>
-      <p>Supponiamo di dover gestire il servizio SMTP (porta 25) in ingresso e in uscita su un router di confine. Un <strong>SMTP Client</strong> (192.168.3.4, TCP 1234) invia un messaggio a un <strong>SMTP Server</strong> (172.16.1.1, TCP 25). Il pacchetto viaggia in direzione <strong>In</strong> (dall'esterno verso l'interno) e la risposta viaggia in direzione <strong>Out</strong> (dall'interno verso l'esterno).</p>
-    </div>
-    <div class="tbl-wrap">
-      <table class="tbl">
-        <thead>
-          <tr><th>Regola</th><th>Direzione</th><th>Fonte</th><th>Destinazione</th><th>Protocollo</th><th>Porta Dest.</th><th>Azione</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>A</td><td>In</td><td>Esterno</td><td>Interno</td><td>TCP</td><td>25</td><td>Accetta</td></tr>
-          <tr><td>B</td><td>Out</td><td>Interno</td><td>Esterno</td><td>TCP</td><td>&gt;1023</td><td>Accetta</td></tr>
-          <tr><td>C</td><td>Out</td><td>Interno</td><td>Esterno</td><td>TCP</td><td>25</td><td>Accetta</td></tr>
-          <tr><td>D</td><td>In</td><td>Esterno</td><td>Interno</td><td>TCP</td><td>&gt;1023</td><td>Accetta</td></tr>
-          <tr><td>E</td><td>O</td><td>Alcuno</td><td>Alcuno</td><td>Alcuno</td><td>Alcuno</td><td>Nega</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="highlight">Le regole <strong>A e B</strong> permettono i collegamenti SMTP <em>in ingresso</em> (email entranti); le regole <strong>C e D</strong> permettono i collegamenti SMTP <em>in uscita</em> (email uscenti). La regola <strong>E</strong> è la regola di default che viene applicata se le altre regole non possono essere applicate: tutto ciò che non è esplicitamente permesso viene negato.</div>
-
-    <h3 class="sep">Esempio — servizio HTTP</h3>
-    <div class="block teal">
-      <div class="btitle">Gestione del traffico HTTP tra client e server</div>
-      <p>Un client vuole accedere a un server web (65.107.1.3, porta 80). Le regole devono permettere il traffico in uscita dal client verso il server e il traffico di ritorno dal server verso il client, bloccando tutto il resto.</p>
-    </div>
-    <div class="tbl-wrap">
-      <table class="tbl">
-        <thead>
-          <tr><th>Regola</th><th>Azione</th><th>Indirizzo Sorgente</th><th>Porta Sorgente</th><th>Indirizzo Destinazione</th><th>Porta Destinazione</th><th>Protocollo</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>A</td><td>Allow</td><td>Any</td><td>&gt;1023</td><td>65.107.1.3</td><td>80</td><td>TCP</td></tr>
-          <tr><td>B</td><td>Allow</td><td>65.107.1.3</td><td>80</td><td>localhost</td><td>&gt;1023</td><td>TCP</td></tr>
-          <tr><td>C</td><td>Reject</td><td>Any</td><td>Any</td><td>&gt;1023</td><td>Any</td><td>TCP/UDP</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="highlight">La regola <strong>A</strong> permette al client di inviare richieste HTTP al server; la regola <strong>B</strong> permette al server di rispondere al client; la regola <strong>C</strong> blocca tutto il traffico che tenta di raggiungere porte privilegiate (sotto la 1023) da parte di host non autorizzati, come misura di protezione aggiuntiva.</div>
-  </div>
-
-  <div id="pf-acl-cisco" class="sub-section">
-    <h3 class="sep">ACL Cisco — introduzione</h3>
-    <div class="block green">
-      <div class="btitle">Cosa sono le Access Control List di Cisco</div>
-      <p>Le <strong>Access Control List (ACL)</strong> di Cisco sono liste di regole applicate a un'interfaccia di router (o switch) per filtrare il traffico. Ogni regola specifica un'azione (<code>permit</code> o <code>deny</code>) e una serie di criteri di corrispondenza. Si dividono in due grandi famiglie:</p>
-    </div>
-    <div class="grid2">
-      <div class="card-small blue">
-        <span class="badge">Standard IP ACL</span>
-        <p>Numerazione: <strong>1–99, 1300–1999</strong>. Controllano <strong>solo l'indirizzo sorgente</strong> del pacchetto (con due eccezioni: VTY outbound e route filtering). Sono le più semplici e meno precise: non distinguono il tipo di traffico né la destinazione.</p>
-      </div>
-      <div class="card-small purple">
-        <span class="badge">Extended IP ACL</span>
-        <p>Numerazione: <strong>100–199, 2000–2699</strong>. Controllano <strong>sorgente, destinazione, protocollo, porte TCP/UDP, flag TCP, ToS</strong> e altri parametri. Permettono un filtro molto più preciso e granulare.</p>
-      </div>
-    </div>
-    <div class="block blue" style="margin-top:14px">
-      <p>Le ACL si possono anche identificare con un <strong>nome</strong> invece che con un numero: le <strong>named ACL</strong> permettono di eliminare singole righe, cosa non possibile con quelle numerate. Inoltre rendono più leggibile la configurazione.</p>
-    </div>
-
-    <h3 class="sep">Wildcard mask — la maschera jolly</h3>
-    <div class="block amber">
-      <div class="btitle">Come indicare quali bit devono corrispondere</div>
-      <p>Le ACL Cisco usano una <strong>wildcard mask</strong> per indicare quali bit dell'indirizzo IP devono corrispondere esattamente e quali possono essere ignorati:</p>
-      <ul>
-        <li><strong>Bit 0</strong> → il bit corrispondente nell'indirizzo <strong>deve corrispondere</strong>.</li>
-        <li><strong>Bit 1</strong> → il bit corrispondente nell'indirizzo <strong>può variare</strong> (viene ignorato).</li>
-      </ul>
-      <p style="margin-top:8px">Esempi:</p>
-      <ul>
-        <li><code>0.0.0.0</code> → corrispondenza esatta (equivale a <code>host</code>).</li>
-        <li><code>255.255.255.255</code> → qualsiasi indirizzo (equivale a <code>any</code>).</li>
-      </ul>
-      <p style="margin-top:8px"><strong>Regola pratica:</strong> la wildcard mask è l'<strong>inverso</strong> della subnet mask. Subnet mask <code>255.255.255.0</code> → wildcard <code>0.0.0.255</code>.</p>
-    </div>
-
-    <h3 class="sep">Comandi base (IOS Cisco)</h3>
-    <div class="trace">
-      <div class="trace-label">ACL standard numerata</div>
-<pre><span class="tg">access-list 10 permit</span> 192.168.1.0 0.0.0.255
-<span class="tg">access-list 10 deny</span> any</pre>
-    </div>
-    <div class="trace">
-      <div class="trace-label">ACL estesa numerata</div>
-<pre><span class="tg">access-list 101 permit tcp</span> 192.168.1.0 0.0.0.255 any eq 80
-<span class="tg">access-list 101 deny ip</span> any any</pre>
-    </div>
-    <div class="trace">
-      <div class="trace-label">Applicazione a un'interfaccia</div>
-<pre><span class="tg">interface</span> GigabitEthernet0/0
- <span class="tb">ip access-group 101 in</span></pre>
-    </div>
-
-    <h3 class="sep">Posizionamento delle ACL</h3>
-    <div class="grid2">
-      <div class="card-small blue">
-        <span class="badge">ACL standard</span>
-        <p>Vanno posizionate <strong>il più vicino possibile alla destinazione</strong>. Poiché filtrano solo in base al sorgente, metterle troppo vicino alla sorgente rischierebbe di bloccare traffico legittimo diretto ad altre destinazioni.</p>
-      </div>
-      <div class="card-small green">
-        <span class="badge">ACL estese</span>
-        <p>Vanno posizionate <strong>il più vicino possibile alla sorgente</strong>. In questo modo il traffico indesiderato viene scartato il prima possibile, risparmiando banda e risorse di elaborazione sui router intermedi.</p>
-      </div>
-    </div>
-
-    <h3 class="sep">Logica di elaborazione e best practice</h3>
-    <div class="block red">
-      <div class="btitle">Prima corrispondenza vince, implicit deny in fondo</div>
-      <p>Il router confronta il pacchetto con le regole ACL <strong>in ordine sequenziale</strong>. La <strong>prima corrispondenza</strong> determina l'azione. Se nessuna regola corrisponde, il pacchetto viene scartato (<strong>implicit deny</strong>).</p>
-      <p style="margin-top:8px"><strong>Best practice:</strong> terminare sempre una ACL con un <code>deny any</code> (o <code>deny ip any any</code>) esplicito per rendere chiara la politica e per avere un contatore di pacchetti scartati. Inoltre, ordinare le regole dalla più specifica alla più generica per evitare che una regola generica blocchi traffico che dovrebbe essere permesso da una regola più specifica successiva.</p>
-    </div>
-  </div>
-</section>
-
-  <!-- ===== CLOUD COMPUTING ===== -->
+<!-- ===== CLOUD COMPUTING ===== -->
 <section id="cloud" class="section">
-  <h2 class="chapter-title">Cloud Computing</h2>
-  <p class="chapter-lead">Dalla definizione del NIST ai modelli di servizio, ai modelli di distribuzione e alle responsabilità di sicurezza: come funziona l'infrastruttura che ospita la maggior parte dei servizi digitali moderni.</p>
+  <h2 class="chapter-title">Cloud computing</h2>
+  <p class="chapter-lead">Risorse di calcolo (server, storage, applicazioni) usate in rete, a richiesta, senza possederle. Esempi di tutti i giorni: Office 365, Google Drive, Dropbox, AWS, la posta elettronica (SaaS).</p>
 
   <div class="block green">
-    <div class="btitle">Definizione del NIST (SP 800-145)</div>
-    <p><em>"Il cloud computing è un modello per abilitare, tramite la rete, l'accesso diffuso, agevole e a richiesta, ad un insieme condiviso e configurabile di risorse di elaborazione (ad esempio reti, server, memoria, applicazioni e servizi) che possono essere acquisite e rilasciate rapidamente e con minimo sforzo di gestione o di interazione con il fornitore di servizi."</em></p>
-    <p style="margin-top:8px">In pratica: l'utente (privato o azienda) può usufruire di risorse computazionali <strong>on demand</strong>, disponibili, di facile accesso e rilascio, senza doversi preoccupare dell'infrastruttura fisica sottostante. Esempi quotidiani: Office 365, Google Drive, Dropbox, la posta elettronica (SaaS), i servizi 5G degli operatori telefonici, Amazon Web Services (EC2).</p>
+    <div class="btitle">Definizione NIST (SP 800-145)</div>
+    <p>Il cloud computing è un modello per abilitare, <strong>tramite la rete</strong>, l'accesso diffuso, agevole e <strong>a richiesta</strong>, a un <strong>insieme condiviso e configurabile di risorse</strong> (reti, server, memoria, applicazioni, servizi) che possono essere <strong>acquisite e rilasciate rapidamente</strong> con minimo sforzo di gestione o interazione con il fornitore.</p>
   </div>
 
   <div class="sub-nav">
-    <button class="on" data-sub="cloud-modelli">Modelli e attori</button>
-    <button data-sub="cloud-sicurezza">Sicurezza nel cloud</button>
+    <button class="on" data-sub="cld-car">Caratteristiche</button>
+    <button data-sub="cld-serv">Modelli di servizio</button>
+    <button data-sub="cld-dist">Modelli di distribuzione</button>
+    <button data-sub="cld-att">Attori</button>
+    <button data-sub="cld-os">OpenStack</button>
+    <button data-sub="cld-sic">Sicurezza</button>
   </div>
 
-  <div id="cloud-modelli" class="sub-section visible">
-    <h3 class="sep">Caratteristiche essenziali</h3>
+  <div id="cld-car" class="sub-section visible">
+    <h3 class="sep">Le 5 caratteristiche essenziali</h3>
     <div class="grid2">
-      <div class="card-small blue">
-        <span class="badge">Self-service su richiesta</span>
-        <p>Il consumatore può acquisire automaticamente le capacità di calcolo necessarie (tempo macchina, memoria, storage) senza richiedere interazione umana con il fornitore di servizi.</p>
-      </div>
-      <div class="card-small green">
-        <span class="badge">Accesso in rete a larga banda</span>
-        <p>Le capacità sono disponibili in rete e accessibili attraverso meccanismi standard che promuovono l'uso tramite piattaforme eterogenee: client leggeri o pesanti (telefoni, tablet, laptop, workstation).</p>
-      </div>
-      <div class="card-small amber">
-        <span class="badge">Condivisione delle risorse</span>
-        <p>Le risorse del fornitore sono messe in comune per servire molteplici consumatori con un modello <strong>multi-tenant</strong>: le risorse fisiche e virtuali sono assegnate e riassegnate dinamicamente in base alla domanda. L'utente non ha controllo o conoscenza dell'esatta ubicazione delle risorse.</p>
-      </div>
-      <div class="card-small teal">
-        <span class="badge">Elasticità rapida</span>
-        <p>Le risorse possono essere acquisite e rilasciate elasticamente, in alcuni casi automaticamente, per scalare rapidamente in relazione alla domanda. Al consumatore le risorse appaiono spesso illimitate e disponibili in qualsiasi quantità e momento.</p>
-      </div>
-      <div class="card-small purple">
-        <span class="badge">Servizio misurato</span>
-        <p>I sistemi cloud controllano automaticamente e ottimizzano l'uso delle risorse tramite misurazione a un livello di astrazione appropriato (memoria, elaborazione, banda, utenti attivi). L'utilizzo è monitorato, controllato e fatturato con trasparenza sia per il fornitore che per l'utilizzatore.</p>
-      </div>
-      <div class="card-small red">
-        <span class="badge">Multi-tenancy</span>
-        <p>Più organizzazioni (tenant) condividono la stessa infrastruttura fisica, con isolamento logico garantito dal software. È il modello che rende economicamente sostenibile il cloud, ma introduce nuove sfide di sicurezza.</p>
-      </div>
-    </div>
-
-    <h3 class="sep">Modelli di servizio</h3>
-    <div class="grid3">
-      <div class="card-small teal">
-        <span class="badge">SaaS — Software as a Service</span>
-        <p>Al consumatore viene fornita la facoltà di utilizzare le <strong>applicazioni del fornitore</strong>, funzionanti su un'infrastruttura cloud. Le applicazioni sono accessibili da diversi dispositivi tramite un'interfaccia leggera (thin client, browser). Il consumatore <strong>non gestisce né controlla</strong> l'infrastruttura sottostante (rete, server, sistemi operativi, storage) né le capacità delle singole applicazioni, con l'eccezione di limitate configurazioni. Esempi: Gmail, Office 365, Salesforce, Dropbox.</p>
-      </div>
-      <div class="card-small amber">
-        <span class="badge">PaaS — Platform as a Service</span>
-        <p>Il consumatore ha facoltà di distribuire sull'infrastruttura cloud <strong>applicazioni create in proprio o acquisite da terzi</strong>, utilizzando linguaggi di programmazione, librerie, servizi e strumenti supportati dal fornitore. Il consumatore <strong>non gestisce né controlla</strong> l'infrastruttura sottostante, ma ha il controllo sulle applicazioni e sulle configurazioni dell'ambiente che le ospita. Esempi: Google App Engine, Heroku, AWS Elastic Beanstalk, OpenShift.</p>
-      </div>
-      <div class="card-small blue">
-        <span class="badge">IaaS — Infrastructure as a Service</span>
-        <p>Il consumatore ha facoltà di acquisire <strong>elaborazione, memoria, rete e altre risorse fondamentali di calcolo</strong>, inclusi sistemi operativi e applicazioni. Anche in questo caso il consumatore non gestisce l'infrastruttura cloud sottostante, ma controlla sistemi operativi, memoria, applicazioni ed eventualmente, in modo limitato, alcuni componenti di rete (es. firewall). Esempi: AWS EC2, Google Compute Engine, Microsoft Azure VMs, OpenStack.</p>
-      </div>
-    </div>
-    <div class="highlight">La regola generale: <strong>maggiore è il controllo, maggiore è la responsabilità del consumer</strong>. In IaaS il consumer ha il massimo controllo (e la massima responsabilità); in SaaS il provider ha il massimo controllo e il consumer ha la minima responsabilità.</div>
-
-    <h3 class="sep">Modelli di distribuzione</h3>
-    <div class="grid2">
-      <div class="card-small red">
-        <span class="badge">Private Cloud</span>
-        <p>Infrastruttura cloud fornita per uso esclusivo di una singola organizzazione, comprendente molteplici consumatori (es. reparti aziendali). Può essere posseduta, diretta e gestita dall'organizzazione stessa, da una società terza o da una combinazione delle due, e può esistere dentro o fuori le proprie sedi.</p>
-      </div>
-      <div class="card-small green">
-        <span class="badge">Community Cloud</span>
-        <p>Infrastruttura cloud fornita per uso esclusivo di una comunità di consumatori di organizzazioni con interessi comuni (missione, requisiti di sicurezza, vincoli di conformità). Può essere posseduta, diretta e gestita da una o più organizzazioni della comunità o da terzi.</p>
-      </div>
-      <div class="card-small blue">
-        <span class="badge">Public Cloud</span>
-        <p>Infrastruttura cloud fornita per un uso aperto a qualsiasi consumatore. Può essere posseduta, gestita e diretta da un'azienda, un'organizzazione accademica o governativa, o da una combinazione. Esiste nelle sedi del fornitore cloud. Esempi: AWS, Azure, GCP.</p>
-      </div>
-      <div class="card-small purple">
-        <span class="badge">Hybrid Cloud</span>
-        <p>Composizione di due o più infrastrutture cloud (private, community o public) che rimangono entità distinte, ma sono unite da tecnologie standard o proprietarie che abilitano la portabilità di dati e applicazioni (es. per bilanciare il carico di lavoro tra cloud).</p>
-      </div>
-    </div>
-
-    <h3 class="sep">Attori del cloud (NIST)</h3>
-    <div class="grid2">
-      <div class="card-small green">
-        <span class="badge">Cloud Consumer</span>
-        <p>Persona o organizzazione che instaura una relazione di business con un cloud provider per acquisire e usufruire dei suoi servizi. Attività: analisi dei servizi, richiesta di servizi appropriati, impostazione del contratto, utilizzo dei servizi.</p>
-      </div>
-      <div class="card-small blue">
-        <span class="badge">Cloud Provider</span>
-        <p>Persona o organizzazione che crea e fornisce servizi per i cloud consumer. Si occupa di: creazione di servizi/piattaforme/infrastrutture, gestione dell'infrastruttura, distribuzione dei servizi concordati, responsabilità della sicurezza e privacy.</p>
-      </div>
-      <div class="card-small amber">
-        <span class="badge">Cloud Broker</span>
-        <p>Intermediario tra consumer e provider. Migliora i servizi (intermediazione), combina e integra servizi multipli (aggregazione), sceglie tra vari servizi offerti (arbitraggio). Può fornire servizi di supporto tecnico.</p>
-      </div>
-      <div class="card-small purple">
-        <span class="badge">Cloud Auditor</span>
-        <p>Conduce una valutazione indipendente dei servizi cloud, delle operazioni del sistema informativo, delle prestazioni e della sicurezza implementata. Verifica che i controlli di sicurezza siano correttamente implementati e producano i risultati desiderati.</p>
-      </div>
-      <div class="card-small teal">
-        <span class="badge">Cloud Carrier</span>
-        <p>Intermediario che fornisce la connettività e il trasporto ai servizi cloud tra cloud consumer e cloud provider. È il livello di rete che rende possibile il collegamento.</p>
-      </div>
+      <div class="card-small blue"><span class="badge">Self-service su richiesta</span><p>Il consumatore acquisisce da solo tempo macchina e memoria, <strong>senza interazione umana</strong> con il fornitore.</p></div>
+      <div class="card-small teal"><span class="badge">Accesso in rete a larga banda</span><p>Le risorse sono accessibili in rete con meccanismi standard da <strong>dispositivi eterogenei</strong> (telefoni, tablet, laptop, workstation).</p></div>
+      <div class="card-small amber"><span class="badge">Condivisione delle risorse</span><p>Le risorse del fornitore sono messe in comune tra più clienti (<strong>multi-tenant</strong>) e riassegnate dinamicamente in base alla domanda. L'utente non sa dove sono fisicamente, al massimo sceglie paese o data center.</p></div>
+      <div class="card-small green"><span class="badge">Elasticità rapida</span><p>Le risorse si acquisiscono e rilasciano anche <strong>in automatico</strong> per scalare con la domanda. All'utente sembrano illimitate.</p></div>
+      <div class="card-small purple"><span class="badge">Servizio misurato</span><p>L'uso delle risorse è <strong>misurato, monitorato e segnalato</strong> (memoria, elaborazione, banda, utenti attivi): trasparenza per fornitore e utente, si paga ciò che si usa.</p></div>
     </div>
   </div>
 
-  <div id="cloud-sicurezza" class="sub-section">
-    <h3 class="sep">Modello a responsabilità condivisa</h3>
-    <div class="block amber">
-      <div class="btitle">Chi è responsabile di cosa</div>
-      <p>Poiché il cloud computing è basato sulla condivisione di informazioni tra organizzazioni diverse, la responsabilità della sicurezza è distribuita tra provider e consumer. Per i diversi modelli di servizio, la responsabilità corrisponde al grado di controllo di ciascun attore:</p>
-    </div>
-    <div class="grid3">
-      <div class="card-small teal">
-        <span class="badge">SaaS</span>
-        <p>Il cloud provider è responsabile di <strong>quasi tutta la sicurezza</strong>. Il cloud consumer può solo accedere e gestire l'uso delle applicazioni senza alterarne il funzionamento.</p>
-      </div>
-      <div class="card-small amber">
-        <span class="badge">PaaS</span>
-        <p>Il cloud provider è responsabile della <strong>sicurezza dell'infrastruttura</strong>; il cloud consumer è responsabile di tutto ciò che implementa sulla piattaforma, inclusa la configurazione delle funzionalità di sicurezza.</p>
-      </div>
-      <div class="card-small blue">
-        <span class="badge">IaaS</span>
-        <p>Il cloud provider è responsabile della <strong>sicurezza di base</strong>; il cloud consumer è responsabile di qualsiasi cosa implementa nell'infrastruttura: ha <strong>maggiore responsabilità</strong> rispetto agli altri modelli.</p>
-      </div>
-    </div>
-    <div class="block blue" style="margin-top:14px">
-      <p>Spetta ai cloud provider documentare in maniera chiara i controlli di sicurezza interni e le funzionalità di sicurezza per supportare i consumer nelle decisioni. Al tempo stesso, i cloud consumer dovrebbero definire una <strong>matrice di responsabilità</strong> per documentare chi implementa i controlli e come.</p>
-    </div>
-
-    <h3 class="sep">Rischi per la sicurezza nel cloud</h3>
-    <div class="block red">
-      <div class="btitle">Le principali minacce</div>
-      <ul>
-        <li>Compromissione della <strong>riservatezza e integrità</strong> dei dati in transito da o verso un cloud provider.</li>
-        <li>Vulnerabilità esistenti nell'infrastruttura del provider.</li>
-        <li>Limitata abilità nel <strong>crittografare i dati</strong> in un ambiente multi-tenancy.</li>
-        <li><strong>Intercettazione dei dati in transito</strong> (attacchi man-in-the-middle).</li>
-      </ul>
-      <p style="margin-top:8px">Secondo il NIST, a tutela della sicurezza dei dati è fondamentale:</p>
-      <ul>
-        <li>Garantire la protezione dei dati da accessi non autorizzati.</li>
-        <li>Impedire l'accesso alle risorse dell'infrastruttura cloud a soggetti non autorizzati.</li>
-        <li>Includere sistemi per il controllo degli accessi.</li>
-      </ul>
-    </div>
-
-    <h3 class="sep">Aree critiche — Cloud Security Alliance (CSA)</h3>
-    <div class="block green">
-      <div class="btitle">I 13 domini del CSA</div>
-      <p>Il CSA ha individuato 13 domini, aree di interesse per il cloud computing, divisi in due categorie: <strong>governance</strong> (strategie e politiche) e <strong>operating</strong> (implementazione della sicurezza).</p>
-    </div>
-    <div class="grid2">
-      <div class="card-small purple">
-        <span class="badge">Governance</span>
-        <ul>
-          <li>Governance and Enterprise Risk Management</li>
-          <li>Legal Issues: Contracts and Electronic Discovery</li>
-          <li>Compliance and Audit Management</li>
-          <li>Information Governance</li>
-          <li>Management Plan and Business Continuity</li>
-        </ul>
-      </div>
-      <div class="card-small teal">
-        <span class="badge">Operating</span>
-        <ul>
-          <li>Infrastructure Security</li>
-          <li>Virtualization and Containers</li>
-          <li>Incident Response, Notification and Remediation</li>
-          <li>Application Security</li>
-          <li>Data Security and Encryption</li>
-          <li>Identity, Entitlement, and Access Management</li>
-          <li>Security as a Service</li>
-          <li>Related Technologies (API, SDN, Big Data, IoT)</li>
-        </ul>
-      </div>
-    </div>
-
-    <h3 class="sep">OpenStack — la piattaforma open source</h3>
+  <div id="cld-serv" class="sub-section">
+    <h3 class="sep">SaaS, PaaS, IaaS</h3>
     <div class="block blue">
-      <div class="btitle">Componenti principali</div>
-      <p>OpenStack è una piattaforma open source per la realizzazione di cloud pubblico e privato. Sviluppata in Python, con interfacce RESTful tra i componenti, ha rilasci semestrali e vede la partecipazione di colossi del software e delle telecomunicazioni.</p>
+      <div class="btitle">SaaS — Software as a Service</div>
+      <p>Si usano le <strong>applicazioni del fornitore</strong> da browser o thin client (es. email su browser). Il consumatore <strong>non gestisce nulla</strong> dell'infrastruttura (rete, server, SO, memoria), solo qualche parametrizzazione.</p>
+    </div>
+    <div class="block amber">
+      <div class="btitle">PaaS — Platform as a Service</div>
+      <p>Si <strong>distribuiscono sul cloud applicazioni proprie</strong> o di terzi, con linguaggi, librerie e strumenti del fornitore. Controlla le applicazioni e (in parte) la configurazione dell'ambiente, non l'infrastruttura. Utenti tipici: sviluppatori.</p>
+    </div>
+    <div class="block green">
+      <div class="btitle">IaaS — Infrastructure as a Service</div>
+      <p>Si ottengono <strong>elaborazione, memoria, rete</strong> e risorse di base: VM, storage, componenti di rete. Il consumatore controlla <strong>sistemi operativi, memoria, applicazioni</strong> e in modo limitato alcuni componenti di rete (es. firewall). Utenti tipici: amministratori e responsabili IT.</p>
     </div>
     <div class="tbl-wrap">
-      <table class="tbl">
+      <table class="tbl cmp">
+        <thead><tr><th></th><th>Gestisce il fornitore</th><th>Gestisce il cliente</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">SaaS</th><td>Tutto (applicazione e infrastruttura)</td><td>Solo l'uso dell'applicazione</td></tr>
+          <tr><th scope="row">PaaS</th><td>Infrastruttura e piattaforma</td><td>Applicazioni e loro configurazione</td></tr>
+          <tr><th scope="row">IaaS</th><td>Hardware fisico, rete, virtualizzazione</td><td>SO, middleware, applicazioni</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight">Da SaaS a IaaS il <strong>controllo del cliente cresce</strong>, e con lui la sua <strong>responsabilità sulla sicurezza</strong>.</div>
+  </div>
+
+  <div id="cld-dist" class="sub-section">
+    <h3 class="sep">I 4 modelli di distribuzione</h3>
+    <div class="grid2">
+      <div class="card-small red"><span class="badge">Private cloud</span><p>Per uso <strong>esclusivo di una sola organizzazione</strong> (anche con più filiali). Può essere gestito da lei o da terzi, dentro o fuori le sue sedi.</p></div>
+      <div class="card-small purple"><span class="badge">Community cloud</span><p>Per una <strong>comunità di organizzazioni con interessi comuni</strong> (missione, requisiti di sicurezza, conformità). Gestito da una o più di esse o da terzi.</p></div>
+      <div class="card-small blue"><span class="badge">Public cloud</span><p>Aperto a <strong>qualsiasi consumatore</strong>. Esiste nelle sedi del fornitore (azienda, ente accademico o governativo).</p></div>
+      <div class="card-small green"><span class="badge">Hybrid cloud</span><p>Composizione di <strong>due o più cloud</strong> (privato, comunitario, pubblico) che restano distinti ma uniti da tecnologie che permettono la <strong>portabilità di dati e applicazioni</strong> (es. bilanciare il carico).</p></div>
+    </div>
+  </div>
+
+  <div id="cld-att" class="sub-section">
+    <h3 class="sep">Gli attori del cloud</h3>
+    <div class="grid2">
+      <div class="card-small blue"><span class="badge">Cloud consumer</span><p>Persona o organizzazione che <strong>sceglie e usa</strong> i servizi: analizza l'offerta, richiede i servizi, imposta il contratto, li utilizza.</p></div>
+      <div class="card-small green"><span class="badge">Cloud provider</span><p><strong>Crea e fornisce</strong> i servizi: gestisce l'infrastruttura, distribuisce i servizi concordati ed è responsabile di <strong>sicurezza e privacy</strong>.</p></div>
+      <div class="card-small amber"><span class="badge">Cloud auditor</span><p>Fa una <strong>valutazione indipendente</strong> di servizi, prestazioni, sicurezza, privacy e conformità al contratto.</p></div>
+      <div class="card-small purple"><span class="badge">Cloud broker</span><p><strong>Intermediario</strong> tra consumer e provider. Offre <em>intermediazione</em> (migliora un servizio), <em>aggregazione</em> (combina più servizi in uno) e <em>arbitraggio</em> (sceglie tra vari provider).</p></div>
+      <div class="card-small teal"><span class="badge">Cloud carrier</span><p>Fornisce <strong>connettività e trasporto</strong> tra consumer e provider.</p></div>
+    </div>
+  </div>
+
+  <div id="cld-os" class="sub-section">
+    <h3 class="sep">OpenStack</h3>
+    <div class="block teal">
+      <div class="btitle">Software open source per cloud pubblici e privati</div>
+      <p>Sviluppato in <strong>Python</strong>, interfacce tra i componenti di tipo <strong>RESTful</strong>, rilasci semestrali. Per costruire il cloud servono virtualizzazione e dischi immagine: se un'applicazione si virtualizza su un server locale con un hypervisor, per averla distribuita su più server e data center la parola chiave è <strong>cloud</strong>.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl cmp">
         <thead><tr><th>Componente</th><th>Funzione</th></tr></thead>
         <tbody>
-          <tr><td><strong>Nova</strong></td><td>Controller delle risorse computazionali</td></tr>
-          <tr><td><strong>Swift</strong></td><td>Sistema di storage di oggetti distribuiti</td></tr>
-          <tr><td><strong>Glance</strong></td><td>Gestione delle immagini dei dischi virtuali</td></tr>
-          <tr><td><strong>Horizon</strong></td><td>Dashboard (interfaccia grafica)</td></tr>
-          <tr><td><strong>Keystone</strong></td><td>Autenticazione degli utenti</td></tr>
-          <tr><td><strong>Neutron</strong></td><td>Network management</td></tr>
-          <tr><td><strong>Cinder</strong></td><td>Gestione di blocchi di storage persistenti</td></tr>
+          <tr><th scope="row">Nova</th><td>Controllore delle risorse computazionali</td></tr>
+          <tr><th scope="row">Swift</th><td>Storage di oggetti distribuito</td></tr>
+          <tr><th scope="row">Glance</th><td>Gestione delle immagini dei dischi virtuali</td></tr>
+          <tr><th scope="row">Horizon</th><td>Dashboard (interfaccia grafica)</td></tr>
+          <tr><th scope="row">Keystone</th><td>Autenticazione degli utenti</td></tr>
+          <tr><th scope="row">Neutron</th><td>Gestione della rete</td></tr>
+          <tr><th scope="row">Cinder</th><td>Blocchi di storage persistenti</td></tr>
         </tbody>
       </table>
     </div>
   </div>
+
+  <div id="cld-sic" class="sub-section">
+    <h3 class="sep">Rischi per la sicurezza</h3>
+    <div class="block red">
+      <div class="btitle">Cosa si rischia</div>
+      <p>Il cloud ha 3 modelli di servizio, 4 di distribuzione e 5 caratteristiche, quindi è complesso, e con il <strong>multi-tenancy</strong> proteggere i dati è ancora più importante. Rischi principali:</p>
+      <ul>
+        <li>compromissione di <strong>riservatezza e integrità</strong> dei dati in transito da/verso il provider;</li>
+        <li>vulnerabilità esistenti;</li>
+        <li>limiti nel <strong>cifrare</strong> i dati in ambiente multi-tenant;</li>
+        <li>intercettazione dei dati (<strong>man-in-the-middle</strong>).</li>
+      </ul>
+      <p style="margin-top:8px">Secondo il NIST serve: proteggere i dati da accessi non autorizzati, impedire l'accesso alle risorse a soggetti non autorizzati, avere sistemi di <strong>controllo degli accessi</strong>.</p>
+    </div>
+    <div class="block amber">
+      <div class="btitle">Modello a responsabilità condivisa</div>
+      <p>Organizzazioni diverse gestiscono parti diverse, quindi la responsabilità sulla sicurezza si divide in base al <strong>grado di controllo</strong>:</p>
+      <ul>
+        <li><strong>SaaS</strong>: il provider è responsabile di quasi tutto.</li>
+        <li><strong>PaaS</strong>: il provider della sicurezza dell'infrastruttura, il cliente di ciò che installa (comprese le impostazioni di sicurezza).</li>
+        <li><strong>IaaS</strong>: il provider della sicurezza di base, il cliente di tutto ciò che implementa. Qui ha <strong>più responsabilità</strong>.</li>
+      </ul>
+      <p style="margin-top:8px">Il provider deve documentare chiaramente i suoi controlli; il cliente dovrebbe definire una <strong>matrice di responsabilità</strong> (chi implementa quali controlli).</p>
+    </div>
+    <h3 class="sep">CSA: 13 domini di interesse</h3>
+    <p style="margin-bottom:10px">La <strong>Cloud Security Alliance</strong> li divide in due categorie.</p>
+    <div class="grid2">
+      <div class="card-small blue">
+        <span class="badge">Governance (5)</span>
+        <ul>
+          <li>Governance e gestione del rischio aziendale</li>
+          <li>Aspetti legali: contratti ed e-discovery</li>
+          <li>Conformità e audit</li>
+          <li>Information governance (controllo dei dati)</li>
+          <li>Piano di gestione e business continuity</li>
+        </ul>
+      </div>
+      <div class="card-small green">
+        <span class="badge">Operating (8)</span>
+        <ul>
+          <li>Sicurezza dell'infrastruttura</li>
+          <li>Virtualizzazione e container (hypervisor, SDN)</li>
+          <li>Incident response, notifica e rimedio</li>
+          <li>Sicurezza delle applicazioni</li>
+          <li>Sicurezza e crittografia dei dati</li>
+          <li>Identity, entitlement e access management</li>
+          <li>Security as a Service</li>
+          <li>Tecnologie correlate (API, SDN, Big Data, IoT)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="card-small gray"><span class="badge">API</span><p>Insieme di procedure a disposizione del programmatore (spesso librerie software).</p></div>
+      <div class="card-small gray"><span class="badge">SDN</span><p>Software Defined Networking: reti tradizionali trasformate in piattaforme flessibili e programmabili.</p></div>
+      <div class="card-small gray"><span class="badge">Big Data / IoT</span><p>Analisi di dati massivi; miliardi di dispositivi (sensori) in rete.</p></div>
+    </div>
+  </div>
 </section>
 
-  <!-- ===== VIRTUALIZZAZIONE ===== -->
-<section id="virtualizzazione" class="section">
-  <h2 class="chapter-title">Virtualizzazione</h2>
-  <p class="chapter-lead">Come astrarre l'hardware fisico per eseguire più sistemi operativi sullo stesso server, con quali vantaggi e quali tecnologie.</p>
+<!-- ===== VIRTUALIZZAZIONE E DATA CENTER ===== -->
+<section id="virt" class="section">
+  <h2 class="chapter-title">Virtualizzazione e data center</h2>
+  <p class="chapter-lead">Astrarre l'hardware fisico per far girare più sistemi sullo stesso server e sfruttare al meglio le risorse dei centri di elaborazione dati.</p>
 
   <div class="block green">
-    <div class="btitle">Che cos'è la virtualizzazione</div>
-    <p>La <strong>virtualizzazione</strong> è qualunque processo in grado di <strong>astrarre i dettagli fisici</strong> di una risorsa reale, al fine di permettere ai suoi utenti un accesso più semplice, efficiente o sicuro. Il concetto non è recente: uno dei primi esempi, introdotto da IBM, risale agli anni '60 (CP-40, 1964). Negli ultimi decenni c'è stato un forte incremento dell'uso di questa tecnica, che permette di contenere i costi di gestione e di sfruttare al meglio le risorse dei centri di elaborazione dati.</p>
-    <p style="margin-top:8px">L'<strong>hypervisor</strong> (o VMM — Virtual Machine Monitor) è il software che crea e gestisce le macchine virtuali, fornendo loro risorse virtualizzate: CPU, RAM, storage (dischi immagine), networking, BIOS, video, audio, ecc. Queste risorse insieme costituiscono la <strong>macchina virtuale</strong> in cui i sistemi operativi guest operano.</p>
+    <div class="btitle">Cos'è la virtualizzazione</div>
+    <p>Qualunque processo che <strong>astrae i dettagli fisici di una risorsa reale</strong> per darne agli utenti un accesso più semplice, efficiente o sicuro. Non è recente (IBM, anni '60) ma negli ultimi anni è molto cresciuta perché riduce i costi di gestione.</p>
+    <ul>
+      <li><strong>Disco rigido</strong>: l'utente non vede piatti, cilindri e settori, ma cartelle e file grazie al <em>file system</em>.</li>
+      <li><strong>Memoria virtuale</strong>: il SO mostra alle applicazioni più RAM di quella reale, usando il disco come supporto aggiuntivo.</li>
+      <li><strong>HAL</strong> (Hardware Abstraction Layer): livello tra kernel e hardware (CPU, memoria, MMU, timer, porte/dispositivi) nei sistemi Microsoft.</li>
+    </ul>
   </div>
 
   <div class="sub-nav">
-    <button class="on" data-sub="virt-tipologie">Tipologie e vantaggi</button>
-    <button data-sub="virt-tecnica">Aspetti tecnici</button>
+    <button class="on" data-sub="vrt-vant">Vantaggi e campi</button>
+    <button data-sub="vrt-tip">Tipologie e hypervisor</button>
+    <button data-sub="vrt-spec">Aspetti specifici</button>
+    <button data-sub="vrt-dc">Data center</button>
+    <button data-sub="vrt-desk">Desktop (VDI)</button>
   </div>
 
-  <div id="virt-tipologie" class="sub-section visible">
-    <h3 class="sep">Hypervisor Type 1 — Bare-metal</h3>
-    <div class="block blue">
-      <div class="btitle">L'hypervisor gira direttamente sull'hardware</div>
-      <p>L'hypervisor è installato <strong>direttamente sull'hardware</strong>, senza un sistema operativo sottostante. È il tipo usato nei data center e nei server di produzione.</p>
-      <ul>
-        <li>Esempi: <strong>VMware ESXi, Microsoft Hyper-V, Xen (Citrix), KVM (kernel-based)</strong>.</li>
-        <li>Vantaggi: prestazioni elevate, minore latenza, maggiore sicurezza.</li>
-      </ul>
-    </div>
-
-    <h3 class="sep">Hypervisor Type 2 — Hosted</h3>
-    <div class="block amber">
-      <div class="btitle">L'hypervisor gira come applicazione su un sistema operativo host</div>
-      <p>L'hypervisor è un'<strong>applicazione</strong> che gira su un sistema operativo host tradizionale. È il tipo usato sui desktop per test e sviluppo.</p>
-      <ul>
-        <li>Esempi: <strong>VirtualBox (Oracle), VMware Workstation/Fusion, QEMU, Parallels</strong>.</li>
-        <li>Vantaggi: facilità d'uso, installazione su qualsiasi desktop.</li>
-        <li>Svantaggi: prestazioni inferiori, maggiore overhead.</li>
-      </ul>
-    </div>
-
-    <div class="block purple">
-      <div class="btitle">KVM — il caso ibrido</div>
-      <p>KVM (Kernel-based Virtual Machine) è un caso particolare: è un <strong>modulo del kernel Linux</strong>, quindi gira direttamente sull'hardware (come un Type 1), ma usufruisce delle funzionalità del sistema operativo host Linux (come un Type 2). È alla base di molte piattaforme cloud (OpenStack, Google Cloud, AWS).</p>
-    </div>
-
-    <h3 class="sep">Vantaggi della virtualizzazione</h3>
+  <div id="vrt-vant" class="sub-section visible">
+    <h3 class="sep">Vantaggi</h3>
     <div class="grid2">
-      <div class="card-small green">
-        <span class="badge">Riduzione dei server fisici</span>
-        <p>Più VM su un solo server fisico: meno consumi energetici, meno calore generato, meno guasti hardware, meno armadi rack, meno spazio in sala macchine, meno cablaggio.</p>
-      </div>
-      <div class="card-small blue">
-        <span class="badge">Consolidamento dei server</span>
-        <p>Si stima che un moderno server venga sfruttato solo al 15–20%. Con la virtualizzazione si possono eseguire 3–4 VM sullo stesso hardware fisico, aumentando drasticamente l'utilizzo.</p>
-      </div>
-      <div class="card-small amber">
-        <span class="badge">Indipendenza hardware</span>
-        <p>Il sistema operativo guest non vede l'hardware fisico, ma un hardware virtuale. Questo permette di spostare o clonare un'installazione su un'altra macchina senza problemi di incompatibilità hardware.</p>
-      </div>
-      <div class="card-small teal">
-        <span class="badge">Adattabilità</span>
-        <p>Allocazione dinamica delle risorse hardware virtuali in modo più veloce e flessibile. La VM può essere spostata su un hardware più efficiente in modo totalmente trasparente.</p>
-      </div>
-      <div class="card-small purple">
-        <span class="badge">Supporto ad applicazioni legacy</span>
-        <p>Gli ambienti di virtualizzazione permettono l'esecuzione anche di sistemi obsoleti, permettendo ai responsabili IT di liberarsi del vecchio hardware non più supportato e più soggetto a guasti.</p>
-      </div>
-      <div class="card-small red">
-        <span class="badge">Ambienti di test</span>
-        <p>Replica immediata di una macchina virtuale per effettuare tutti i test richiesti da nuove applicazioni o aggiornamenti di applicazioni esistenti, senza impattare la produzione.</p>
-      </div>
+      <div class="card-small green"><span class="badge">Meno server fisici</span><p>Più VM su un solo server: meno consumi, calore (condizionamento meno potente), guasti, cablaggio, armadi rack e spazio in sala macchine.</p></div>
+      <div class="card-small blue"><span class="badge">Consolidamento</span><p>Un server moderno è sfruttato solo al <strong>15-20%</strong>: ha senso eseguire <strong>3 o 4 VM</strong> sullo stesso hardware.</p></div>
+      <div class="card-small amber"><span class="badge">Indipendenza hardware</span><p>Il SO vede un <strong>hardware virtuale</strong>, non quello fisico: spostare o clonare un server non crea problemi di incompatibilità.</p></div>
+      <div class="card-small teal"><span class="badge">Adattabilità</span><p>Risorse allocate in modo più <strong>veloce e flessibile</strong>; la VM si sposta su hardware più efficiente in modo trasparente.</p></div>
+      <div class="card-small purple"><span class="badge">Applicazioni legacy</span><p>Si eseguono anche sistemi vecchi, liberandosi di hardware non più supportato e soggetto a guasti.</p></div>
+      <div class="card-small red"><span class="badge">Ambienti di test</span><p>Replica immediata di una VM per testare nuove applicazioni e aggiornamenti.</p></div>
     </div>
-
     <h3 class="sep">Campi di applicazione</h3>
     <div class="tbl-wrap">
-      <table class="tbl">
-        <thead><tr><th>Tipo</th><th>Descrizione</th></tr></thead>
+      <table class="tbl cmp">
+        <thead><tr><th>Ambito</th><th>Esempi</th></tr></thead>
         <tbody>
-          <tr><td><strong>Hardware</strong></td><td>Full, Bare-Metal, Hosted, Partial, Para</td></tr>
-          <tr><td><strong>Network</strong></td><td>Internal Network Virtualization, External Network Virtualization</td></tr>
-          <tr><td><strong>Storage</strong></td><td>Block Virtualization, File Virtualization</td></tr>
-          <tr><td><strong>Memory</strong></td><td>Application Level Integration, OS Level Integration</td></tr>
-          <tr><td><strong>Software</strong></td><td>OS Level, Application, Service</td></tr>
-          <tr><td><strong>Data</strong></td><td>Database Virtualization</td></tr>
-          <tr><td><strong>Desktop</strong></td><td>Virtual Desktop Infrastructure (VDI), Hosted Virtual Desktop</td></tr>
+          <tr><th scope="row">Hardware</th><td>Full (bare-metal, hosted), partial, para</td></tr>
+          <tr><th scope="row">Network</th><td>Virtualizzazione di rete interna ed esterna</td></tr>
+          <tr><th scope="row">Storage</th><td>A blocchi e a file</td></tr>
+          <tr><th scope="row">Memory</th><td>Integrazione a livello applicazione e a livello SO</td></tr>
+          <tr><th scope="row">Software</th><td>Livello SO, applicazione, servizio</td></tr>
+          <tr><th scope="row">Data</th><td>Database</td></tr>
+          <tr><th scope="row">Desktop</th><td>Infrastruttura desktop virtuale, desktop virtuale in hosting</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <div id="virt-tecnica" class="sub-section">
-    <h3 class="sep">Dischi immagine</h3>
-    <div class="block green">
-      <div class="btitle">Contenuto e formati</div>
-      <p>Il <strong>disco immagine</strong> contiene i contenuti necessari alla macchina virtuale: sistema operativo, applicazioni, configurazioni. I formati principali sono:</p>
-      <ul>
-        <li><strong>raw</strong> — formato binario in chiaro.</li>
-        <li><strong>qcow2</strong> — formato QEMU/KVM, con supporto a snapshot e copy-on-write.</li>
-        <li><strong>vmdk</strong> — Virtual Machine Disk (VMware).</li>
-        <li><strong>vdi</strong> — Virtual Disk Image (VirtualBox).</li>
-        <li><strong>vhd / vhdx</strong> — Virtual Hard Disk (Microsoft Hyper-V).</li>
-      </ul>
+  <div id="vrt-tip" class="sub-section">
+    <h3 class="sep">Modello con e senza virtualizzazione</h3>
+    <div class="grid2">
+      <div class="card-small red"><span class="badge">Senza</span><p>Hardware → un solo sistema operativo → applicazioni utente.</p></div>
+      <div class="card-small green"><span class="badge">Con</span><p>Hardware → <strong>hypervisor</strong> → più sistemi operativi, ognuno con le sue applicazioni e il suo hardware virtuale (CPU, memoria, disco, NIC).</p></div>
     </div>
-
-    <h3 class="sep">OVF e OVA — standard di interscambio</h3>
+    <h3 class="sep">Tipologie</h3>
     <div class="block blue">
-      <div class="btitle">Open Virtualization Format</div>
-      <p><strong>OVF (Open Virtualization Format)</strong> è una specifica definita dal DMTF (Data Management Task Force) che consente l'interscambio di macchine virtuali tra hypervisor diversi, indipendentemente dall'architettura del processore sottostante. Contiene, oltre all'immagine disco, anche metadati riguardanti la VM.</p>
-      <p style="margin-top:8px"><strong>OVA</strong> è un archivio TAR che raccoglie le informazioni OVF e l'immagine disco in un unico file, facilitando la distribuzione.</p>
-      <p style="margin-top:8px"><strong>Attenzione:</strong> le immagini <em>prebuilt</em> (preconfezionate) riducono i tempi di deploy, ma vanno prelevate solo da fonti affidabili per motivi di sicurezza. Per la produzione è consigliata un'installazione da scratch.</p>
-    </div>
-
-    <h3 class="sep">Livelli di privilegio della CPU (Ring)</h3>
-    <div class="block amber">
-      <div class="btitle">Perché la virtualizzazione richiede meccanismi speciali</div>
+      <div class="btitle">Hardware e software virtualization</div>
+      <p>La virtualizzazione <strong>software</strong> si divide in:</p>
       <ul>
-        <li><strong>Senza virtualizzazione</strong>: il sistema operativo gira a <strong>Ring 0</strong> (massimo privilegio); le applicazioni a <strong>Ring 3</strong>.</li>
-        <li><strong>Con virtualizzazione (binary translation)</strong>: l'hypervisor (VMM) gira a <strong>Ring 0</strong>; il guest OS viene eseguito a <strong>Ring 1</strong> (livello deprivilegiato) e le istruzioni privilegiate vengono tradotte dinamicamente.</li>
-        <li><strong>Con virtualizzazione assistita da hardware</strong>: Intel VT-x e AMD-V introducono un nuovo livello (Ring -1) per l'hypervisor, eliminando la necessità di traduzione binaria e migliorando le prestazioni.</li>
+        <li><strong>Full virtualization</strong>: il guest non sa di essere virtualizzato. Può essere <em>bare-metal</em> (Tipo 1) o <em>hosted</em> (Tipo 2).</li>
+        <li><strong>Para-virtualization</strong>: il guest è modificato e collabora con l'hypervisor.</li>
       </ul>
     </div>
-
-    <h3 class="sep">Virtual switch e rete virtuale</h3>
-    <div class="block teal">
-      <div class="btitle">Come le VM comunicano tra loro e con la rete fisica</div>
-      <p>Gli <strong>switch virtuali</strong> collegano le schede di rete virtuali delle VM alle schede di rete fisiche del server, permettendo la comunicazione tra VM e con la rete fisica. Le VM possono avere:</p>
-      <ul>
-        <li><strong>Virtual Ethernet Adapters</strong> (schede di rete virtuali)</li>
-        <li>Collegamento a <strong>virtual switch</strong> interni o esterni</li>
-        <li>Accesso a <strong>Physical Ethernet Adapters</strong> per uscire sulla rete fisica</li>
-      </ul>
+    <div class="grid2">
+      <div class="card-small green">
+        <span class="badge">Tipo 1 — bare-metal (nativo)</span>
+        <p>L'hypervisor (VMM) è installato <strong>direttamente sull'hardware</strong>, senza SO host. Es.: Hyper-V (Microsoft), XenServer (Citrix), VMware ESX/ESXi.</p>
+      </div>
+      <div class="card-small amber">
+        <span class="badge">Tipo 2 — hosted</span>
+        <p>L'hypervisor gira <strong>dentro un SO convenzionale</strong> (SO host) come un programma. Es.: VirtualBox, VMware Fusion, QEMU, Virtual PC, Parallels.</p>
+      </div>
     </div>
+    <div class="highlight"><strong>Ibrido</strong>: es. KVM, modulo del kernel Linux, può essere visto sia come bare-metal (gira nel kernel sull'hardware) sia come Tipo 2 (esiste dentro Linux). Esempi di hybrid VMM: Virtual PC e Virtual Server.</div>
+    <h3 class="sep">Termini da non confondere</h3>
+    <div class="grid3">
+      <div class="card-small blue"><span class="badge">Hypervisor / VMM</span><p>Software, firmware o hardware che crea e avvia le macchine virtuali.</p></div>
+      <div class="card-small teal"><span class="badge">Host</span><p>SO o server su cui è installato l'hypervisor.</p></div>
+      <div class="card-small purple"><span class="badge">Guest</span><p>La macchina virtuale che gira sull'hypervisor.</p></div>
+    </div>
+    <div class="block gray">
+      <div class="btitle">Macchina virtuale e disco immagine</div>
+      <p>L'hypervisor mette a disposizione risorse virtuali (CPU, RAM, storage, rete, BIOS, video, audio) che insieme formano la <strong>VM</strong>. Il <strong>disco immagine</strong> contiene tutto ciò che serve alla VM. Formati: <strong>raw</strong> (binario in chiaro), <strong>qcow2</strong> (QEMU/KVM), <strong>vmdk</strong> (VMware), <strong>vdi</strong> (VirtualBox), <strong>vhd</strong> (Microsoft). Il formato <strong>OVF</strong> (DMTF) permette di scambiare VM tra hypervisor diversi; si distribuisce come file <strong>.ova</strong> (tar). Con immagini preconfezionate: attenzione alla fonte, per la produzione meglio installare da zero.</p>
+    </div>
+  </div>
 
-    <h3 class="sep">Shared Storage e funzionalità avanzate</h3>
+  <div id="vrt-spec" class="sub-section">
+    <h3 class="sep">Anelli di protezione e traduzione binaria</h3>
     <div class="block purple">
-      <div class="btitle">Storage condiviso per l'alta disponibilità</div>
-      <p>L'uso di <strong>storage condiviso</strong> (SAN, NAS) permette funzionalità avanzate:</p>
+      <div class="btitle">Ring 0–3</div>
+      <p>La CPU ha livelli di privilegio: <strong>Ring 0</strong> (kernel, massimo privilegio) fino a <strong>Ring 3</strong> (applicazioni utente).</p>
       <ul>
-        <li><strong>vMotion / Live Migration</strong>: spostamento di una VM da un host all'altro senza interruzione del servizio.</li>
-        <li><strong>High Availability (HA)</strong>: riavvio automatico delle VM su un altro host in caso di guasto hardware.</li>
-        <li><strong>DRS (Distributed Resource Scheduler)</strong>: bilanciamento automatico del carico tra host.</li>
+        <li><strong>Senza virtualizzazione</strong>: il SO sta in Ring 0 ed esegue direttamente le richieste su CPU non virtualizzata; le app in Ring 3.</li>
+        <li><strong>Full virtualization (binary translation)</strong>: il <strong>VMM sta in Ring 0</strong>, il <strong>guest OS in Ring 1</strong>. Le richieste del SO guest vengono <strong>tradotte dal VMM</strong>; quelle delle app utente sono eseguite direttamente.</li>
+        <li><strong>Con estensioni hardware</strong> (Intel VT-x, AMD-V, ARM): l'hypervisor sta a un livello sotto (Level 0, come Hyper-V) e il guest gira sulla <strong>vCPU</strong> senza traduzione.</li>
       </ul>
-      <p style="margin-top:8px">Queste funzionalità sono la base per la tolleranza ai guasti e la continuità operativa dei data center moderni.</p>
     </div>
+    <div class="highlight">Perché il cloud sia possibile, CPU, BIOS, SO e software di virtualizzazione devono supportare la <strong>virtualizzazione hardware</strong> (Intel VT-x, AMD-V, ARM LPAE).</div>
+    <h3 class="sep">Rete virtuale</h3>
+    <div class="block teal">
+      <div class="btitle">Virtual switch e adattatori</div>
+      <p>Ogni VM ha uno o più <strong>virtual Ethernet adapters</strong> collegati a <strong>virtual switch</strong>. Questi si collegano ai <strong>physical Ethernet adapters</strong> del server, che portano alla LAN di produzione. Una VM può avere più schede, una rete virtuale può non uscire mai dal server.</p>
+    </div>
+  </div>
 
-    <h3 class="sep">VDI — Virtual Desktop Infrastructure</h3>
+  <div id="vrt-dc" class="sub-section">
+    <h3 class="sep">Il data center virtualizzato</h3>
     <div class="block blue">
-      <div class="btitle">Il desktop virtuale</div>
-      <p>La <strong>VDI</strong> consiste nel virtualizzare l'intero desktop (sistema operativo, applicazioni, dati) e nel fornire all'utente l'accesso remoto a tale desktop tramite un <strong>thin client</strong> o un qualsiasi dispositivo (PC, laptop, tablet). I componenti tipici sono:</p>
+      <div class="btitle">Da server farm a infrastruttura virtuale</div>
+      <p>In un data center tradizionale ogni applicazione ha il suo server fisico (<strong>server farm</strong>). Con la virtualizzazione molti server fisici sotto-utilizzati si <strong>migrano</strong> su pochi host, ognuno con più VM. Le VM possono poi essere spostate su altri host.</p>
+      <p style="margin-top:8px">L'<strong>infrastruttura virtuale</strong> è il livello che riunisce <strong>server, rete e storage</strong> e li presenta alle applicazioni come un unico pool di risorse.</p>
+    </div>
+    <div class="grid2">
+      <div class="card-small amber">
+        <span class="badge">Shared storage / SAN</span>
+        <p>Gli host condividono lo storage (<strong>Storage Area Network</strong>, collegata in genere con Fibre Channel). I dischi delle VM non stanno nel singolo server, quindi qualunque host può avviarle. Lo storage è organizzato in pool, con RAID.</p>
+      </div>
+      <div class="card-small green">
+        <span class="badge">Migrazione live</span>
+        <p>Una VM si sposta da un host (o cluster) a un altro <strong>mentre è in esecuzione</strong> (es. VMware vMotion). Utile per bilanciare il carico o fare manutenzione senza fermare i servizi.</p>
+      </div>
+      <div class="card-small red">
+        <span class="badge">Alta disponibilità e failover</span>
+        <p>Se un host si guasta, le sue VM (primary VMs) <strong>ripartono su un altro host</strong> (secondary VMs) usando lo storage condiviso. Anche tra cloud server: <em>cloud server failover</em>.</p>
+      </div>
+      <div class="card-small purple">
+        <span class="badge">Single point of failure</span>
+        <p>Un componente il cui guasto ferma tutto (es. un <strong>unico storage condiviso</strong>). Va ridondato, altrimenti il failover non basta.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="vrt-desk" class="sub-section">
+    <h3 class="sep">Desktop virtualization (VDI)</h3>
+    <div class="block green">
+      <div class="btitle">Virtual Desktop Infrastructure</div>
+      <p>I desktop degli utenti diventano <strong>VM nel data center</strong>. L'utente li usa da qualsiasi client (thick client, desktop, laptop, tablet, smartphone) che mostra solo lo schermo. SO, applicazioni, dati e personalizzazioni stanno sui server insieme alle <strong>immagini delle VM</strong>.</p>
       <ul>
-        <li><strong>Connection Broker</strong>: gestisce le sessioni utente.</li>
-        <li><strong>Virtual Desktop Manager</strong>: orchestra le VM desktop.</li>
-        <li><strong>Hypervisor</strong>: esegue le VM desktop.</li>
-        <li><strong>Storage</strong>: ospita le immagini dei desktop.</li>
+        <li>Gestione centralizzata di provisioning, aggiornamenti e <strong>virtual desktop manager</strong>.</li>
+        <li>Disaster recovery, sicurezza, disponibilità e backup si fanno sul server, non su ogni PC.</li>
       </ul>
-      <p style="margin-top:8px">Vantaggi: gestione centralizzata, sicurezza (i dati non risiedono sul client), supporto a dispositivi BYOD, disaster recovery semplificato.</p>
     </div>
   </div>
 </section>
 
-  <!-- ===== DATA CENTER ===== -->
-<section id="data-center" class="section">
-  <h2 class="chapter-title">Data Center</h2>
-  <p class="chapter-lead">Dove vivono fisicamente i server che erogano i servizi cloud: classificazione, componenti, efficienza energetica e tendenze evolutive.</p>
+<!-- ===== ACL E PACKET FILTERING ===== -->
+<section id="acl" class="section">
+  <h2 class="chapter-title">Packet filtering e ACL</h2>
+  <p class="chapter-lead">Introduzione al filtraggio dei pacchetti sul router con le Access Control List (Cisco).</p>
 
   <div class="block green">
-    <div class="btitle">Che cos'è un data center</div>
-    <p>Un <strong>data center</strong> (o <strong>CED — Centro Elaborazione Dati</strong>) è la sala macchine che ospita server, storage, apparati di rete, gruppi di continuità (UPS) e tutti i sistemi necessari a garantire il funzionamento <strong>24/7</strong> dei servizi IT di un'organizzazione. Oggi il data center non è più solo un luogo fisico: è sempre più spesso un ambiente <strong>ibrido</strong>, composto da infrastrutture in-house, cloud privati e cloud pubblici.</p>
+    <div class="btitle">Packet filter router</div>
+    <p>Un router che filtra i pacchetti usando le <strong>ACL (Access Control List)</strong>: liste di condizioni applicate al traffico <strong>entrante o uscente</strong> da un router. Stabiliscono se un pacchetto va <strong>instradato</strong> oppure <strong>bloccato e scartato</strong>. Si configurano sul router per controllare l'accesso a una rete.</p>
   </div>
 
   <div class="sub-nav">
-    <button class="on" data-sub="dc-tier">Tier e componenti</button>
-    <button data-sub="dc-efficienza">Efficienza e cloud</button>
+    <button class="on" data-sub="acl-base">Concetti</button>
+    <button data-sub="acl-smtp">Esempio SMTP</button>
+    <button data-sub="acl-http">Esempio HTTP</button>
+    <button data-sub="acl-cisco">Sintassi Cisco</button>
   </div>
 
-  <div id="dc-tier" class="sub-section visible">
-    <h3 class="sep">Classificazione TIER (Uptime Institute)</h3>
-    <div class="block amber">
-      <div class="btitle">Quattro livelli di affidabilità</div>
-      <p>La classificazione <strong>TIER</strong> definisce il livello di ridondanza, affidabilità e uptime di un data center. Esistono quattro livelli:</p>
+  <div id="acl-base" class="sub-section visible">
+    <h3 class="sep">Su cosa si basano le regole</h3>
+    <div class="grid2">
+      <div class="card-small blue"><span class="badge">Indirizzi IP</span><p>IP <strong>sorgente</strong> e <strong>destinazione</strong>.</p></div>
+      <div class="card-small teal"><span class="badge">Indirizzi MAC</span><p>MAC sorgente e destinazione.</p></div>
+      <div class="card-small amber"><span class="badge">Porte</span><p>Numero di porta sorgente e destinazione.</p></div>
+      <div class="card-small purple"><span class="badge">Protocollo</span><p>Protocollo usato (<strong>TCP / UDP</strong>).</p></div>
     </div>
+    <h3 class="sep">Perché creare le ACL</h3>
+    <ul>
+      <li><strong>Limitare il traffico</strong> in rete.</li>
+      <li>Dare <strong>controllo sul flusso</strong> del traffico.</li>
+      <li>Offrire un <strong>livello base di sicurezza</strong> per l'accesso alla rete.</li>
+      <li>Permettere o negare l'accesso a una parte della rete in base al <strong>tipo di traffico</strong>.</li>
+    </ul>
+    <div class="highlight">Se sul router <strong>non c'è nessuna ACL</strong>, tutti i pacchetti vengono instradati verso la destinazione.</div>
+    <h3 class="sep">Inbound e outbound</h3>
+    <div class="block amber">
+      <div class="btitle">Le due direzioni di un'interfaccia</div>
+      <ul>
+        <li><strong>Inbound</strong>: il pacchetto <em>entra</em> da quell'interfaccia.</li>
+        <li><strong>Outbound</strong>: il pacchetto <em>esce</em> da quell'interfaccia.</li>
+      </ul>
+      <p style="margin-top:8px">Una ACL è una lista di regole di <strong>accettazione o rifiuto</strong> di un pacchetto, applicata su un'interfaccia in una delle due direzioni.</p>
+    </div>
+    <h3 class="sep">Struttura di una regola</h3>
     <div class="tbl-wrap">
-      <table class="tbl">
-        <thead>
-          <tr><th>Tier</th><th>Denominazione</th><th>Uptime</th><th>Ridondanza</th><th>Caratteristiche</th></tr>
-        </thead>
+      <table class="tbl cmp">
+        <thead><tr><th>N°</th><th>Azione</th><th>Sorgente</th><th>Porta sorg.</th><th>Destinazione</th><th>Porta dest.</th><th>Prot.</th></tr></thead>
         <tbody>
-          <tr>
-            <td><strong>Tier I</strong></td>
-            <td>Basic</td>
-            <td>99.671%<br><small>~28,8 h/anno di downtime</small></td>
-            <td>Nessuna</td>
-            <td>Singolo path di alimentazione e raffreddamento; nessun componente ridondante</td>
-          </tr>
-          <tr>
-            <td><strong>Tier II</strong></td>
-            <td>Redundant Capacity Components</td>
-            <td>99.741%</td>
-            <td>Componenti ridondanti (N+1)</td>
-            <td>Path di distribuzione singolo, ma componenti ridondanti</td>
-          </tr>
-          <tr>
-            <td><strong>Tier III</strong></td>
-            <td>Concurrently Maintainable</td>
-            <td>99.982%</td>
-            <td>Path multipli attivi (N+1)</td>
-            <td>Permette manutenzione programmata senza interruzione del servizio</td>
-          </tr>
-          <tr>
-            <td><strong>Tier IV</strong></td>
-            <td>Fault Tolerant</td>
-            <td>99.995%</td>
-            <td>Completamente ridondante (2N/2N+1)</td>
-            <td>Tolleranza ai guasti; nessuna interruzione anche in caso di guasto</td>
-          </tr>
+          <tr><th scope="row">1</th><td>Accept</td><td>Host interno</td><td>1024</td><td>Rete esterna</td><td>80</td><td>TCP</td></tr>
+          <tr><th scope="row">2</th><td>Accept</td><td>Host interno</td><td>2234</td><td>Host esterno</td><td>110</td><td>UDP</td></tr>
+          <tr><th scope="row">3</th><td>Deny</td><td>Host esterno</td><td>90</td><td>Rete interna</td><td>8080</td><td>TCP</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="highlight">Il Tier IV è l'unico che garantisce la <strong>fault tolerance</strong> completa. La maggior parte dei data center aziendali si colloca tra Tier II e Tier III.</div>
-
-    <h3 class="sep">Tipologie di data center</h3>
-    <div class="grid2">
-      <div class="card-small blue">
-        <span class="badge">Server / Computer Room</span>
-        <p>Piccola sala macchine dedicata, spesso all'interno dell'azienda stessa. Destinata a ospitare l'infrastruttura IT locale.</p>
-      </div>
-      <div class="card-small green">
-        <span class="badge">Private Data Center</span>
-        <p>Infrastruttura di proprietà di una singola organizzazione, gestita internamente o da terzi.</p>
-      </div>
-      <div class="card-small amber">
-        <span class="badge">Managed Services / Vendor Owned</span>
-        <p>Data center gestito da un fornitore di servizi che eroga l'infrastruttura ai clienti.</p>
-      </div>
-      <div class="card-small purple">
-        <span class="badge">Vendor / Carrier Neutral Colocation</span>
-        <p>Data center in cui più aziende affittano spazio e connettività da provider diversi. Il cliente può scegliere tra più carrier per la connettività.</p>
-      </div>
-    </div>
-
-    <h3 class="sep">Componenti infrastrutturali</h3>
-    <div class="block teal">
-      <div class="btitle">Cosa c'è dentro un data center</div>
-      <ul>
-        <li><strong>Server</strong>: fisici e virtualizzati.</li>
-        <li><strong>Storage</strong>: SAN (Storage Area Network), NAS, storage object-based.</li>
-        <li><strong>Networking</strong>: switch, router, firewall, load balancer, connessioni ridondanti.</li>
-        <li><strong>Alimentazione</strong>: UPS (gruppi di continuità), generatori diesel, PDU (Power Distribution Unit), path di alimentazione ridondanti.</li>
-        <li><strong>Raffreddamento</strong>: CRAC/CRAH, free cooling, contenimento corsie (hot/cold aisle).</li>
-        <li><strong>Sicurezza fisica</strong>: controllo accessi, videosorveglianza, rilevamento incendi, soppressione incendi.</li>
-        <li><strong>Monitoraggio e gestione</strong>: DCIM (Data Center Infrastructure Management), sensori ambientali.</li>
-      </ul>
-    </div>
+    <div class="highlight">Le regole si leggono <strong>in ordine</strong>: vale la prima che corrisponde al pacchetto. In fondo serve una regola di <strong>default</strong> per tutto il resto.</div>
   </div>
 
-  <div id="dc-efficienza" class="sub-section">
-    <h3 class="sep">Efficienza energetica — PUE</h3>
-    <div class="block amber">
-      <div class="btitle">Power Usage Effectiveness</div>
-      <p>Il <strong>PUE</strong> è il rapporto tra l'energia totale consumata dal data center e quella effettivamente usata dall'IT:</p>
-      <p style="margin-top:8px;font-family:monospace"><strong>PUE = Energia totale del data center / Energia consumata dall'IT</strong></p>
-      <ul style="margin-top:8px">
-        <li><strong>PUE ideale = 1.0</strong> (tutta l'energia va all'IT).</li>
-        <li>Valori tipici: 1.2–1.5 per data center moderni ed efficienti; &gt;2.0 per strutture obsolete.</li>
-        <li>Il PUE misura l'efficienza dell'infrastruttura di supporto (raffreddamento, alimentazione), non quella dei server.</li>
-      </ul>
+  <div id="acl-smtp" class="sub-section">
+    <h3 class="sep">Gestire il servizio SMTP (porta 25)</h3>
+    <div class="tbl-wrap">
+      <table class="tbl cmp">
+        <thead><tr><th></th><th>Direzione</th><th>Fonte</th><th>Destinazione</th><th>Prot.</th><th>Porta dest.</th><th>Azione</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">A</th><td>In</td><td>Esterno</td><td>Interno</td><td>TCP</td><td>25</td><td>Accetta</td></tr>
+          <tr><th scope="row">B</th><td>Out</td><td>Interno</td><td>Esterno</td><td>TCP</td><td>&gt;1023</td><td>Accetta</td></tr>
+          <tr><th scope="row">C</th><td>Out</td><td>Interno</td><td>Esterno</td><td>TCP</td><td>25</td><td>Accetta</td></tr>
+          <tr><th scope="row">D</th><td>In</td><td>Esterno</td><td>Interno</td><td>TCP</td><td>&gt;1023</td><td>Accetta</td></tr>
+          <tr><th scope="row">E</th><td>Qualsiasi</td><td>Qualsiasi</td><td>Qualsiasi</td><td>Qualsiasi</td><td>Qualsiasi</td><td>Nega</td></tr>
+        </tbody>
+      </table>
     </div>
+    <div class="grid2" style="margin-top:12px">
+      <div class="card-small green"><span class="badge">A + B · SMTP in ingresso</span><p>Permettono le <strong>e-mail entranti</strong>: la richiesta arriva alla porta 25 del server interno (A) e la risposta torna sulla porta alta del client (B).</p></div>
+      <div class="card-small blue"><span class="badge">C + D · SMTP in uscita</span><p>Permettono le <strong>e-mail uscenti</strong>: richiesta verso la porta 25 esterna (C) e risposta in ingresso sulla porta alta (D).</p></div>
+    </div>
+    <div class="highlight"><strong>Regola E = default</strong>: se nessuna delle altre regole si applica, il pacchetto viene <strong>negato</strong>.</div>
+    <h3 class="sep">Esempio di pacchetti</h3>
+    <div class="tbl-wrap">
+      <table class="tbl cmp">
+        <thead><tr><th>Pacchetto</th><th>Dir.</th><th>Fonte</th><th>Destinazione</th><th>Prot.</th><th>Porta</th><th>Azione</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">1</th><td>In</td><td>192.168.3.4</td><td>172.16.1.1</td><td>TCP</td><td>25</td><td>Accetta (A)</td></tr>
+          <tr><th scope="row">2</th><td>Out</td><td>172.16.1.1</td><td>192.168.3.4</td><td>TCP</td><td>1234</td><td>Accetta (B)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:10px">Il pacchetto 1 (client SMTP → suo server) è permesso dalla <strong>regola A</strong>. Il pacchetto 2 (risposta del server al client, su porta alta) è permesso dalla <strong>regola B</strong>.</p>
+  </div>
 
-    <h3 class="sep">Evoluzione — SDDC e IT-as-a-Service</h3>
+  <div id="acl-http" class="sub-section">
+    <h3 class="sep">Gestire il servizio HTTP (porta 80)</h3>
+    <p style="margin-bottom:10px">Rete interna <code>192.168.1.xx</code> che naviga verso il server web <code>65.107.1.3</code>.</p>
+    <div class="tbl-wrap">
+      <table class="tbl cmp">
+        <thead><tr><th></th><th>Azione</th><th>IP sorgente</th><th>Porta sorg.</th><th>IP destinazione</th><th>Porta dest.</th><th>Prot.</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">A</th><td>Allow</td><td>Any</td><td>&gt;1023</td><td>65.107.1.3</td><td>80</td><td>TCP</td></tr>
+          <tr><th scope="row">B</th><td>Allow</td><td>65.107.1.3</td><td>80</td><td>localhost</td><td>&gt;1023</td><td>TCP</td></tr>
+          <tr><th scope="row">C</th><td>Reject</td><td>Any</td><td>Any</td><td>Any</td><td>Any</td><td>TCP/UDP</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid2" style="margin-top:12px">
+      <div class="card-small green"><span class="badge">Regola A</span><p>Il client (porta alta &gt;1023) può connettersi al server web sulla <strong>porta 80</strong>.</p></div>
+      <div class="card-small blue"><span class="badge">Regola B</span><p>Il server (porta 80) può <strong>rispondere</strong> al client sulla sua porta alta.</p></div>
+    </div>
+    <div class="highlight"><strong>Regola C</strong>: tutto il resto viene rifiutato (default deny). Va sempre <strong>per ultima</strong>, perché le regole si leggono in ordine.</div>
+  </div>
+
+  <div id="acl-cisco" class="sub-section">
+    <h3 class="sep">ACL su router Cisco (introduzione)</h3>
+    <div class="block gray">
+      <div class="btitle">Nota</div>
+      <p>Questa parte non è nelle slide: è solo un'introduzione alla sintassi Cisco IOS per collegare le regole viste sopra a quello che si scrive sul router.</p>
+    </div>
     <div class="grid2">
-      <div class="card-small blue">
-        <span class="badge">SDDC — Software-Defined Data Center</span>
-        <p>L'intera infrastruttura (calcolo, storage, rete, sicurezza) è virtualizzata e gestita tramite software. Consente automazione, orchestrazione e policy dinamiche. È l'evoluzione verso un data center completamente programmabile.</p>
-      </div>
-      <div class="card-small green">
-        <span class="badge">IT-as-a-Service (ITaaS)</span>
-        <p>Il data center eroga risorse IT come servizi self-service, con modelli di costo a consumo (pay-per-use). L'utente richiede risorse tramite un catalogo e le ottiene in modo automatico, come in un cloud provider.</p>
-      </div>
+      <div class="card-small blue"><span class="badge">ACL standard (1–99)</span><p>Filtrano solo per <strong>IP sorgente</strong>.</p></div>
+      <div class="card-small amber"><span class="badge">ACL estese (100–199)</span><p>Filtrano per IP sorgente e destinazione, <strong>protocollo e porte</strong>.</p></div>
     </div>
+    <div class="trace"><div class="trace-label">Esempio: permetti il web verso 65.107.1.3 (ACL estesa)</div><pre><span class="tg">access-list</span> 101 <span class="tb">permit</span> tcp any host 65.107.1.3 eq 80
+<span class="tg">access-list</span> 101 <span class="tr">deny</span> ip any any
 
-    <h3 class="sep">Data Center e Cloud</h3>
-    <div class="block purple">
-      <div class="btitle">Il substrato fisico del cloud</div>
-      <p>Il data center è il <strong>substrato fisico</strong> del cloud computing. I provider cloud possiedono e gestiscono data center su larga scala (regioni, availability zone) per offrire servizi IaaS, PaaS e SaaS con elevati livelli di affidabilità e tolleranza ai guasti.</p>
-      <p style="margin-top:8px">La tendenza moderna è verso <strong>architetture ibride</strong>, in cui carichi di lavoro critici restano on-premise (o in private cloud) e altri vengono spostati su cloud pubblico, con orchestrazione unificata.</p>
-      <ul>
-        <li><strong>Regioni</strong>: aree geografiche diverse (es. Europa, USA, Asia).</li>
-        <li><strong>Availability Zone</strong>: data center fisicamente separati all'interno di una regione, con alimentazione e rete indipendenti.</li>
-        <li><strong>Edge Computing</strong>: elaborazione vicino all'utente finale, per ridurre latenza e traffico verso il cloud centrale.</li>
-      </ul>
-    </div>
+<span class="tg">interface</span> FastEthernet0/0
+  <span class="tb">ip access-group 101 in</span></pre></div>
+    <ul style="margin-top:10px">
+      <li><code>permit</code> / <code>deny</code> = Accept / Deny; <code>any</code> = qualunque host; <code>host x</code> = un indirizzo preciso; <code>eq 80</code> = porta 80.</li>
+      <li><code>ip access-group N in|out</code> applica la ACL all'interfaccia in direzione <strong>inbound</strong> o <strong>outbound</strong>.</li>
+      <li>Le regole si valutano <strong>dall'alto in basso</strong>; in fondo a ogni ACL Cisco c'è un <strong>deny implicito</strong> (la regola di default delle slide).</li>
+    </ul>
   </div>
 </section>
-
 
 </main>
 
