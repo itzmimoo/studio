@@ -3,12 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f3f4f5" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1a1d21" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f4f2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b0c0e" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Studio">
 <meta name="format-detection" content="telephone=no">
 <title>Studio | SAGGIN s.r.l.</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -21,37 +26,44 @@
     <p class="home-sub">Anno scolastico 2026/27</p>
 
     <h2 class="group-label">Attive</h2>
+    <div class="list">
+      <a class="subject blue" href="reti/">
+        <span class="mono-tile" aria-hidden="true">SR</span>
+        <div class="subject-main">
+          <h2>Sistemi e Reti</h2>
+          <p>Sicurezza, crittografia, VLAN, cloud, virtualizzazione, ACL.</p>
+        </div>
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4l6 6-6 6"/></svg>
+      </a>
+      <a class="subject green" href="gpoi/">
+        <span class="mono-tile" aria-hidden="true">GP</span>
+        <div class="subject-main">
+          <h2>G.P.O.I.</h2>
+          <p>Gestione del progetto e organizzazione d'impresa.</p>
+        </div>
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4l6 6-6 6"/></svg>
+      </a>
+      <a class="subject red" href="storia/">
+        <span class="mono-tile" aria-hidden="true">St</span>
+        <div class="subject-main">
+          <h2>Storia</h2>
+          <p>Unificazione italiana e tedesca, industrializzazione e imperialismo (1850-1900).</p>
+        </div>
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4l6 6-6 6"/></svg>
+      </a>
+      <a class="subject purple" href="inglese/">
+        <span class="mono-tile" aria-hidden="true">En</span>
+        <div class="subject-main">
+          <h2>Inglese</h2>
+          <p>Reported speech e reported questions.</p>
+        </div>
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4l6 6-6 6"/></svg>
+      </a>
+    </div>
 
-    <a class="subject" href="reti/">
-      <div class="subject-main">
-        <h2>Sistemi e Reti</h2>
-        <p>Mezzi trasmissivi, architetture, OSI e TCP/IP, IP, router, DNS, DHCP, livello di trasporto, posta elettronica.</p>
-      </div>
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4l6 6-6 6"/></svg>
-    </a>
-
-    <a class="subject" href="gpoi/">
-      <div class="subject-main">
-        <h2>G.P.O.I.</h2>
-        <p>Gestione del progetto e organizzazione d'impresa.</p>
-      </div>
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4l6 6-6 6"/></svg>
-    </a>
-
-    <a class="subject" href="storia/">
-      <div class="subject-main">
-        <h2>Storia</h2>
-        <p>Unificazione italiana e tedesca, industrializzazione e imperialismo, la lotta per l'egemonia (1850-1900).</p>
-      </div>
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4l6 6-6 6"/></svg>
-    </a>
-
-    <a class="subject" href="inglese/">
-      <div class="subject-main">
-        <h2>Inglese</h2>
-        <p>Reported speech e reported questions.</p>
-      </div>
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4l6 6-6 6"/></svg>
+    <a class="past" href="anno-precedente/">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10a6.5 6.5 0 1 0 2-4.7"/><path d="M3 3.5v3.3h3.3"/><path d="M10 6.5V10l2.5 1.5"/></svg>
+      Torna all'anno precedente
     </a>
 
     <h2 class="group-label">Non ancora attive</h2>
